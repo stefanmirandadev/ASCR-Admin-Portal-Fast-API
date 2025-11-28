@@ -1,6 +1,0 @@
-{
-  "version": 3,
-  "sources": [],
-  "sections": [
-    {"offset": {"line": 7, "column": 0}, "map": {"version":3,"sources":["file:///app/src/app/tools/loading.tsx"],"sourcesContent":["export default function Loading() {\n  return (\n    <div className=\"flex items-center justify-center h-full min-h-[400px]\">\n      <div className=\"flex flex-col items-center space-y-4\">\n        <div className=\"animate-spin rounded-full h-12 w-12 border-b-2 border-gray-800 dark:border-white\"></div>\n        <p className=\"text-gray-600 dark:text-gray-300 text-sm\">Loading...</p>\n      </div>\n    </div>\n  );\n} "],"names":[],"mappings":";;;;;AAAe,SAAS;IACtB,qBACE,8OAAC;QAAI,WAAU;kBACb,cAAA,8OAAC;YAAI,WAAU;;8BACb,8OAAC;oBAAI,WAAU;;;;;;8BACf,8OAAC;oBAAE,WAAU;8BAA2C;;;;;;;;;;;;;;;;;AAIhE","debugId":null}}]
-}

@@ -1,92 +1,76 @@
 services:
-  web:
-    build: .
-    command: python manage.py runserver 0.0.0.0:8000
-    volumes:
-      - .:/app
-    ports:
-      - "8000:8000"
-    depends_on:
-      - db
-      - redis
-    environment:
-      - DATABASE_URL=postgres://postgres:postgres@db:5432/postgres
-      - REDIS_URL=redis://redis:6379/0
-      - OPENAI_API_KEY=${OPENAI_API_KEY}
-      - ANTHROPIC_API_KEY=${ANTHROPIC_API_KEY}
-      - AWS_ACCESS_KEY_ID=${AWS_ACCESS_KEY_ID}
-      - AWS_SECRET_ACCESS_KEY=${AWS_SECRET_ACCESS_KEY}
-      - AWS_DEFAULT_REGION=${AWS_DEFAULT_REGION:-us-east-1}
-
   frontend:
     build:
-      context: ./api/front-end
-      dockerfile: Dockerfile
-      target: development
+      context: ./services/frontend/my-app
+      dockerfile: ../Dockerfile
     ports:
-      - "3000:3000"
+      - "3001:3000"
     volumes:
-      - ./api/front-end/my-app:/app
+      - ./services/frontend/my-app:/app
       - frontend_node_modules:/app/node_modules
     environment:
       - NODE_ENV=development
-      - NEXT_PUBLIC_API_URL=http://web:8000
-    user: "1001:1001"
+      - NEXT_PUBLIC_CURATION_API_URL=http://localhost:8001
+      - NEXT_PUBLIC_ARCHIVE_API_URL=http://localhost:8002
+    depends_on:
+      - curation_service
+      - cell_line_archive
 
-  db:
-    image: postgres:15
-    volumes:
-      - postgres_data:/var/lib/postgresql/data/
-    environment:
-      - POSTGRES_DB=postgres
-      - POSTGRES_USER=postgres
-      - POSTGRES_PASSWORD=postgres
+  curation_service:
+    build:
+      context: ./services/curation_service
+      dockerfile: Dockerfile
     ports:
-      - "5433:5432"
+      - "8001:8001"
+    volumes:
+      - ./services/curation_service:/app
+      - curation_data:/app/data
+    environment:
+      - OPENAI_API_KEY=${OPENAI_API_KEY}
+      - ANTHROPIC_API_KEY=${ANTHROPIC_API_KEY}
+      - REDIS_URL=redis://redis:6379/0
+      - ARCHIVE_SERVICE_URL=http://cell_line_archive:8002
+    depends_on:
+      - redis
+      - background_processor
+
+  cell_line_archive:
+    build:
+      context: ./services/cell_line_archive
+      dockerfile: Dockerfile
+    ports:
+      - "8002:8002"
+    volumes:
+      - ./services/cell_line_archive:/app
+      - archive_data:/app/data
+    environment:
+      - DATA_PATH=/app/data
+
+  background_processor:
+    build:
+      context: ./services/background_processor
+      dockerfile: Dockerfile
+    volumes:
+      - ./services/background_processor:/app
+      - curation_data:/app/curation_data
+      - archive_data:/app/archive_data
+    environment:
+      - REDIS_URL=redis://redis:6379/0
+      - OPENAI_API_KEY=${OPENAI_API_KEY}
+      - CURATION_SERVICE_URL=http://curation_service:8001
+      - ARCHIVE_SERVICE_URL=http://cell_line_archive:8002
+    depends_on:
+      - redis
 
   redis:
-    image: redis:7
+    image: redis:7-alpine
     ports:
-      - "6379:6379"
-
-  celery:
-    build: .
-    command: celery -A config worker -l INFO
+      - "6380:6379"
     volumes:
-      - .:/app
-    depends_on:
-      - web
-      - redis
-    environment:
-      - DATABASE_URL=postgres://postgres:postgres@db:5432/postgres
-      - REDIS_URL=redis://redis:6379/0
-      - OPENAI_API_KEY=${OPENAI_API_KEY}
-      - AWS_ACCESS_KEY_ID=${AWS_ACCESS_KEY_ID}
-      - AWS_SECRET_ACCESS_KEY=${AWS_SECRET_ACCESS_KEY}
-      - AWS_DEFAULT_REGION=${AWS_DEFAULT_REGION:-us-east-1}
-
-  celery-beat:
-    build: .
-    command: celery -A config beat -l INFO
-    volumes:
-      - .:/app
-    depends_on:
-      - web
-      - redis
-    environment:
-      - DATABASE_URL=postgres://postgres:postgres@db:5432/postgres
-      - REDIS_URL=redis://redis:6379/0
-      - OPENAI_API_KEY=${OPENAI_API_KEY}
-      - AWS_ACCESS_KEY_ID=${AWS_ACCESS_KEY_ID}
-      - AWS_SECRET_ACCESS_KEY=${AWS_SECRET_ACCESS_KEY}
-      - AWS_DEFAULT_REGION=${AWS_DEFAULT_REGION:-us-east-1}
+      - redis_data:/data
 
 volumes:
-  postgres_data:
   frontend_node_modules:
-
-
-
-
-# Run migrations command
-# docker-compose exec web python manage.py migrate
+  curation_data:
+  archive_data:
+  redis_data:

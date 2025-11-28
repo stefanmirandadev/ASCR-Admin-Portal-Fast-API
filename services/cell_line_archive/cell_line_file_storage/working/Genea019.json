@@ -1,0 +1,115 @@
+{
+  "cell_line_id": "Genea019",
+  "saved_on": "2025-11-05T23:48:04.630034",
+  "status": "working",
+  "curated_data": {
+    "basic_data": [
+      {
+        "hpscreg_name": "Genea019",
+        "cell_line_alt_name": "Missing",
+        "cell_type": "ESC",
+        "frozen": "True"
+      }
+    ],
+    "generator": [
+      {
+        "group": "Genea Biocells"
+      }
+    ],
+    "contact": [
+      {
+        "group": "Genea Biocells",
+        "first_name": "Biljana",
+        "last_name": "Dumeska",
+        "name_initials": "Missing",
+        "e_mail": "biljana.dumeska@geneabiocells.com",
+        "phone_number": "Missing"
+      }
+    ],
+    "publications": [
+      {
+        "doi": "10.1016/j.scr.2016.02.008",
+        "journal": "Stem Cell Research",
+        "title": "Derivation of human embryonic stem cell line Genea019",
+        "first_author": "Biljana Dumeska",
+        "last_author": "Uli Schmidt",
+        "year": "2016",
+        "pmid": "Missing"
+      }
+    ],
+    "donor": [
+      {
+        "age": "Missing",
+        "sex": "Female",
+        "disease_name": "Missing",
+        "disease_description": "Missing"
+      }
+    ],
+    "genomic_modifications": [
+      {
+        "mutation_type": "Missing",
+        "cytoband": "Missing",
+        "delivery_method": "Missing",
+        "description": "Missing",
+        "genotype": "Missing",
+        "loci_name": "Missing"
+      }
+    ],
+    "differentiation_results": [
+      {
+        "cell_type": "Missing",
+        "show_potency": "Missing",
+        "marker_list": "Missing",
+        "method_used": "Missing",
+        "description": "Missing"
+      }
+    ],
+    "undifferentiated_characterisation": [
+      {
+        "epi_pluri_score": "Missing",
+        "pluri_test_score": "Missing",
+        "pluri_novelty_score": "Missing"
+      }
+    ],
+    "genomic_characterisation": [
+      {
+        "passage_number": "12",
+        "karyotype": "46,XX",
+        "karyotype_method": "CGH",
+        "summary": "The cell line has been karyotyped and also tested by CGH."
+      }
+    ],
+    "induced_derivation": [
+      {
+        "i_source_cell_type_term": "Missing",
+        "i_source_cell_origin_term": "Missing",
+        "derivation_year": "Missing",
+        "non_int_vector": "Missing",
+        "non_int_vector_name": "Missing"
+      }
+    ],
+    "embryonic_derivation": [
+      {
+        "embryo_stage": "Missing",
+        "zp_removal_technique": "Missing",
+        "trophectoderm_morphology": "Missing",
+        "icm_morphology": "Missing",
+        "e_preimplant_genetic_diagnosis": "Missing"
+      }
+    ],
+    "ethics": [
+      {
+        "ethics_number": "Missing",
+        "approval_date": "Missing",
+        "institutional_HREC": "Missing"
+      }
+    ],
+    "culture_medium": [
+      {
+        "co2_concentration": "Missing",
+        "o2_concentration": "Missing",
+        "passage_method": "Enzymatically"
+      }
+    ]
+  }
+}

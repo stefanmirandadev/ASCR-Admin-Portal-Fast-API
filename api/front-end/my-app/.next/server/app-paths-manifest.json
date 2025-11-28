@@ -1,7 +1,0 @@
-{
-  "/favicon.ico/route": "app/favicon.ico/route.js",
-  "/page": "app/page.js",
-  "/tools/curation/page": "app/tools/curation/page.js",
-  "/tools/editor/page": "app/tools/editor/page.js",
-  "/tools/transcription/page": "app/tools/transcription/page.js"
-}

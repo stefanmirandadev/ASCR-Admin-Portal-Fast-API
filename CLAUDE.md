@@ -1,184 +1,186 @@
 # CLAUDE.md
 
-This file provides guidance to Claude Code (claude.ai/code) when working with code in this repository.
+This file provides guidance to Claude Code when working with the ASCR Admin Portal microservices architecture.
 
 ## Project Overview
 
-This is the ASCR (Australian Stem Cell Registry) Web Services application - a Django-based system with a Next.js frontend for managing cell line data, article transcription, and AI-powered curation workflows. The system supports PDF document processing, cell line metadata extraction using OpenAI, and comprehensive data management with version control.
+The **Australian Stem Cell Registry (ASCR) Admin Portal** is a modern microservices-based web application for managing cell line data and AI-powered curation workflows. Built with FastAPI and Next.js, it provides a lightweight, scalable solution for cell line metadata management.
+
+## Architecture
+
+### Microservices Structure
+
+- **Frontend** (`services/frontend/my-app/`) - Next.js 15 + TypeScript application (Port 3001)
+- **Curation Service** (`services/curation_service/`) - FastAPI + OpenAI for AI curation (Port 8001)
+- **Cell Line Archive** (`services/cell_line_archive/`) - FastAPI + file storage for data management (Port 8002)
+- **Background Processor** (`services/background_processor/`) - Celery worker for long-running tasks
+- **Redis** - Task queue and caching (Port 6380)
 
 ## Development Commands
 
-### Backend (Django)
-
-```bash
-# Run the development server
-python manage.py runserver
-
-# Run database migrations
-python manage.py migrate
-
-# Create new migrations
-python manage.py makemigrations
-
-# Run tests
-python manage.py test
-
-# Load cell line data
-python manage.py load_celllines
-
-# Cleanup old versions
-python manage.py cleanup_old_versions
-
-# Django shell
-python manage.py shell
-```
-
-### Frontend (Next.js)
-
-```bash
-# Development server
-cd api/front-end/my-app
-npm run dev
-
-# Build for production
-npm run build
-
-# Start production server
-npm start
-
-# Lint
-npm run lint
-```
-
-### Docker Development
-
+### Quick Start
 ```bash
 # Start all services
-docker-compose up
+./start.sh
 
-# Start in detached mode
+# Or manually
 docker-compose up -d
+```
 
-# Run migrations in container
-docker-compose exec web python manage.py migrate
+### Service Management
+```bash
+# View all service logs
+docker-compose logs -f
 
-# View logs
-docker-compose logs -f web
-docker-compose logs -f frontend
+# View specific service logs
+docker-compose logs -f [frontend|curation_service|cell_line_archive|background_processor|redis]
 
-# Stop services
+# Restart a service
+docker-compose restart [service_name]
+
+# Stop all services
 docker-compose down
 ```
 
-### Celery Task Queue
+### Individual Service Development
 
+#### Curation Service (Port 8001)
 ```bash
-# Start Celery worker
-celery -A config worker -l INFO
-
-# Start Celery beat scheduler
-celery -A config beat -l INFO
-
-# Monitor tasks
-celery -A config events
+cd services/curation_service/
+python -m uvicorn main:app --reload --port 8001
 ```
 
-## Architecture Overview
+#### Archive Service (Port 8002)
+```bash
+cd services/cell_line_archive/
+python -m uvicorn main:app --reload --port 8002
+```
 
-### Core Applications
+#### Frontend (Port 3001)
+```bash
+cd services/frontend/my-app/
+npm run dev
+```
 
-- **api**: Main Django app containing models and core API endpoints
-- **api.transcription**: PDF transcription service using AWS Textract  
-- **api.curation**: AI-powered curation using OpenAI for cell line metadata extraction
-- **api.editor**: Advanced cell line editor with version control and diff capabilities
-- **api.ontologies**: Ontology management services
+#### Background Processor
+```bash
+cd services/background_processor/
+celery -A worker worker --loglevel=info
+```
 
-### Key Models
+## Data Storage
 
-- **CellLineTemplate**: Core model storing cell line metadata with extensive fields covering genomic alterations, characterization, and ethics
-- **TranscribedArticle**: Manages PDF transcription and curation workflow states
-- **CellLineVersion**: Version control system for tracking cell line changes
-- **Article**: Legacy model for article processing (being phased out)
+### File-Based Architecture
+- **Cell Lines**: Stored as JSON files in `archive_data/cell_lines/`
+- **Versions**: Version history in `archive_data/versions/{cell_line_id}/v*.json`
+- **Jobs**: Temporary job status in Redis
+- **Sample Data**: Example records in `sample_data/`
 
-### Frontend Architecture
+### Data Flow
+1. **Manual Entry**: Create cell lines via Archive API
+2. **AI Curation**: Submit text to Curation Service for OpenAI processing
+3. **Background Processing**: Long-running curation jobs handled by Celery
+4. **Version Control**: Automatic versioning on cell line updates (10-version retention)
+5. **Frontend Interface**: User interaction through Next.js application
 
-- **Next.js 15** with TypeScript and Tailwind CSS
-- **Component Structure**:
-  - `tools/curation/`: Curation workflow components with real-time polling
-  - `tools/editor/`: Advanced cell line editor with diff visualization
-  - `tools/transcription/`: PDF transcription interface
-- **Key Features**: Performance optimization, virtualization for large datasets, comprehensive error handling
+## API Integration
 
-## Data Flow
+### Curation Service (8001)
+- `POST /curate` - Start AI curation job
+- `GET /status/{job_id}` - Check job status
+- `GET /jobs` - List recent jobs
 
-1. **Document Upload**: PDFs uploaded through frontend
-2. **Transcription**: AWS Textract extracts text content
-3. **AI Curation**: OpenAI processes transcription to extract structured cell line data
-4. **Manual Review**: Users review and edit extracted data using advanced editor
-5. **Version Control**: Changes tracked with automatic versioning system
+### Archive Service (8002)
+- `GET/POST /cell-lines/` - List/create cell lines
+- `GET/PUT/DELETE /cell-lines/{id}` - Manage specific cell line
+- `GET /cell-lines/{id}/versions` - Version history
+- `GET /stats` - Archive statistics
 
 ## Environment Configuration
 
 Required environment variables:
-
 ```bash
-# Database
-DATABASE_URL=postgres://postgres:postgres@db:5432/postgres
+# AI Services (required for curation)
+OPENAI_API_KEY=your_openai_api_key
+ANTHROPIC_API_KEY=your_anthropic_api_key
 
-# Redis
+# Service configuration
 REDIS_URL=redis://redis:6379/0
-
-# API Keys
-OPENAI_API_KEY=your_openai_key
-ANTHROPIC_API_KEY=your_anthropic_key
-AWS_ACCESS_KEY_ID=your_aws_key
-AWS_SECRET_ACCESS_KEY=your_aws_secret
-AWS_DEFAULT_REGION=us-east-1
-
-# Django
-DJANGO_SECRET_KEY=your_secret_key
-DJANGO_DEBUG=True
+DEBUG=true
 ```
 
-## AI Integration
+## Key Technologies
 
-- **OpenAI Integration**: Uses GPT-4 with structured outputs for cell line data extraction
-- **Curation Instructions**: Stored in `api/curation/instructions/` directory
-- **Error Handling**: Comprehensive error tracking for AI service failures
-- **Work Status Tracking**: Automatic status updates during curation process
+- **FastAPI**: Modern Python web framework for APIs
+- **Next.js 15**: React framework with TypeScript
+- **Pydantic**: Data validation and serialization
+- **Celery**: Distributed task queue
+- **Redis**: In-memory data store for task queue
+- **Docker**: Containerization for consistent development
+
+## Frontend Structure
+
+```
+services/frontend/my-app/src/app/
+├── components/          # Shared UI components
+├── tools/
+│   ├── curation/       # AI curation interface
+│   ├── editor/         # Cell line editor with diff visualization
+│   ├── transcription/  # (Legacy - can be removed)
+│   └── ontologies/     # Ontology management
+└── lib/                # Utility functions and API clients
+```
 
 ## Testing
 
-- **Backend Tests**: Located in `api/tests/`
-- **Frontend Tests**: Located in `api/front-end/my-app/src/app/tools/curation/__tests__/`
-- **Test Coverage**: Models, API endpoints, curation workflow, and frontend components
+### Backend Services
+```bash
+# Test curation service
+curl http://localhost:8001/health
 
-## Version Control & Collaboration
+# Test archive service  
+curl http://localhost:8002/health
 
-- **Cell Line Versioning**: Automatic version creation on edits with 10-version retention policy
-- **Edit Locking**: Prevents concurrent edits with timeout mechanism  
-- **Diff Visualization**: Advanced diff engine for comparing cell line versions
+# Create test cell line
+curl -X POST "http://localhost:8002/cell-lines/" \
+  -H "Content-Type: application/json" \
+  -d '{"CellLine_hpscreg_id": "TEST001", "CellLine_cell_line_type": "hiPSC"}'
+```
+
+### Frontend
+```bash
+cd services/frontend/my-app/
+npm test
+```
 
 ## Performance Considerations
 
-- **Database**: PostgreSQL with appropriate indexing for version queries
-- **Caching**: Redis for Celery task queue and caching
-- **Frontend**: Virtualized components for large datasets, optimized polling
-- **File Processing**: Chunked uploads and background processing for large PDFs
+- **File Storage**: No database overhead, simple JSON persistence
+- **Microservices**: Independent scaling and development
+- **Background Tasks**: Non-blocking AI operations via Celery
+- **Version Control**: Automatic cleanup prevents storage bloat
+- **Container Volumes**: Persistent data storage across container restarts
 
 ## Development Workflow
 
-1. Use Docker Compose for consistent development environment
-2. Run migrations after model changes
-3. Test AI curation with sample articles in development
-4. Frontend development uses hot reload via Next.js dev server
-5. Celery required for background transcription and curation tasks
+1. **Start Services**: Use `./start.sh` for full stack development
+2. **Service Development**: Individual services can be run locally for faster iteration
+3. **API Testing**: Use FastAPI auto-generated docs at `/docs` endpoints
+4. **Frontend Development**: Hot reload available via Next.js dev server
+5. **Background Tasks**: Monitor Celery worker for long-running operations
 
-## API Structure
+## Important Notes
 
-- **REST API**: Django REST Framework with ViewSets
-- **Key Endpoints**:
-  - `/api/transcribed-articles/` - Article management
-  - `/api/editor/` - Cell line editing and version control
-  - `/api/curation/` - AI curation workflows
-  - `/api/transcription/` - PDF transcription services
+- **No Database**: This architecture uses file-based storage instead of PostgreSQL
+- **No Transcription**: AWS Textract integration has been removed for simplicity
+- **Simplified Models**: Pydantic models are used instead of Django ORM
+- **Version Control**: File-based versioning with automatic cleanup
+- **AI Integration**: OpenAI GPT-4 for cell line metadata extraction
+
+## Migration from Django
+
+This microservices architecture replaces the previous Django + PostgreSQL setup with:
+- ✅ **Simpler**: File storage instead of database migrations
+- ✅ **Faster**: Independent service development and deployment
+- ✅ **Cleaner**: Focused microservices with clear responsibilities
+- ✅ **Maintainable**: Reduced complexity and dependencies

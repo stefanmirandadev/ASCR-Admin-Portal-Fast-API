@@ -1,6 +1,0 @@
-{
-  "version": 3,
-  "sources": [],
-  "sections": [
-    {"offset": {"line": 7, "column": 0}, "map": {"version":3,"sources":["file:///app/src/app/components/PrelineScript.tsx"],"sourcesContent":["'use client';\n\nimport { usePathname } from 'next/navigation';\nimport { useEffect } from 'react';\n\n// Preline UI\nasync function loadPreline() {\n  return import('preline/dist/index.js');\n}\n\nexport default function PrelineScript() {\n  const path = usePathname();\n\n  useEffect(() => {\n    const initPreline = async () => {\n      await loadPreline();\n    };\n\n    initPreline();\n  }, []);\n\n  useEffect(() => {\n    setTimeout(() => {\n      if (\n        window.HSStaticMethods &&\n        typeof window.HSStaticMethods.autoInit === 'function'\n      ) {\n        window.HSStaticMethods.autoInit();\n      }\n    }, 100);\n  }, [path]);\n\n  return null;\n} "],"names":[],"mappings":";;;AAEA;AACA;;AAHA;;;AAKA,aAAa;AACb,eAAe;IACb;AACF;AAEe,SAAS;;IACtB,MAAM,OAAO,CAAA,GAAA,qIAAA,CAAA,cAAW,AAAD;IAEvB,CAAA,GAAA,6JAAA,CAAA,YAAS,AAAD;mCAAE;YACR,MAAM;uDAAc;oBAClB,MAAM;gBACR;;YAEA;QACF;kCAAG,EAAE;IAEL,CAAA,GAAA,6JAAA,CAAA,YAAS,AAAD;mCAAE;YACR;2CAAW;oBACT,IACE,OAAO,eAAe,IACtB,OAAO,OAAO,eAAe,CAAC,QAAQ,KAAK,YAC3C;wBACA,OAAO,eAAe,CAAC,QAAQ;oBACjC;gBACF;0CAAG;QACL;kCAAG;QAAC;KAAK;IAET,OAAO;AACT;GAvBwB;;QACT,qIAAA,CAAA,cAAW;;;KADF","debugId":null}}]
-}
