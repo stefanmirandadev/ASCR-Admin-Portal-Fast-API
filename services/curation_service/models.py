@@ -211,7 +211,7 @@ class CultureMedium(BaseModel):
     passage_method: str = Field(default="Missing", description="Passage method used to culture the cell line")
 
 # Complete cell line data structure
-class CellLineMetadataModel(BaseModel):
+class CellLineData(BaseModel):
     basic_data: List[BasicData] = Field(default_factory=lambda: [BasicData()])
     generator: List[Generator] = Field(default_factory=lambda: [Generator()])
     contact: List[Contact] = Field(default_factory=lambda: [Contact()])
@@ -225,6 +225,7 @@ class CellLineMetadataModel(BaseModel):
     embryonic_derivation: List[EmbryonicDerivation] = Field(default_factory=lambda: [EmbryonicDerivation()])
     ethics: List[Ethics] = Field(default_factory=lambda: [Ethics()])
     culture_medium: List[CultureMedium] = Field(default_factory=lambda: [CultureMedium()])
+
 
 # Usage metadata models
 class UsageData(BaseModel):

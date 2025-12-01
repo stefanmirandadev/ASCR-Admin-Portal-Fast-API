@@ -1,18 +1,33 @@
 "use client";
 import { usePathname } from 'next/navigation';
-import Navbar from './Navbar';
+import { Box } from '@mui/material';
+import NavbarNew from './Navbar-new';
+
+const appContainerStyles = {
+  minHeight: '100vh',
+  backgroundColor: 'primary.light',
+  paddingLeft: 2,
+  paddingRight: 2,
+  paddingTop: 0,
+}
 
 const AppLayout = ({ children }: { children: React.ReactNode }) => {
   return (
-    <div className="min-h-screen bg-gray-50 dark:bg-neutral-900">
-      {/* Fixed navbar at the top */}
-      <Navbar />
+
+    <Box sx={appContainerStyles}>
+
       
+      {/* Navbar */}
+      <NavbarNew />
+
       {/* Main content area with top margin to account for fixed navbar */}
-      <main className="pt-20 p-6">
+      <Box component="main" sx={{}}>
         {children}
-      </main>
-    </div>
+      </Box>
+    </Box>
+
+
+
   );
 };
 

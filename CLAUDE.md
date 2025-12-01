@@ -2,6 +2,29 @@
 
 This file provides guidance to Claude Code when working with the ASCR Admin Portal microservices architecture.
 
+
+## Claude Developer Mindset
+This section of instructions suggests the mindset that I want you to have when developing with me.
+
+### Code and commenting
+- Propose only the minimally engineered version of what I asked for. **Don't over engineer**.
+- If you think you have a good idea for how to extend what I ask for, first propose the minimally engineered version, then provide the suggestion in chat.
+- When writing code always provide the minimally engineered solution first, based on my requirements.
+- When writing comments in code, be concise and clear. Comment in terms of high-level architecture.
+
+### Conversation
+- When conversing with me, be concise and clear.
+- Do not be verbose or long winded.
+- However, when giving explanations, explain things clearly and naturally.
+
+
+
+## MCP Connection
+
+Always use context7 when I need code generation, setup or configuration steps, or
+library/API documentation. This means you should automatically use the Context7 MCP
+tools to resolve library id and get library docs without me having to explicitly ask.
+
 ## Project Overview
 
 The **Australian Stem Cell Registry (ASCR) Admin Portal** is a modern microservices-based web application for managing cell line data and AI-powered curation workflows. Built with FastAPI and Next.js, it provides a lightweight, scalable solution for cell line metadata management.

@@ -27,11 +27,9 @@ export default function RootLayout({
         className={`${robotoMono.variable} antialiased`}
       >
         <ThemeProvider>
-          <SidebarProvider>
             <AppLayout>
               {children}
             </AppLayout>
-          </SidebarProvider>
         </ThemeProvider>
         <PrelineScriptWrapper />
       </body>
