@@ -45,7 +45,8 @@ app = FastAPI(title="ASCR Curation Service", version="1.0.0")
 # CORS middleware
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=["http://localhost:3001"],
+    allow_origins=["http://localhost:3001",
+                   "http://172.26.129.138:3001"],
     allow_credentials=True,
     allow_methods=["*"],
     allow_headers=["*"],
