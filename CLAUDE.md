@@ -106,6 +106,33 @@ celery -A worker worker --loglevel=info
 4. **Version Control**: Automatic versioning on cell line updates (10-version retention)
 5. **Frontend Interface**: User interaction through Next.js application
 
+## Data Dictionary Changes
+
+The data dictionary (`data_dictionaries/2025_12_ascr_data_dictionary_v1.0.xlsx`) is the source of truth for curation models and LLM instructions. When making changes during development:
+
+1. **Record the change** in `data_dictionaries/stefan_data_dictionary_change_record.md`
+   - Document: table name, field name, column changed, reason, old value, new value
+
+2. **Update the xlsx** using openpyxl (via `.venv`):
+   ```bash
+   source .venv/bin/activate
+   python3 -c "from openpyxl import load_workbook; ..."
+   ```
+
+3. **Regenerate artifacts**:
+   ```bash
+   source .venv/bin/activate
+   python data_dictionaries/make_data_dictionary.py
+   ```
+
+This generates:
+- `curation_models.py` - Pydantic models
+- `curation_schema.yaml` - Human-readable schema
+- `curation_schema.jsonc` - JSON schema for frontend
+- `curation_instructions/llm_curation_instructions.md` - LLM instructions
+
+The change record ensures alignment with the data dictionary maintainer's master copy.
+
 ## API Integration
 
 ### Curation Service (8001)

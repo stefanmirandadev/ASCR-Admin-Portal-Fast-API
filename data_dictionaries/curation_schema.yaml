@@ -1,0 +1,2311 @@
+# Auto-generated from: 2025_12_ascr_data_dictionary_v1.0.xlsx
+# Do not edit manually - regenerate from xlsx source.
+
+CellLine:
+  fields:
+    hpscreg_name:
+      description: Cell line name in hPSCreg.
+      data_type: VARCHAR
+      allows_null: true
+      field_length: 100
+      valid_values_long: null
+      uses_ontology: false
+      llm_curate: true
+      llm_instructions: Write the name of the cell line that you are currently curating.
+        This should have been given to you in the prompt.
+    cell_line_alt_name:
+      description: Alternative name/s for the cell line.
+      data_type: VARCHAR
+      allows_null: true
+      field_length: 100
+      valid_values_long: null
+      uses_ontology: false
+      llm_curate: true
+      llm_instructions: Alternative names for the cell line used in article, or "Missing"
+        if none. Used semicolon separated values if multiple names.
+    cell_type:
+      description: Type of cell line.
+      data_type: ENUM
+      allows_null: false
+      field_length: 5
+      valid_values_long:
+      - human embryonic stem cell (hESC)
+      - human induced pluripotent stem cell (hiPSC)
+      uses_ontology: false
+      llm_curate: true
+      llm_instructions: Select from schema literals (e.g., hiPSC, ESC)
+    status:
+      description: Status of the cell line's characterisation.
+      data_type: ENUM
+      allows_null: false
+      field_length: 2
+      valid_values_long:
+      - Backup
+      - Characterised
+      uses_ontology: false
+      llm_curate: false
+      llm_instructions: null
+    genotype:
+      description: Summary of overall genotype of the cell line at the genotype_locus.
+      data_type: ENUM
+      allows_null: false
+      field_length: 2
+      valid_values_long:
+      - Patient Control
+      - Gene Corrected
+      uses_ontology: false
+      llm_curate: false
+      llm_instructions: null
+    genotype_locus:
+      description: Specific gene locus affected by variants or modifications.
+      data_type: VARCHAR
+      allows_null: false
+      field_length: 100
+      valid_values_long: null
+      uses_ontology: false
+      llm_curate: false
+      llm_instructions: null
+    frozen:
+      description: Describes whether stock of the cell line was frozen.
+      data_type: BOOLEAN
+      allows_null: false
+      field_length: null
+      valid_values_long:
+      - 'TRUE'
+      - 'FALSE'
+      uses_ontology: false
+      llm_curate: true
+      llm_instructions: Write "True" if the article mentions a stocked/archived date.
+        "False" otherwise
+    associated_polymorphism:
+      description: Known polymorphism/s associated with the cell line.
+      data_type: VARCHAR
+      allows_null: true
+      field_length: null
+      valid_values_long: null
+      uses_ontology: false
+      llm_curate: false
+      llm_instructions: null
+    research_use:
+      description: Describes whether the cell line is available for research use.
+      data_type: BOOLEAN
+      allows_null: false
+      field_length: null
+      valid_values_long:
+      - 'TRUE'
+      - 'FALSE'
+      uses_ontology: false
+      llm_curate: false
+      llm_instructions: null
+    clinical_use:
+      description: Describes whether the cell line is available for clinical use.
+      data_type: BOOLEAN
+      allows_null: false
+      field_length: null
+      valid_values_long:
+      - 'TRUE'
+      - 'FALSE'
+      uses_ontology: false
+      llm_curate: false
+      llm_instructions: null
+    commercial_use:
+      description: Describes whether the cell line is available for commercial use.
+      data_type: BOOLEAN
+      allows_null: false
+      field_length: null
+      valid_values_long:
+      - 'TRUE'
+      - 'FALSE'
+      uses_ontology: false
+      llm_curate: false
+      llm_instructions: null
+    certificate_of_pluripotency_characterisation:
+      description: Describes whether a certificate of pluripotency has been issued
+        for the cell line.
+      data_type: BOOLEAN
+      allows_null: false
+      field_length: null
+      valid_values_long:
+      - 'TRUE'
+      - 'FALSE'
+      uses_ontology: false
+      llm_curate: false
+      llm_instructions: null
+    publish:
+      description: Whether the line can be made visible on ASCR website
+      data_type: BOOLEAN
+      allows_null: false
+      field_length: null
+      valid_values_long:
+      - 'TRUE'
+      - 'FALSE'
+      uses_ontology: false
+      llm_curate: false
+      llm_instructions: null
+    embargo_date:
+      description: Australian Stem Cell Registry embargo date for cell line entry.
+      data_type: DATE
+      allows_null: true
+      field_length: null
+      valid_values_long: null
+      uses_ontology: false
+      llm_curate: false
+      llm_instructions: null
+    registered_with_hpscreg:
+      description: Whether the line can be registered with hPSCreg.
+      data_type: ENUM
+      allows_null: false
+      field_length: 2
+      valid_values_long:
+      - Not Registered
+      - Registered
+      - To be Updated
+      - Cannot be Registered
+      uses_ontology: false
+      llm_curate: false
+      llm_instructions: null
+    curation_status:
+      description: Cell line's curation status in the Australian Stem Cell Registry.
+      data_type: ENUM
+      allows_null: false
+      field_length: 6
+      valid_values_long:
+      - Not yet reviewed by Australian Stem Cell Registry
+      - Reviewed by Australian Stem Cell Registry
+      - Reviewed and Updated by Australian Stem Cell Registry
+      - Flagged for further review
+      uses_ontology: false
+      llm_curate: false
+      llm_instructions: null
+ExternalCellLineSource:
+  fields:
+    name:
+      description: Name of the external cell line which served as the source cell.
+      data_type: VARCHAR
+      allows_null: false
+      field_length: 100
+      valid_values_long: null
+      uses_ontology: false
+      llm_curate: false
+      llm_instructions: null
+    xref_url:
+      description: URL to source cell line pages in relevant external databases.
+      data_type: URL
+      allows_null: false
+      field_length: 200
+      valid_values_long: null
+      uses_ontology: false
+      llm_curate: false
+      llm_instructions: null
+    xref_id:
+      description: Identifier for source cell line in relevant external databases.
+      data_type: VARCHAR
+      allows_null: false
+      field_length: 100
+      valid_values_long: null
+      uses_ontology: false
+      llm_curate: false
+      llm_instructions: null
+    polymorphism:
+      description: Known polymorphism/s associated with the source cell line.
+      data_type: VARCHAR
+      allows_null: true
+      field_length: 500
+      valid_values_long: null
+      uses_ontology: false
+      llm_curate: false
+      llm_instructions: null
+    provider:
+      description: Source cell line provider/ company name.
+      data_type: VARCHAR
+      allows_null: true
+      field_length: 500
+      valid_values_long: null
+      uses_ontology: false
+      llm_curate: false
+      llm_instructions: null
+    provider_cat_num:
+      description: Provider catalogue number for source cell line.
+      data_type: VARCHAR
+      allows_null: true
+      field_length: 100
+      valid_values_long: null
+      uses_ontology: false
+      llm_curate: false
+      llm_instructions: null
+    provider_cat_url:
+      description: URL to provider page for source cell line.
+      data_type: URL
+      allows_null: true
+      field_length: 200
+      valid_values_long: null
+      uses_ontology: false
+      llm_curate: false
+      llm_instructions: null
+    lot_number:
+      description: Provider lot number for source cell line.
+      data_type: VARCHAR
+      allows_null: true
+      field_length: 100
+      valid_values_long: null
+      uses_ontology: false
+      llm_curate: false
+      llm_instructions: null
+Contact:
+  fields:
+    first_name:
+      description: First name of contact.
+      data_type: VARCHAR
+      allows_null: false
+      field_length: 255
+      valid_values_long: null
+      uses_ontology: false
+      llm_curate: true
+      llm_instructions: Contact person's first name
+    last_name:
+      description: Last name of contact.
+      data_type: VARCHAR
+      allows_null: false
+      field_length: 255
+      valid_values_long: null
+      uses_ontology: false
+      llm_curate: true
+      llm_instructions: Contact person's last name
+    name_initials:
+      description: Initial of contact's middle name.
+      data_type: VARCHAR
+      allows_null: true
+      field_length: 4
+      valid_values_long: null
+      uses_ontology: false
+      llm_curate: false
+      llm_instructions: Contact person's middle initials
+    e_mail:
+      description: Email address of contact.
+      data_type: EMAIL
+      allows_null: false
+      field_length: 255
+      valid_values_long: null
+      uses_ontology: false
+      llm_curate: false
+      llm_instructions: Contact person's email address
+    phone_number:
+      description: Phone number of contact.
+      data_type: VARCHAR
+      allows_null: true
+      field_length: 128
+      valid_values_long: null
+      uses_ontology: false
+      llm_curate: false
+      llm_instructions: Contact person's phone number
+Institute:
+  fields:
+    name:
+      description: Name of institution.
+      data_type: VARCHAR
+      allows_null: false
+      field_length: 100
+      valid_values_long: null
+      uses_ontology: false
+      llm_curate: false
+      llm_instructions: null
+    acronym:
+      description: Institute acronym.
+      data_type: VARCHAR
+      allows_null: true
+      field_length: 8
+      valid_values_long: null
+      uses_ontology: false
+      llm_curate: false
+      llm_instructions: null
+    city:
+      description: City of institution.
+      data_type: VARCHAR
+      allows_null: false
+      field_length: 100
+      valid_values_long: null
+      uses_ontology: false
+      llm_curate: false
+      llm_instructions: null
+    country:
+      description: Country of institution.
+      data_type: VARCHAR
+      allows_null: false
+      field_length: 80
+      valid_values_long: null
+      uses_ontology: false
+      llm_curate: false
+      llm_instructions: null
+    latitude:
+      description: Latitude coordinate for institute.
+      data_type: FLOAT
+      allows_null: true
+      field_length: null
+      valid_values_long: null
+      uses_ontology: false
+      llm_curate: false
+      llm_instructions: null
+    longitude:
+      description: Longitude coordinate for institute.
+      data_type: FLOAT
+      allows_null: true
+      field_length: null
+      valid_values_long: null
+      uses_ontology: false
+      llm_curate: false
+      llm_instructions: null
+Group:
+  fields:
+    name:
+      description: Name of the group.
+      data_type: VARCHAR
+      allows_null: false
+      field_length: 100
+      valid_values_long: null
+      uses_ontology: false
+      llm_curate: false
+      llm_instructions: null
+    is_research_group:
+      description: Describes whether the group is a research group.
+      data_type: BOOLEAN
+      allows_null: false
+      field_length: null
+      valid_values_long:
+      - 'TRUE'
+      - 'FALSE'
+      uses_ontology: false
+      llm_curate: false
+      llm_instructions: null
+    institutes:
+      description: Django ManyToManyField linking to stakeholders_institute via stakeholders_group_institutes
+      data_type: ARRAY
+      allows_null: false
+      field_length: null
+      valid_values_long: null
+      uses_ontology: false
+      llm_curate: false
+      llm_instructions: null
+    contacts:
+      description: Django ManyToManyField linking to stakeholders_contact via stakeholders_group_contacts
+      data_type: ARRAY
+      allows_null: false
+      field_length: null
+      valid_values_long: null
+      uses_ontology: false
+      llm_curate: false
+      llm_instructions: null
+Ethics:
+  fields:
+    ethics_number:
+      description: Ethics approval number associated with the cell line.
+      data_type: VARCHAR
+      allows_null: false
+      field_length: 100
+      valid_values_long: null
+      uses_ontology: false
+      llm_curate: false
+      llm_instructions: null
+    approval_date:
+      description: Date of ethics approval.
+      data_type: DATE
+      allows_null: true
+      field_length: null
+      valid_values_long: null
+      uses_ontology: false
+      llm_curate: false
+      llm_instructions: null
+    consent_form:
+      description: Template of donor consent form.
+      data_type: FILE
+      allows_null: true
+      field_length: 500
+      valid_values_long: null
+      uses_ontology: false
+      llm_curate: false
+      llm_instructions: null
+    consent_for_specific_research:
+      description: Whether consent pertains to a specific research project.
+      data_type: BOOLEAN
+      allows_null: false
+      field_length: null
+      valid_values_long:
+      - 'TRUE'
+      - 'FALSE'
+      uses_ontology: false
+      llm_curate: false
+      llm_instructions: null
+    consent_for_future_research:
+      description: Whether consent permits unforeseen future research, without further
+        consent.
+      data_type: BOOLEAN
+      allows_null: false
+      field_length: null
+      valid_values_long:
+      - 'TRUE'
+      - 'FALSE'
+      uses_ontology: false
+      llm_curate: false
+      llm_instructions: null
+    consent_for_global_distribution:
+      description: Whether consent prevents cells derived from the donated biosample
+        from being made available to researchers anywhere in the world.
+      data_type: BOOLEAN
+      allows_null: false
+      field_length: null
+      valid_values_long:
+      - 'TRUE'
+      - 'FALSE'
+      uses_ontology: false
+      llm_curate: false
+      llm_instructions: null
+    institutional_HREC:
+      description: Name of institutional human research ethics committee granting
+        the relevant approval.
+      data_type: VARCHAR
+      allows_null: true
+      field_length: 500
+      valid_values_long: null
+      uses_ontology: false
+      llm_curate: false
+      llm_instructions: null
+RegistrationRequirements:
+  fields:
+    submitted_ethics_clearance:
+      description: Describes whether the cell line has HREC approval
+      data_type: ENUM
+      allows_null: false
+      field_length: 2
+      valid_values_long:
+      - 'Yes'
+      - 'No'
+      - Unknown
+      uses_ontology: false
+      llm_curate: false
+      llm_instructions: null
+xRef:
+  fields:
+    db_url:
+      description: URL to the home page of the external database the cell line is
+        referenced in.
+      data_type: URL
+      allows_null: true
+      field_length: 200
+      valid_values_long: null
+      uses_ontology: false
+      llm_curate: false
+      llm_instructions: null
+    xref_url:
+      description: Full URL to the external database entry for the cell line.
+      data_type: URL
+      allows_null: false
+      field_length: 200
+      valid_values_long: null
+      uses_ontology: false
+      llm_curate: false
+      llm_instructions: null
+    db_name:
+      description: Name of the external database the cell line is referenced in.
+      data_type: VARCHAR
+      allows_null: false
+      field_length: 100
+      valid_values_long: null
+      uses_ontology: false
+      llm_curate: false
+      llm_instructions: null
+Publication:
+  fields:
+    doi:
+      description: Digital Object Identifier of the publication.
+      data_type: URL
+      allows_null: false
+      field_length: 200
+      valid_values_long: null
+      uses_ontology: false
+      llm_curate: true
+      llm_instructions: Digital Object Identifier
+    pmid:
+      description: PubMed ID of the publication.
+      data_type: VARCHAR
+      allows_null: true
+      field_length: 100
+      valid_values_long: null
+      uses_ontology: false
+      llm_curate: true
+      llm_instructions: PubMed ID. This often cannot be found in the article however
+        it is the filename stem in the article file you were given.
+    first_author:
+      description: Name of first author of the publication.
+      data_type: VARCHAR
+      allows_null: false
+      field_length: 100
+      valid_values_long: null
+      uses_ontology: false
+      llm_curate: true
+      llm_instructions: First author name
+    last_author:
+      description: Name of last author of the publication.
+      data_type: VARCHAR
+      allows_null: false
+      field_length: 100
+      valid_values_long: null
+      uses_ontology: false
+      llm_curate: true
+      llm_instructions: Last author name
+    journal:
+      description: Name of journal that publication was published in.
+      data_type: VARCHAR
+      allows_null: false
+      field_length: 150
+      valid_values_long: null
+      uses_ontology: false
+      llm_curate: true
+      llm_instructions: Journal name
+    title:
+      description: Title of the publication.
+      data_type: VARCHAR
+      allows_null: true
+      field_length: 255
+      valid_values_long: null
+      uses_ontology: false
+      llm_curate: true
+      llm_instructions: Full article title
+    year:
+      description: Year that publication was published.
+      data_type: INT
+      allows_null: false
+      field_length: null
+      valid_values_long: null
+      uses_ontology: false
+      llm_curate: true
+      llm_instructions: Publication year
+DonorSource:
+  fields:
+    age:
+      description: Age range of the donor.
+      data_type: ENUM
+      allows_null: false
+      field_length: 5
+      valid_values_long:
+      - Unknown
+      - Embryo
+      - Fetal
+      - Neonate
+      - 1-4
+      - 5-9
+      - 10-14
+      - 15-19
+      - 20-24
+      - 25-29
+      - 30-34
+      - 35-39
+      - 40-44
+      - 45-49
+      - 50-54
+      - 55-59
+      - 60-64
+      - 65-69
+      - 70-74
+      - 75-79
+      - 80-84
+      - 85-89
+      - 89+
+      uses_ontology: false
+      llm_curate: true
+      llm_instructions: Age range (see accepted values for how to represent age ranges)
+        of the donor or "Missing" if not found. If the line was embryonically derived,
+        write "EM". If fetus write FE or if neonatal write NEO.
+    sex:
+      description: Genetic sex of the donor.
+      data_type: ENUM
+      allows_null: false
+      field_length: 1
+      valid_values_long:
+      - Male
+      - Female
+      - Other
+      - Unknown
+      uses_ontology: false
+      llm_curate: true
+      llm_instructions: Biological sex of the donor or "Missing" if not found
+    polymorphism:
+      description: Polymorphism associated with the donor.
+      data_type: VARCHAR
+      allows_null: true
+      field_length: 500
+      valid_values_long: null
+      uses_ontology: false
+      llm_curate: false
+      llm_instructions: null
+    xref_url:
+      description: Full URL to donor related entry in database.
+      data_type: URL
+      allows_null: true
+      field_length: 200
+      valid_values_long: null
+      uses_ontology: false
+      llm_curate: false
+      llm_instructions: null
+    xref_id:
+      description: Identifier for donor entry in external database.
+      data_type: VARCHAR
+      allows_null: true
+      field_length: 100
+      valid_values_long: null
+      uses_ontology: false
+      llm_curate: false
+      llm_instructions: null
+Disease:
+  fields:
+    name:
+      description: Disease name as reported unless an ontological label applies.
+      data_type: VARCHAR
+      allows_null: false
+      field_length: 100
+      valid_values_long: null
+      uses_ontology: false
+      llm_curate: true
+      llm_instructions: Disease name or "Missing" if not found
+    description:
+      description: Disease description.
+      data_type: VARCHAR
+      allows_null: false
+      field_length: 1250
+      valid_values_long: null
+      uses_ontology: false
+      llm_curate: true
+      llm_instructions: Brief disease description or "Missing" if not found
+    omim_url:
+      description: URL for disease entry in OMIM.
+      data_type: URL
+      allows_null: false
+      field_length: 200
+      valid_values_long: null
+      uses_ontology: false
+      llm_curate: false
+      llm_instructions: null
+    omim_id:
+      description: Identifier for disease entry in OMIM.
+      data_type: VARCHAR
+      allows_null: false
+      field_length: 100
+      valid_values_long: null
+      uses_ontology: false
+      llm_curate: false
+      llm_instructions: null
+    icd11_url:
+      description: URL for disease entry in ICD11.
+      data_type: URL
+      allows_null: false
+      field_length: 200
+      valid_values_long: null
+      uses_ontology: false
+      llm_curate: false
+      llm_instructions: null
+    icd11_id:
+      description: Identifier for disease entry in ICD11.
+      data_type: VARCHAR
+      allows_null: false
+      field_length: 100
+      valid_values_long: null
+      uses_ontology: false
+      llm_curate: false
+      llm_instructions: null
+MediumComponentItems:
+  fields:
+    name:
+      description: Name of media component.
+      data_type: VARCHAR
+      allows_null: false
+      field_length: 100
+      valid_values_long: null
+      uses_ontology: false
+      llm_curate: false
+      llm_instructions: null
+    amount:
+      description: Number of unit/s of component used.
+      data_type: VARCHAR
+      allows_null: true
+      field_length: 20
+      valid_values_long: null
+      uses_ontology: false
+      llm_curate: false
+      llm_instructions: null
+    unit:
+      description: Units for media component amount.
+      data_type: ENUM
+      allows_null: true
+      field_length: 10
+      valid_values_long:
+      - Percent
+      - Milliliter
+      - Microliter
+      - Millimolar
+      - Micromolar
+      - Milligram per milliliter
+      - Microgram per milliliter
+      - Nanogram per milliliter
+      - Nanomolar
+      - Unit per milliliter
+      - Unit
+      uses_ontology: false
+      llm_curate: false
+      llm_instructions: null
+    company:
+      description: Name of company who supplied media component.
+      data_type: VARCHAR
+      allows_null: true
+      field_length: 100
+      valid_values_long: null
+      uses_ontology: false
+      llm_curate: false
+      llm_instructions: null
+    type:
+      description: Type of media component.
+      data_type: ENUM
+      allows_null: false
+      field_length: 2
+      valid_values_long:
+      - Base Medium
+      - Main Protein
+      - Supplement
+      - Base Coat
+      - Serum
+      uses_ontology: false
+      llm_curate: false
+      llm_instructions: null
+CultureMedium:
+  fields:
+    co2_concentration:
+      description: CO2 concentration.
+      data_type: FLOAT
+      allows_null: true
+      field_length: null
+      valid_values_long: null
+      uses_ontology: false
+      llm_curate: true
+      llm_instructions: CO₂ concentration or "Missing" if not found
+    o2_concentration:
+      description: O2 Concentration.
+      data_type: FLOAT
+      allows_null: true
+      field_length: null
+      valid_values_long: null
+      uses_ontology: false
+      llm_curate: true
+      llm_instructions: O₂ concentration or "Missing" if not found
+    rho_kinase_sed:
+      description: 'Whether Rho Kinase been used at cryo, passage or thaw. '
+      data_type: BOOLEAN
+      allows_null: true
+      field_length: null
+      valid_values_long:
+      - 'TRUE'
+      - 'FALSE'
+      uses_ontology: false
+      llm_curate: false
+      llm_instructions: null
+    passage_method:
+      description: Method used for passaging cells.
+      data_type: ENUM
+      allows_null: false
+      field_length: 2
+      valid_values_long:
+      - Enzymatically
+      - Enzyme-free cell dissociation
+      - Mechanically
+      - Other
+      - Not specified
+      uses_ontology: false
+      llm_curate: true
+      llm_instructions: Write the passage method used to culture the cell line
+    other_passage_method:
+      description: Other cell passage method (if not covered by passage_method).
+      data_type: VARCHAR
+      allows_null: false
+      field_length: 100
+      valid_values_long: null
+      uses_ontology: false
+      llm_curate: false
+      llm_instructions: null
+    culture_medium_items:
+      description: Django ManyToManyField linking to stem_cell_mediumcomponentitems
+        via stem_cell_culturemedium_culture_medium_items
+      data_type: VARCHAR
+      allows_null: false
+      field_length: null
+      valid_values_long: null
+      uses_ontology: false
+      llm_curate: false
+      llm_instructions: null
+MicrobiologyVirologyScreening:
+  fields:
+    performed:
+      description: Describes whether any microbiology or virology screening was performed.
+      data_type: BOOLEAN
+      allows_null: false
+      field_length: null
+      valid_values_long:
+      - 'TRUE'
+      - 'FALSE'
+      uses_ontology: false
+      llm_curate: false
+      llm_instructions: null
+    hiv1:
+      description: HIV1 test result if/ whether available.
+      data_type: ENUM
+      allows_null: false
+      field_length: 2
+      valid_values_long:
+      - Positive
+      - Negative
+      - Not Done
+      uses_ontology: false
+      llm_curate: false
+      llm_instructions: null
+    hiv2:
+      description: HIV2 test result if/ whether available.
+      data_type: ENUM
+      allows_null: false
+      field_length: 2
+      valid_values_long:
+      - Positive
+      - Negative
+      - Not Done
+      uses_ontology: false
+      llm_curate: false
+      llm_instructions: null
+    hep_b:
+      description: Hepatitis B test result if/ whether available.
+      data_type: ENUM
+      allows_null: false
+      field_length: 2
+      valid_values_long:
+      - Positive
+      - Negative
+      - Not Done
+      uses_ontology: false
+      llm_curate: false
+      llm_instructions: null
+    hep_c:
+      description: Hepatitis C test result if/ whether available.
+      data_type: ENUM
+      allows_null: false
+      field_length: 2
+      valid_values_long:
+      - Positive
+      - Negative
+      - Not Done
+      uses_ontology: false
+      llm_curate: false
+      llm_instructions: null
+    mycoplasma:
+      description: Mycoplasma test result if/ whether available.
+      data_type: ENUM
+      allows_null: false
+      field_length: 2
+      valid_values_long:
+      - Positive
+      - Negative
+      - Not Done
+      uses_ontology: false
+      llm_curate: false
+      llm_instructions: null
+    other:
+      description: Other microbiology/virology screening test performed if any.
+      data_type: VARCHAR
+      allows_null: true
+      field_length: 100
+      valid_values_long:
+      - Positive
+      - Negative
+      - Not Done
+      uses_ontology: false
+      llm_curate: false
+      llm_instructions: null
+    other_result:
+      description: Result of other screening test.
+      data_type: ENUM
+      allows_null: false
+      field_length: 2
+      valid_values_long:
+      - Positive
+      - Negative
+      - Not Done
+      uses_ontology: false
+      llm_curate: false
+      llm_instructions: null
+GenomicAlteration:
+  fields:
+    mutation_type:
+      description: Type of genomic alteration.
+      data_type: ENUM
+      allows_null: false
+      field_length: 3
+      valid_values_long:
+      - Variant
+      - Transgene Expression
+      - Gene Knock-out
+      - Gene Knock-in
+      - Isogenic modification
+      uses_ontology: false
+      llm_curate: true
+      llm_instructions: Type of genomic alteration or "Missing" if not found
+    cytoband:
+      description: Chromosome/cytoband location of genomic alteration.
+      data_type: VARCHAR
+      allows_null: false
+      field_length: 100
+      valid_values_long: null
+      uses_ontology: false
+      llm_curate: true
+      llm_instructions: Chromosomal location or "Missing" if not found
+    delivery_method:
+      description: Delivery method of genomic alteration.
+      data_type: VARCHAR
+      allows_null: false
+      field_length: 500
+      valid_values_long: null
+      uses_ontology: false
+      llm_curate: true
+      llm_instructions: How modification was delivered or "Missing" if not found
+    description:
+      description: Description relevant to genomic alteration.
+      data_type: VARCHAR
+      allows_null: false
+      field_length: 500
+      valid_values_long: null
+      uses_ontology: false
+      llm_curate: true
+      llm_instructions: Modification description or "Missing" if not found
+    genotype:
+      description: Genotype of genomic alteration.
+      data_type: VARCHAR
+      allows_null: false
+      field_length: 500
+      valid_values_long: null
+      uses_ontology: false
+      llm_curate: true
+      llm_instructions: Write the genotype nomenclature for the genomic modification
+        performed on this cell line, or "NM" if no modification, or "Missing" if not
+        found
+CharacterisationProtocolResult:
+  fields:
+    cell_type:
+      description: Type of germ layer into which the stem cell line was differentiated.
+      data_type: ENUM
+      allows_null: false
+      field_length: 2
+      valid_values_long:
+      - Endoderm
+      - Ectoderm
+      - Mesoderm
+      - Trophectoderm
+      uses_ontology: false
+      llm_curate: true
+      llm_instructions: Cell type abbreviation from results
+    show_potency:
+      description: Indicates whether the stem cell was shown to differentiate into
+        the germ layer indicated by cell_type.
+      data_type: BOOLEAN
+      allows_null: true
+      field_length: null
+      valid_values_long:
+      - 'TRUE'
+      - 'FALSE'
+      uses_ontology: false
+      llm_curate: true
+      llm_instructions: Can differentiate into this type
+    marker_list:
+      description: List of markers used to demonstrate differentiation into germ layer.
+      data_type: VARCHAR
+      allows_null: true
+      field_length: 100
+      valid_values_long: null
+      uses_ontology: false
+      llm_curate: true
+      llm_instructions: Differentiation markers as string
+    differentiation_profile:
+      description: Method of differentiation.
+      data_type: ENUM
+      allows_null: true
+      field_length: 3
+      valid_values_long:
+      - In vivo teratoma
+      - In vitro spontaneous differentiation
+      - In vitro directed differentiation
+      - Other
+      - Unknown
+      uses_ontology: false
+      llm_curate: true
+      llm_instructions: Write the method that was used to determine expression of
+        the markers
+    transcriptome_data_url:
+      description: Link to raw transcriptome data relevant to differentiation of stem
+        cell line.
+      data_type: URL
+      allows_null: true
+      field_length: 200
+      valid_values_long: null
+      uses_ontology: false
+      llm_curate: false
+      llm_instructions: null
+    morphology_file:
+      description: File demonstrating morphology of differentiated cells.
+      data_type: FILE
+      allows_null: true
+      field_length: 100
+      valid_values_long: null
+      uses_ontology: false
+      llm_curate: false
+      llm_instructions: null
+UndifferentiatedCharacterisation:
+  fields:
+    epi_pluri_test:
+      description: Describes whether EpiPluri Test results are available for undifferentiated
+        cells.
+      data_type: BOOLEAN
+      allows_null: true
+      field_length: null
+      valid_values_long:
+      - 'TRUE'
+      - 'FALSE'
+      uses_ontology: false
+      llm_curate: false
+      llm_instructions: null
+    epi_pluri_score:
+      description: EpiPluri Test Score (for undifferentiated cells).
+      data_type: FLOAT
+      allows_null: true
+      field_length: null
+      valid_values_long: null
+      uses_ontology: false
+      llm_curate: true
+      llm_instructions: EpiPluriScore result or "Missing" if not found
+    epi_pluri_mcpg:
+      description: EpiPluri mCpG result (undifferentiated cells).
+      data_type: BOOLEAN
+      allows_null: false
+      field_length: null
+      valid_values_long:
+      - 'TRUE'
+      - 'FALSE'
+      uses_ontology: false
+      llm_curate: false
+      llm_instructions: null
+    epi_pluri_oct4:
+      description: EpiPluri OCT4 methylation result (undifferentiated cells).
+      data_type: BOOLEAN
+      allows_null: false
+      field_length: null
+      valid_values_long:
+      - 'TRUE'
+      - 'FALSE'
+      uses_ontology: false
+      llm_curate: false
+      llm_instructions: null
+    pluri_test:
+      description: Describes whether PluriTest results are available for undifferentiated
+        cells.
+      data_type: BOOLEAN
+      allows_null: true
+      field_length: null
+      valid_values_long:
+      - 'TRUE'
+      - 'FALSE'
+      uses_ontology: false
+      llm_curate: false
+      llm_instructions: null
+    pluri_test_score:
+      description: Pluritest_score (undifferentiated cells).
+      data_type: FLOAT
+      allows_null: true
+      field_length: null
+      valid_values_long: null
+      uses_ontology: false
+      llm_curate: true
+      llm_instructions: PluriTest score or "Missing" if not found
+    pluri_novelty_score:
+      description: Pluritest_novelty_score (undifferentiated cells).
+      data_type: FLOAT
+      allows_null: true
+      field_length: null
+      valid_values_long: null
+      uses_ontology: false
+      llm_curate: true
+      llm_instructions: PluriTest novelty score or "Missing" if not found
+    pluri_test_microarray_url:
+      description: URL for PluriTest microarray data (undifferentiated cells).
+      data_type: URL
+      allows_null: true
+      field_length: 200
+      valid_values_long: null
+      uses_ontology: false
+      llm_curate: false
+      llm_instructions: null
+    morphology_file:
+      description: Morphology image file (undifferentiated cells).
+      data_type: FILE
+      allows_null: true
+      field_length: 100
+      valid_values_long: null
+      uses_ontology: false
+      llm_curate: false
+      llm_instructions: null
+    other:
+      description: Describes whether any other tests were performed to characterise
+        undifferentiated cells.
+      data_type: VARCHAR
+      allows_null: true
+      field_length: 100
+      valid_values_long: null
+      uses_ontology: false
+      llm_curate: false
+      llm_instructions: null
+HpscScorecard:
+  fields:
+    self_renewal:
+      description: hPSC score card self-renewal result (TRUE indicates positive result).
+      data_type: BOOLEAN
+      allows_null: false
+      field_length: null
+      valid_values_long:
+      - 'TRUE'
+      - 'FALSE'
+      uses_ontology: false
+      llm_curate: false
+      llm_instructions: null
+    endoderm:
+      description: hPSC scorecard endoderm result (TRUE indicates positive result).
+      data_type: BOOLEAN
+      allows_null: false
+      field_length: null
+      valid_values_long:
+      - 'TRUE'
+      - 'FALSE'
+      uses_ontology: false
+      llm_curate: false
+      llm_instructions: null
+    mesoderm:
+      description: hPSC scorecard mesoderm result (TRUE indicates positive result).
+      data_type: BOOLEAN
+      allows_null: false
+      field_length: null
+      valid_values_long:
+      - 'TRUE'
+      - 'FALSE'
+      uses_ontology: false
+      llm_curate: false
+      llm_instructions: null
+    ectoderm:
+      description: hPSC scorecard ectoderm result (TRUE indicates positive result).
+      data_type: BOOLEAN
+      allows_null: false
+      field_length: null
+      valid_values_long:
+      - 'TRUE'
+      - 'FALSE'
+      uses_ontology: false
+      llm_curate: false
+      llm_instructions: null
+    scorecard_file:
+      description: hPSC scorecard file.
+      data_type: FILE
+      allows_null: true
+      field_length: 100
+      valid_values_long: null
+      uses_ontology: false
+      llm_curate: false
+      llm_instructions: null
+UnDiffCharacterisationExpressionMarkerMethod:
+  fields:
+    marker:
+      description: Marker used to assess undifferentiated state.
+      data_type: VARCHAR
+      allows_null: false
+      field_length: 100
+      valid_values_long: null
+      uses_ontology: false
+      llm_curate: false
+      llm_instructions: null
+    method_file:
+      description: File containing method or protocol related information (image,
+        data, etc.).
+      data_type: FILE
+      allows_null: true
+      field_length: 100
+      valid_values_long: null
+      uses_ontology: false
+      llm_curate: false
+      llm_instructions: null
+CharacterisationMethod:
+  fields:
+    description:
+      description: Characterisation method description.
+      data_type: TEXT
+      allows_null: false
+      field_length: null
+      valid_values_long: null
+      uses_ontology: false
+      llm_curate: false
+      llm_instructions: null
+    name:
+      description: Characterisation method name.
+      data_type: VARCHAR
+      allows_null: false
+      field_length: 100
+      valid_values_long: null
+      uses_ontology: false
+      llm_curate: false
+      llm_instructions: null
+GenomicCharacterisation:
+  fields:
+    passage_number:
+      description: Passage number at which characterisation occurred.
+      data_type: VARCHAR
+      allows_null: true
+      field_length: 10
+      valid_values_long: null
+      uses_ontology: false
+      llm_curate: true
+      llm_instructions: Passage number from results
+    karyotyped:
+      description: Describes whether the line has been karyotyped.
+      data_type: ENUM
+      allows_null: false
+      field_length: 2
+      valid_values_long:
+      - 'YES'
+      - 'NO'
+      - UNKNOWN
+      uses_ontology: false
+      llm_curate: true
+      llm_instructions: Chromosomal karyotype
+    karyotype:
+      description: Karyotype of the line.
+      data_type: VARCHAR
+      allows_null: false
+      field_length: 100
+      valid_values_long: null
+      uses_ontology: false
+      llm_curate: true
+      llm_instructions: 'Write the karyotyping method used to perform the genomic
+        characterisation '
+    karyotype_method:
+      description: Method used to karyotype line.
+      data_type: ENUM
+      allows_null: false
+      field_length: 5
+      valid_values_long:
+      - G-banding
+      - Q-banding
+      - Spectral Karyotyping
+      - Comparative genomic hybridisation
+      - Array comparative genomic hybridisation
+      - Molecular karyotyping by SNP array
+      - Karyolite BoBs
+      - Exome sequencing
+      - Methylation profiling
+      - Other
+      uses_ontology: false
+      llm_curate: false
+      llm_instructions: null
+    karyotype_method_other:
+      description: Other Karyotype method (if not covered by karyotype_method).
+      data_type: VARCHAR
+      allows_null: true
+      field_length: 100
+      valid_values_long: null
+      uses_ontology: false
+      llm_curate: false
+      llm_instructions: null
+    karyogram:
+      description: Karyogram file.
+      data_type: FILE
+      allows_null: true
+      field_length: 100
+      valid_values_long: null
+      uses_ontology: false
+      llm_curate: false
+      llm_instructions: null
+    summary:
+      description: Text summary of genomic characterisation.
+      data_type: VARCHAR
+      allows_null: false
+      field_length: 1500
+      valid_values_long: null
+      uses_ontology: false
+      llm_curate: true
+      llm_instructions: Concise results summary
+    data_url:
+      description: Data url.
+      data_type: URL
+      allows_null: true
+      field_length: 200
+      valid_values_long: null
+      uses_ontology: false
+      llm_curate: false
+      llm_instructions: null
+    data_file:
+      description: Data file.
+      data_type: FILE
+      allows_null: true
+      field_length: 100
+      valid_values_long: null
+      uses_ontology: false
+      llm_curate: false
+      llm_instructions: null
+AdditionalGenomicCharacterisation:
+  fields:
+    hla_typing:
+      description: Describes whether HLA typing was done.
+      data_type: BOOLEAN
+      allows_null: false
+      field_length: null
+      valid_values_long:
+      - 'TRUE'
+      - 'FALSE'
+      uses_ontology: false
+      llm_curate: false
+      llm_instructions: null
+    str_analysis:
+      description: Describes whether STR analysis was done.
+      data_type: BOOLEAN
+      allows_null: false
+      field_length: null
+      valid_values_long:
+      - 'TRUE'
+      - 'FALSE'
+      uses_ontology: false
+      llm_curate: false
+      llm_instructions: null
+    fingerprinting_analysis:
+      description: Describes whether fingerprint analysis was done.
+      data_type: BOOLEAN
+      allows_null: false
+      field_length: null
+      valid_values_long:
+      - 'TRUE'
+      - 'FALSE'
+      uses_ontology: false
+      llm_curate: false
+      llm_instructions: null
+    genome_wide_or_functional_data:
+      description: Describes whether GWAS analysis was done.
+      data_type: BOOLEAN
+      allows_null: false
+      field_length: null
+      valid_values_long:
+      - 'TRUE'
+      - 'FALSE'
+      uses_ontology: false
+      llm_curate: false
+      llm_instructions: null
+HlaResult:
+  fields:
+    loci_group:
+      description: HLA type.
+      data_type: ENUM
+      allows_null: false
+      field_length: 100
+      valid_values_long:
+      - HLA Class I
+      - HLA Class II
+      - Non HLA Genes
+      uses_ontology: false
+      llm_curate: false
+      llm_instructions: null
+    allele_1:
+      description: First HLA Allele.
+      data_type: VARCHAR
+      allows_null: true
+      field_length: 100
+      valid_values_long: null
+      uses_ontology: false
+      llm_curate: false
+      llm_instructions: null
+    allele_2:
+      description: Second HLA Allele.
+      data_type: VARCHAR
+      allows_null: true
+      field_length: 100
+      valid_values_long: null
+      uses_ontology: false
+      llm_curate: false
+      llm_instructions: null
+StrOrFingerprinting:
+  fields:
+    allele_1:
+      description: First STR allele at a given locus.
+      data_type: VARCHAR
+      allows_null: true
+      field_length: 100
+      valid_values_long: null
+      uses_ontology: false
+      llm_curate: false
+      llm_instructions: null
+    allele_2:
+      description: Second STR allele at a given locus.
+      data_type: VARCHAR
+      allows_null: true
+      field_length: 100
+      valid_values_long: null
+      uses_ontology: false
+      llm_curate: false
+      llm_instructions: null
+Loci:
+  fields:
+    name:
+      description: Loci name.
+      data_type: VARCHAR
+      allows_null: false
+      field_length: 100
+      valid_values_long: null
+      uses_ontology: false
+      llm_curate: false
+      llm_instructions: null
+    chromosome:
+      description: Chromome location.
+      data_type: VARCHAR
+      allows_null: true
+      field_length: 100
+      valid_values_long: null
+      uses_ontology: false
+      llm_curate: false
+      llm_instructions: null
+    start:
+      description: Start position.
+      data_type: INT
+      allows_null: true
+      field_length: null
+      valid_values_long: null
+      uses_ontology: false
+      llm_curate: false
+      llm_instructions: null
+    end:
+      description: End position.
+      data_type: INT
+      allows_null: true
+      field_length: null
+      valid_values_long: null
+      uses_ontology: false
+      llm_curate: false
+      llm_instructions: null
+    group:
+      description: Loci group.
+      data_type: VARCHAR
+      allows_null: true
+      field_length: 100
+      valid_values_long: null
+      uses_ontology: false
+      llm_curate: false
+      llm_instructions: null
+    ncbi_url:
+      description: "\tLink to NCBI entry."
+      data_type: URL
+      allows_null: true
+      field_length: 200
+      valid_values_long: null
+      uses_ontology: false
+      llm_curate: false
+      llm_instructions: null
+    ebi_url:
+      description: Link to EBI/Ensembl entry.
+      data_type: URL
+      allows_null: true
+      field_length: 200
+      valid_values_long: null
+      uses_ontology: false
+      llm_curate: false
+      llm_instructions: null
+VectorFreeReprogram:
+  fields:
+    kit_name:
+      description: Name of the commercial kit used for vector-free reprogramming.
+      data_type: VARCHAR
+      allows_null: true
+      field_length: 500
+      valid_values_long: null
+      uses_ontology: false
+      llm_curate: false
+      llm_instructions: null
+    mrna:
+      description: Indicates whether mRNA was used to induce reprogramming.
+      data_type: BOOLEAN
+      allows_null: false
+      field_length: null
+      valid_values_long:
+      - 'TRUE'
+      - 'FALSE'
+      uses_ontology: false
+      llm_curate: false
+      llm_instructions: null
+    protein:
+      description: Indicates whether protein was used to induce reprogramming.
+      data_type: BOOLEAN
+      allows_null: false
+      field_length: null
+      valid_values_long:
+      - 'TRUE'
+      - 'FALSE'
+      uses_ontology: false
+      llm_curate: false
+      llm_instructions: null
+    small_molecule_flag:
+      description: Indicates whether small molecules were used to induce reprogramming.
+      data_type: BOOLEAN
+      allows_null: false
+      field_length: null
+      valid_values_long:
+      - 'TRUE'
+      - 'FALSE'
+      uses_ontology: false
+      llm_curate: false
+      llm_instructions: null
+    mirna:
+      description: Indicates whether micro-RNA was used to induce reprogramming.
+      data_type: BOOLEAN
+      allows_null: false
+      field_length: null
+      valid_values_long:
+      - 'TRUE'
+      - 'FALSE'
+      uses_ontology: false
+      llm_curate: false
+      llm_instructions: null
+IntegratedVector:
+  fields:
+    int_vector_name:
+      description: Name of integrating vector.
+      data_type: VARCHAR
+      allows_null: false
+      field_length: 100
+      valid_values_long: null
+      uses_ontology: false
+      llm_curate: false
+      llm_instructions: null
+    int_rep_vector:
+      description: Type of integrating reprogramming vector.
+      data_type: ENUM
+      allows_null: false
+      field_length: 1
+      valid_values_long:
+      - Virus
+      - Plasmid
+      - Transposon
+      - Other
+      uses_ontology: false
+      llm_curate: false
+      llm_instructions: null
+    int_rep_vector_other:
+      description: Free-text to capture other type of integrating reprogramming vector.
+      data_type: VARCHAR
+      allows_null: true
+      field_length: 100
+      valid_values_long: null
+      uses_ontology: false
+      llm_curate: false
+      llm_instructions: null
+    int_rep_virus_type:
+      description: Specify virus type if the vector is viral.
+      data_type: ENUM
+      allows_null: false
+      field_length: 1
+      valid_values_long:
+      - Adenovirus
+      - Retrovirus
+      - Lentivirus
+      - Other
+      uses_ontology: false
+      llm_curate: false
+      llm_instructions: null
+    int_rep_virus_other:
+      description: Free-text to capture other type of virus.
+      data_type: VARCHAR
+      allows_null: true
+      field_length: 100
+      valid_values_long: null
+      uses_ontology: false
+      llm_curate: false
+      llm_instructions: null
+    int_rep_trans_type:
+      description: System used to deliver the vector.
+      data_type: ENUM
+      allows_null: false
+      field_length: 2
+      valid_values_long:
+      - PiggyBac
+      - Sleeping Beauty
+      - Other
+      uses_ontology: false
+      llm_curate: false
+      llm_instructions: null
+    int_rep_trans_type_other:
+      description: Free-text to capture other types of system used to deliver the
+        vector.
+      data_type: VARCHAR
+      allows_null: true
+      field_length: 100
+      valid_values_long: null
+      uses_ontology: false
+      llm_curate: false
+      llm_instructions: null
+    excisable:
+      description: Indicates whether the integrating vector is designed to be excisable.
+      data_type: BOOLEAN
+      allows_null: false
+      field_length: null
+      valid_values_long:
+      - 'TRUE'
+      - 'FALSE'
+      uses_ontology: false
+      llm_curate: false
+      llm_instructions: null
+    silenced:
+      description: Indicates whether expression of the reprogramming genes in the
+        vector have been silenced.
+      data_type: ENUM
+      allows_null: false
+      field_length: 1
+      valid_values_long:
+      - 'Yes'
+      - 'No'
+      - Unknown
+      uses_ontology: false
+      llm_curate: false
+      llm_instructions: null
+    detected_reprogramming_vector:
+      description: Was the reprogramming vector detected?
+      data_type: ENUM
+      allows_null: false
+      field_length: 1
+      valid_values_long:
+      - 'Yes'
+      - 'No'
+      - Unknown
+      uses_ontology: false
+      llm_curate: false
+      llm_instructions: null
+    detected_vector_notes:
+      description: Notes describing how the reprogramming vector was detected.
+      data_type: VARCHAR
+      allows_null: true
+      field_length: 500
+      valid_values_long: null
+      uses_ontology: false
+      llm_curate: false
+      llm_instructions: null
+NonIntegratedVector:
+  fields:
+    non_int_vector_name:
+      description: Name of non-integrating vector.
+      data_type: VARCHAR
+      allows_null: false
+      field_length: 500
+      valid_values_long: null
+      uses_ontology: false
+      llm_curate: true
+      llm_instructions: Non-integrating vector name or kit name
+    non_int_vector:
+      description: Type of non-integrating vector.
+      data_type: ENUM
+      allows_null: false
+      field_length: 3
+      valid_values_long:
+      - Episomal
+      - Sendai Virus
+      - AAV
+      - Other
+      uses_ontology: false
+      llm_curate: true
+      llm_instructions: Write the type of the non-integrating vector used for the
+        induced derivation procedure for this cell line.
+    non_int_other_vector:
+      description: Free-text to capture other type of non-integrating vector.
+      data_type: VARCHAR
+      allows_null: true
+      field_length: 500
+      valid_values_long: null
+      uses_ontology: false
+      llm_curate: false
+      llm_instructions: null
+    detected_reprogramming_vector:
+      description: Indicates whether the non-integrating reprogramming vector/s were
+        detected.
+      data_type: ENUM
+      allows_null: false
+      field_length: 1
+      valid_values_long:
+      - 'Yes'
+      - 'No'
+      - Unknown
+      uses_ontology: false
+      llm_curate: false
+      llm_instructions: null
+    detected_vector_notes:
+      description: Free text field to capture notes regarding how vector detection
+        was performed.
+      data_type: VARCHAR
+      allows_null: true
+      field_length: 500
+      valid_values_long: null
+      uses_ontology: false
+      llm_curate: false
+      llm_instructions: null
+CellLineDerivationInducedPluripotent:
+  fields:
+    passage_number:
+      description: Passage number at which reprogramming occurred.
+      data_type: VARCHAR
+      allows_null: true
+      field_length: 10
+      valid_values_long: null
+      uses_ontology: false
+      llm_curate: false
+      llm_instructions: null
+    i_source_cell_type_additional_info:
+      description: Free-text entry for additional information about source cell type.
+      data_type: VARCHAR
+      allows_null: true
+      field_length: 500
+      valid_values_long: null
+      uses_ontology: false
+      llm_curate: false
+      llm_instructions: null
+    i_reprogramming_vector_type:
+      description: Type of vector used for reprogramming.
+      data_type: ENUM
+      allows_null: false
+      field_length: 2
+      valid_values_long:
+      - Not integrated
+      - Integrated
+      - None
+      - Vector free
+      uses_ontology: false
+      llm_curate: false
+      llm_instructions: null
+    vector_map_file:
+      description: "\tVector plasmid map file."
+      data_type: FILE
+      allows_null: true
+      field_length: 100
+      valid_values_long: null
+      uses_ontology: false
+      llm_curate: false
+      llm_instructions: null
+    method_used_immune_marker_staining:
+      description: Was immune marker staining used to show that the reprogramming
+        vector was not detected?
+      data_type: BOOLEAN
+      allows_null: false
+      field_length: null
+      valid_values_long:
+      - 'TRUE'
+      - 'FALSE'
+      uses_ontology: false
+      llm_curate: false
+      llm_instructions: null
+    method_used_pcr:
+      description: Was pcr used to show that the reprogramming vector was not detected?
+      data_type: BOOLEAN
+      allows_null: false
+      field_length: null
+      valid_values_long:
+      - 'TRUE'
+      - 'FALSE'
+      uses_ontology: false
+      llm_curate: false
+      llm_instructions: null
+    method_used_rtpcr:
+      description: Was RT-PCR used to show that the reprogramming vector was not detected?
+      data_type: BOOLEAN
+      allows_null: false
+      field_length: null
+      valid_values_long:
+      - 'TRUE'
+      - 'FALSE'
+      uses_ontology: false
+      llm_curate: false
+      llm_instructions: null
+    method_used_seq:
+      description: Was sequencing used to show that the reprogramming vector was not
+        detected?
+      data_type: BOOLEAN
+      allows_null: false
+      field_length: null
+      valid_values_long:
+      - 'TRUE'
+      - 'FALSE'
+      uses_ontology: false
+      llm_curate: false
+      llm_instructions: null
+    reprogramming_expression_silence_file:
+      description: File showing silencing of reprogramming gene expression.
+      data_type: FILE
+      allows_null: true
+      field_length: 100
+      valid_values_long: null
+      uses_ontology: false
+      llm_curate: false
+      llm_instructions: null
+    derivation_year:
+      description: Year in which the ipsc was derived.
+      data_type: DATE
+      allows_null: true
+      field_length: null
+      valid_values_long: null
+      uses_ontology: false
+      llm_curate: true
+      llm_instructions: Write the year that the cell line was derived in. This should
+        be reported in the article, or otherwise, write the year the article was published.
+    reason_no_derivation_year:
+      description: Text explanation if the year of derivation is unknown.
+      data_type: VARCHAR
+      allows_null: true
+      field_length: 500
+      valid_values_long: null
+      uses_ontology: false
+      llm_curate: false
+      llm_instructions: null
+    selection_criteria_for_clones:
+      description: Description of how iPSC clones were selected.
+      data_type: VARCHAR
+      allows_null: true
+      field_length: 500
+      valid_values_long: null
+      uses_ontology: false
+      llm_curate: false
+      llm_instructions: null
+    derived_under_xeno_free_conditions:
+      description: Indicates whether derivation of the ipsc was performed without
+        animal products.
+      data_type: BOOLEAN
+      allows_null: true
+      field_length: null
+      valid_values_long:
+      - 'TRUE'
+      - 'FALSE'
+      uses_ontology: false
+      llm_curate: false
+      llm_instructions: null
+    derivation_under_gmp:
+      description: Indicates whether derivation of the ipsc followed Good Manufacturing
+        Practice.
+      data_type: BOOLEAN
+      allows_null: true
+      field_length: null
+      valid_values_long:
+      - 'TRUE'
+      - 'FALSE'
+      uses_ontology: false
+      llm_curate: false
+      llm_instructions: null
+    available_as_clinical_grade:
+      description: Indicates if the ipsc cell line is available as clinical-grade.
+      data_type: BOOLEAN
+      allows_null: false
+      field_length: null
+      valid_values_long:
+      - 'TRUE'
+      - 'FALSE'
+      uses_ontology: false
+      llm_curate: false
+      llm_instructions: null
+    gene_list:
+      description: Django ManyToManyField linking to stem_cell_loci through stem_cell_idpgene.
+      data_type: ARRAY
+      allows_null: false
+      field_length: null
+      valid_values_long: null
+      uses_ontology: false
+      llm_curate: false
+      llm_instructions: null
+CellLineDerivationEmbryonic:
+  fields:
+    e_nhmrc_licence_number:
+      description: NHMRC License number.
+      data_type: VARCHAR
+      allows_null: true
+      field_length: 100
+      valid_values_long: null
+      uses_ontology: false
+      llm_curate: false
+      llm_instructions: null
+    e_preimplant_genetic_diagnosis:
+      description: Indicates whether the cell line was derived from a preimplantation
+        genetic diagnostic embryo.
+      data_type: BOOLEAN
+      allows_null: false
+      field_length: null
+      valid_values_long:
+      - 'TRUE'
+      - 'FALSE'
+      uses_ontology: false
+      llm_curate: true
+      llm_instructions: e_preimplant_genetic_diagnosis
+    e_supernumerary:
+      description: Indicates whether the embryo used was a supernumerary embryo from
+        IVF treatment.
+      data_type: BOOLEAN
+      allows_null: false
+      field_length: null
+      valid_values_long:
+      - 'TRUE'
+      - 'FALSE'
+      uses_ontology: false
+      llm_curate: false
+      llm_instructions: null
+    derivation_year:
+      description: Year in which the ESC was derived (ie. cells isolated from embryo).
+      data_type: DATE
+      allows_null: true
+      field_length: null
+      valid_values_long: null
+      uses_ontology: false
+      llm_curate: true
+      llm_instructions: Write the year that the cell line was derived in. If the derivation
+        year is unknown or not reported, use null. Do not use placeholder dates like
+        0000-01-01.
+    reason_no_derivation_year:
+      description: Text explanation if the year of derivation is unknown.
+      data_type: VARCHAR
+      allows_null: true
+      field_length: 100
+      valid_values_long: null
+      uses_ontology: false
+      llm_curate: false
+      llm_instructions: null
+    separation_of_research_and_ivf_treat:
+      description: Describes whether IVF treatment and research decision-making processes
+        were clearly separated.
+      data_type: BOOLEAN
+      allows_null: true
+      field_length: null
+      valid_values_long:
+      - 'TRUE'
+      - 'FALSE'
+      uses_ontology: false
+      llm_curate: false
+      llm_instructions: null
+    other_hesc_source:
+      description: Indicates if the hESC line was derived from a source other than
+        supernumerary IVF embryos.
+      data_type: ENUM
+      allows_null: false
+      field_length: 4
+      valid_values_long:
+      - Somatic Cell Nuclear Transfer (SCNT)
+      - Pathogenesis
+      - Other
+      uses_ontology: false
+      llm_curate: false
+      llm_instructions: null
+    other_hesc_source_other:
+      description: Description of other embryo source.
+      data_type: VARCHAR
+      allows_null: true
+      field_length: 100
+      valid_values_long: null
+      uses_ontology: false
+      llm_curate: false
+      llm_instructions: null
+    embryo_stage:
+      description: Developmental stage of the embryo at the time of cell isolation.
+      data_type: ENUM
+      allows_null: true
+      field_length: 4
+      valid_values_long:
+      - Blastula with ICM and Trophoblast
+      - Cleavage (Mitosis)
+      - Compaction
+      - Morula
+      - Zygot
+      uses_ontology: false
+      llm_curate: true
+      llm_instructions: embryo_stage
+    expansion_status:
+      description: "\tIndicates the extent to which the cell line has undergone expansion."
+      data_type: ENUM
+      allows_null: true
+      field_length: 2
+      valid_values_long:
+      - Stage 1
+      - Stage 2
+      - Stage 3
+      - Stage 4
+      - Stage 5
+      - Stage 6
+      uses_ontology: false
+      llm_curate: false
+      llm_instructions: null
+    icm_morphology:
+      description: Morphological quality of the inner cell mass (ICM) used in derivation.
+      data_type: ENUM
+      allows_null: true
+      field_length: 2
+      valid_values_long:
+      - Type A
+      - Type B
+      - Type C
+      - Type D
+      - Type E
+      uses_ontology: false
+      llm_curate: true
+      llm_instructions: icm_morphology
+    trophectoderm_morphology:
+      description: Morphology of the trophectoderm layer at the time of derivation.
+      data_type: ENUM
+      allows_null: true
+      field_length: 2
+      valid_values_long:
+      - Type A
+      - Type B
+      - Type G
+      uses_ontology: false
+      llm_curate: true
+      llm_instructions: trophectoderm_morphology
+    zp_removal_technique:
+      description: Technique used to remove the zona pellucida (ZP).
+      data_type: ENUM
+      allows_null: false
+      field_length: 2
+      valid_values_long:
+      - Chemical
+      - Enzymatic
+      - Manual
+      - Mechanical
+      - Spontaneous
+      - Other
+      uses_ontology: false
+      llm_curate: true
+      llm_instructions: zp_removal_technique
+    zp_removal_technique_other:
+      description: "\tFree-text entry for other techniques to remove ZP."
+      data_type: VARCHAR
+      allows_null: true
+      field_length: 100
+      valid_values_long: null
+      uses_ontology: false
+      llm_curate: false
+      llm_instructions: null
+    cell_isolation:
+      description: Method used to isolate cells from embryo.
+      data_type: ENUM
+      allows_null: false
+      field_length: 2
+      valid_values_long:
+      - Immunosurgery
+      - Laser
+      - mechanical trophectoderm and icm isolated
+      - None
+      - Other
+      uses_ontology: false
+      llm_curate: false
+      llm_instructions: null
+    cell_isolation_other:
+      description: Free-text entry for other method used to isolate cells from embryo.
+      data_type: VARCHAR
+      allows_null: true
+      field_length: 100
+      valid_values_long: null
+      uses_ontology: false
+      llm_curate: false
+      llm_instructions: null
+    cell_seeding:
+      description: Technique used to plate cells post-isolation.
+      data_type: ENUM
+      allows_null: false
+      field_length: 4
+      valid_values_long:
+      - Embryo
+      - Isolated ICM
+      - Single cell
+      - Other
+      uses_ontology: false
+      llm_curate: false
+      llm_instructions: null
+    cell_seeding_other:
+      description: Free-text entry for other technique used to plate cells post-isolation.
+      data_type: VARCHAR
+      allows_null: true
+      field_length: 100
+      valid_values_long: null
+      uses_ontology: false
+      llm_curate: false
+      llm_instructions: null
+    derived_under_gmp:
+      description: Indicates whether derivation followed Good Manufacturing Practice.
+      data_type: BOOLEAN
+      allows_null: true
+      field_length: null
+      valid_values_long:
+      - 'TRUE'
+      - 'FALSE'
+      uses_ontology: false
+      llm_curate: false
+      llm_instructions: null
+    derived_under_xeno_free_conditions:
+      description: Indicates whether the derivation was performed without animal products.
+      data_type: BOOLEAN
+      allows_null: true
+      field_length: null
+      valid_values_long:
+      - 'TRUE'
+      - 'FALSE'
+      uses_ontology: false
+      llm_curate: false
+      llm_instructions: null
+    available_as_clinical_grade:
+      description: Indicates if the resulting cell line is available as clinical-grade.
+      data_type: BOOLEAN
+      allows_null: true
+      field_length: null
+      valid_values_long:
+      - 'TRUE'
+      - 'FALSE'
+      uses_ontology: false
+      llm_curate: false
+      llm_instructions: null
+Synonym:
+  fields:
+    synonym:
+      description: Cell line synonym.
+      data_type: TEXT
+      allows_null: false
+      field_length: 100
+      valid_values_long: null
+      uses_ontology: false
+      llm_curate: false
+      llm_instructions: null
+IdpGene:
+  fields:
+    allele_1:
+      description: First allele observed at gene locus.
+      data_type: VARCHAR
+      allows_null: true
+      field_length: 100
+      valid_values_long: null
+      uses_ontology: false
+      llm_curate: false
+      llm_instructions: null
+    allele_2:
+      description: Second allele observed at gene locus.
+      data_type: VARCHAR
+      allows_null: true
+      field_length: 100
+      valid_values_long: null
+      uses_ontology: false
+      llm_curate: false
+      llm_instructions: null
+VectorFreeReprogrammingGenes:
+  fields:
+    nv_type:
+      description: Type of genomic feature.
+      data_type: ENUM
+      allows_null: false
+      field_length: 2
+      valid_values_long:
+      - mRNA
+      - Protein
+      uses_ontology: false
+      llm_curate: false
+      llm_instructions: null
+    allele_1:
+      description: First allele observed at gene locus.
+      data_type: VARCHAR
+      allows_null: true
+      field_length: 100
+      valid_values_long: null
+      uses_ontology: false
+      llm_curate: false
+      llm_instructions: null
+    allele_2:
+      description: Second allele observed at gene locus.
+      data_type: VARCHAR
+      allows_null: true
+      field_length: 100
+      valid_values_long: null
+      uses_ontology: false
+      llm_curate: false
+      llm_instructions: null
+SmallMolecule:
+  fields:
+    name:
+      description: Small molecule name
+      data_type: TEXT
+      allows_null: false
+      field_length: null
+      valid_values_long: null
+      uses_ontology: false
+      llm_curate: false
+      llm_instructions: null
+    chembank_id:
+      description: Chembank database id for the small molecule
+      data_type: URL
+      allows_null: true
+      field_length: null
+      valid_values_long: null
+      uses_ontology: false
+      llm_curate: false
+      llm_instructions: null
+Ontology:
+  fields:
+    label:
+      description: Text label for ontology_identifier.
+      data_type: VARCHAR
+      allows_null: false
+      field_length: 1000
+      valid_values_long: null
+      uses_ontology: false
+      llm_curate: false
+      llm_instructions: null
+    definition:
+      description: Definition of ontology term (label).
+      data_type: VARCHAR
+      allows_null: true
+      field_length: null
+      valid_values_long: null
+      uses_ontology: false
+      llm_curate: false
+      llm_instructions: null
+    ontology_db_name:
+      description: Name of ontology database.
+      data_type: VARCHAR
+      allows_null: false
+      field_length: 100
+      valid_values_long: null
+      uses_ontology: false
+      llm_curate: false
+      llm_instructions: null
+    url:
+      description: URL to web entry for ontology_identifier.
+      data_type: URL
+      allows_null: false
+      field_length: 200
+      valid_values_long: null
+      uses_ontology: false
+      llm_curate: false
+      llm_instructions: null
+    lowest_level_for_search:
+      description: Describes whether the ontology_id is used as the lowest level for
+        filtering and searching.
+      data_type: BOOLEAN
+      allows_null: false
+      field_length: null
+      valid_values_long:
+      - 'TRUE'
+      - 'FALSE'
+      uses_ontology: false
+      llm_curate: false
+      llm_instructions: null
+Synonyms:
+  fields:
+    synonym:
+      description: Synonyms of ontology label.
+      data_type: VARCHAR
+      allows_null: false
+      field_length: 1000
+      valid_values_long: null
+      uses_ontology: false
+      llm_curate: false
+      llm_instructions: null

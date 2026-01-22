@@ -1,0 +1,13 @@
+{
+  "cell_line": "this should be a list not a string",
+  "generator": [
+    {
+      "group": "Test University"
+    }
+  ],
+  "contact": [
+    {
+      "group": "Test Lab"
+    }
+  ]
+}

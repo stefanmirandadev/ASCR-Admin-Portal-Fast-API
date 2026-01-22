@@ -1,0 +1,83 @@
+site_name: ASCR Admin Portal Documentation
+site_description: Documentation for modules and APIs in the ASCR Admin Portal
+
+# Theme configuration
+theme:
+  name: material
+  palette:
+    # Palette toggle for light mode
+    - scheme: default
+      primary: indigo
+      accent: blue
+      toggle:
+        icon: material/brightness-7
+        name: Switch to dark mode
+    # Palette toggle for dark mode  
+    - scheme: slate
+      primary: indigo
+      accent: blue
+      toggle:
+        icon: material/brightness-4
+        name: Switch to light mode
+  features:
+    - navigation.tabs
+    - navigation.sections
+    - navigation.expand
+    - navigation.top
+    - search.highlight
+    - search.share
+    - content.code.copy
+
+# Plugins
+plugins:
+  - search
+  - mkdocstrings:
+      handlers:
+        python:
+          paths: [../services/backend]  # Add path to your Python modules
+          options:
+            docstring_style: google
+            show_source: true
+            show_root_heading: false
+            show_root_full_path: true
+            heading_level: 1
+            show_symbol_type_heading: true
+            show_symbol_type_toc: true
+            show_object_full_path: false
+            show_root_members_full_path: false
+            group_by_category: true
+            show_category_heading: true
+            allow_inspection: false
+            show_inheritance_diagram: true
+            inheritance_diagram_direction: TD
+
+# Navigation
+nav:
+  - Home: index.md
+  - Deployment:
+    - Production Deployment: prod_deployment_guide.md
+  - Features:
+    - Settings Page: features/settings-page.md
+  - Modules:
+    - Storage: modules/storage.md
+    - Version control: modules/version_control.md
+    - Data transport: modules/data_transport.md
+
+# Markdown extensions
+markdown_extensions:
+  - pymdownx.highlight:
+      anchor_linenums: true
+      line_spans: __span
+      pygments_lang_class: true
+  - pymdownx.inlinehilite
+  - pymdownx.snippets
+  - pymdownx.superfences
+  - admonition
+  - pymdownx.details
+  - pymdownx.tabbed:
+      alternate_style: true
+  - pymdownx.superfences:
+      custom_fences:
+        - name: mermaid
+          class: mermaid
+          format: !!python/name:pymdownx.superfences.fence_code_format

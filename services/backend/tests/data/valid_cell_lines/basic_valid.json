@@ -1,0 +1,110 @@
+{
+  "cell_line": [
+    {
+      "hpscreg_name": "TestCell001",
+      "cell_line_alt_name": "Alternative Name 1",
+      "cell_type": "hiPSC",
+      "frozen": "True"
+    }
+  ],
+  "generator": [
+    {
+      "group": "Test University"
+    }
+  ],
+  "contact": [
+    {
+      "group": "Test Lab",
+      "first_name": "John",
+      "last_name": "Doe",
+      "name_initials": "A",
+      "e_mail": "john.doe@test.com",
+      "phone_number": "+1234567890"
+    }
+  ],
+  "publications": [
+    {
+      "doi": "10.1000/test.doi",
+      "journal": "Test Journal",
+      "title": "Test Publication",
+      "first_author": "John Doe",
+      "last_author": "Jane Smith",
+      "year": "2024",
+      "pmid": "12345678"
+    }
+  ],
+  "donor": [
+    {
+      "age": "A25_29",
+      "sex": "Male",
+      "disease_name": "Healthy",
+      "disease_description": "No known diseases"
+    }
+  ],
+  "genomic_modifications": [
+    {
+      "mutation_type": "Missing",
+      "cytoband": "Missing",
+      "delivery_method": "Missing",
+      "description": "Missing",
+      "genotype": "Missing",
+      "loci_name": "Missing"
+    }
+  ],
+  "differentiation_results": [
+    {
+      "cell_type": "Missing",
+      "show_potency": "Missing",
+      "marker_list": "Missing",
+      "method_used": "Missing",
+      "description": "Missing"
+    }
+  ],
+  "undifferentiated_characterisation": [
+    {
+      "epi_pluri_score": "Missing",
+      "pluri_test_score": "Missing",
+      "pluri_novelty_score": "Missing"
+    }
+  ],
+  "genomic_characterisation": [
+    {
+      "passage_number": "Missing",
+      "karyotype": "Missing",
+      "karyotype_method": "Missing",
+      "summary": "Missing"
+    }
+  ],
+  "induced_derivation": [
+    {
+      "i_source_cell_type_term": "Missing",
+      "i_source_cell_origin_term": "Missing",
+      "derivation_year": "Missing",
+      "non_int_vector": "Missing",
+      "non_int_vector_name": "Missing"
+    }
+  ],
+  "embryonic_derivation": [
+    {
+      "embryo_stage": "Missing",
+      "zp_removal_technique": "Missing",
+      "trophectoderm_morphology": "Missing",
+      "icm_morphology": "Missing",
+      "e_preimplant_genetic_diagnosis": "Missing"
+    }
+  ],
+  "ethics": [
+    {
+      "ethics_number": "Missing",
+      "approval_date": "Missing",
+      "institutional_HREC": "Missing"
+    }
+  ],
+  "culture_medium": [
+    {
+      "co2_concentration": "Missing",
+      "o2_concentration": "Missing",
+      "passage_method": "Missing"
+    }
+  ]
+}

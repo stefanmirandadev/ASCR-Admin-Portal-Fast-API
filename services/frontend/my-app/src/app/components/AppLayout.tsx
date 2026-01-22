@@ -1,33 +1,33 @@
 "use client";
-import { usePathname } from 'next/navigation';
 import { Box } from '@mui/material';
 import NavbarNew from './Navbar-new';
-
-const appContainerStyles = {
-  minHeight: '100vh',
-  backgroundColor: 'primary.light',
-  paddingLeft: 2,
-  paddingRight: 2,
-  paddingTop: 0,
-}
+import Sidebar from './Sidebar';
 
 const AppLayout = ({ children }: { children: React.ReactNode }) => {
   return (
-
-    <Box sx={appContainerStyles}>
-
-      
+    <Box sx={{ minHeight: '100vh', display: 'flex', flexDirection: 'column' }}>
       {/* Navbar */}
       <NavbarNew />
 
-      {/* Main content area with top margin to account for fixed navbar */}
-      <Box component="main" sx={{}}>
-        {children}
+      {/* Content area below navbar */}
+      <Box
+        sx={{
+          flex: 1,
+          backgroundColor: 'background.primary',
+          display: 'flex',
+          gap: 1,
+          paddingTop: 2
+        }}
+      >
+        {/* Sidebar */}
+        <Sidebar />
+
+        {/* Main content */}
+        <Box component="main" sx={{ flex: 1, overflow: 'auto' }}>
+          {children}
+        </Box>
       </Box>
     </Box>
-
-
-
   );
 };
 

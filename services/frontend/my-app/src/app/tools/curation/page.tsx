@@ -1,524 +1,958 @@
 'use client';
 
-import { useState, useEffect } from 'react';
-import {
-  Box,
-  Container,
-  Typography,
-  Grid,
-  Card,
-  CardContent,
-  Button,
-  Chip,
-  List,
-  ListItem,
-  ListItemButton,
-  ListItemText,
-  ListItemSecondaryAction,
-  IconButton,
-  LinearProgress,
-  Paper,
-  Divider,
-  Stack,
-  Alert,
-  Fade,
-  Collapse,
-  Modal,
-  Backdrop,
-} from '@mui/material';
-import {
-  CloudUpload as CloudUploadIcon,
-  CheckCircle as CheckCircleIcon,
-  Error as ErrorIcon,
-  Close as CloseIcon,
-  Delete as DeleteIcon,
-  Save as SaveIcon,
-  Article as ArticleIcon,
-  Biotech as BiotechIcon,
-  HourglassEmpty as HourglassEmptyIcon,
-} from '@mui/icons-material';
-import CurationCellLineEditor from './components/CurationCellLineEditor';
+import { Typography, Box, List, ListItem, ListItemIcon, ListItemText, IconButton, LinearProgress, Skeleton, Popover, TextField, Checkbox, FormControlLabel, InputAdornment } from '@mui/material';
+import { Button } from '@mui/material';
+import BlurOnOutlinedIcon from '@mui/icons-material/BlurOnOutlined';
+import FileUploadOutlinedIcon from '@mui/icons-material/FileUploadOutlined';
+import CheckCircleIcon from '@mui/icons-material/CheckCircle';
+import ErrorIcon from '@mui/icons-material/Error';
+import FilterListIcon from '@mui/icons-material/FilterList';
+import SearchIcon from '@mui/icons-material/Search';
+import DownloadIcon from '@mui/icons-material/Download';
+import { useTheme } from '@mui/material/styles';
+import { useState, useEffect, useRef } from 'react';
+import { useSearchParams } from 'next/navigation';
+import AddIcon from '@mui/icons-material/Add';
+import Card from '@/app/components/Card';
+import CellLineEditor from '@/app/components/CellLineEditor';
 
-interface CurationJob {
-  status: 'processing' | 'completed' | 'error';
-  currentArticle: number;
-  totalArticles: number;
-  message?: string;
-}
+// Utility function to convert File to Base64
+const fileToBase64 = (file: File): Promise<string> => {
+  return new Promise((resolve, reject) => {
+    const reader = new FileReader();
+    reader.readAsDataURL(file);
+    reader.onload = () => {
+      const result = reader.result as string;
+      // Remove the "data:application/pdf;base64," prefix
+      const base64 = result.split(',')[1];
+      resolve(base64);
+    };
+    reader.onerror = error => reject(error);
+  });
+};
 
-interface CellLineEntry {
-  id: string;
-  data: any;
-  status: 'pending' | 'saved' | 'error';
-}
-
-export default function CurationPage() {
-  const [selectedFiles, setSelectedFiles] = useState<File[]>([]);
-  const [uploading, setUploading] = useState(false);
-  const [curationJob, setCurationJob] = useState<CurationJob | null>(null);
-  const [cellLines, setCellLines] = useState<CellLineEntry[]>([]);
-  const [selectedCellLineId, setSelectedCellLineId] = useState<string | null>(null);
-  const [response, setResponse] = useState<any>(null);
-  const [successModal, setSuccessModal] = useState<{ open: boolean; count: number }>({ open: false, count: 0 });
-
-  // Auto-close success modal and reset page
-  useEffect(() => {
-    if (successModal.open) {
-      const timer = setTimeout(() => {
-        setSuccessModal({ open: false, count: 0 });
-        // Reset page to initial state
-        setSelectedFiles([]);
-        setCurationJob(null);
-        setCellLines([]);
-        setSelectedCellLineId(null);
-        setResponse(null);
-      }, 1000);
-      return () => clearTimeout(timer);
-    }
-  }, [successModal.open]);
-
-  const handleFileSelect = (event: React.ChangeEvent<HTMLInputElement>) => {
-    const files = Array.from(event.target.files || []);
-    const pdfFiles = files.filter(file => file.type === 'application/pdf');
-    
-    if (pdfFiles.length !== files.length) {
-      alert('Only PDF files are allowed. Non-PDF files have been filtered out.');
-    }
-    
-    if (pdfFiles.length > 0) {
-      setSelectedFiles(pdfFiles);
-      setResponse(null);
-    } else {
-      alert('Please select at least one PDF file');
-      event.target.value = '';
-    }
-  };
-
-  const removeFile = (index: number) => {
-    setSelectedFiles(prev => prev.filter((_, i) => i !== index));
-  };
-
-  const handleUpload = async () => {
-    if (selectedFiles.length === 0) return;
-
-    setUploading(true);
-    setCurationJob({ status: 'processing', currentArticle: 1, totalArticles: selectedFiles.length });
-    setCellLines([]);
-    setSelectedCellLineId(null);
-    
-    try {
-      let allCellLines: CellLineEntry[] = [];
+// Animated progress bar component
+const TaskProgressBar = ({ task }: { task: { task_id: string; filename: string; status: 'processing' | 'completed' | 'failed'; result?: any } }) => {
+  const theme = useTheme();
+  
+  return (
+    <ListItem
+      sx={{
+        flexDirection: 'column',
+        alignItems: 'flex-start',
+        gap: 1,
+        py: 2,
+        borderBottom: `1px solid ${theme.palette.grey[200]}`,
+      }}
+    >
+      {/* File name and status */}
+      <Box sx={{ display: 'flex', alignItems: 'center', gap: 1, width: '100%' }}>
+        <ListItemIcon>
+          {task.status === 'completed' ? (
+            <CheckCircleIcon sx={{ color: theme.palette.success.main }} />
+          ) : task.status === 'failed' ? (
+            <ErrorIcon sx={{ color: theme.palette.error.main }} />
+          ) : (
+            <BlurOnOutlinedIcon sx={{ color: theme.palette.primary.main }} />
+          )}
+        </ListItemIcon>
+        <ListItemText 
+          primary={task.filename}
+          secondary={task.status === 'completed' ? 'Curation completed' : task.status === 'failed' ? 'Curation failed' : 'Processing...'}
+        />
+      </Box>
       
-      // Process each file sequentially
-      for (let i = 0; i < selectedFiles.length; i++) {
-        const file = selectedFiles[i];
-        
-        // Update progress
-        setCurationJob({ 
-          status: 'processing', 
-          currentArticle: i + 1, 
-          totalArticles: selectedFiles.length 
-        });
-        
-        try {
-          // Convert file to bytes
-          const fileBytes = await file.arrayBuffer();
-          
-          // Call the curation service
-          const response = await fetch('http://localhost:8001/single_article_curate', {
-            method: 'POST',
-            headers: {
-              'Content-Type': 'application/json',
-            },
-            body: JSON.stringify({
-              filename: file.name,
-              file_data: Array.from(new Uint8Array(fileBytes))
-            })
-          });
+      {/* Progress bar - only show for processing and completed states */}
+      {task.status === 'processing' ? (
+        <LinearProgress 
+          sx={{ 
+            width: '100%', 
+            height: 6,
+            borderRadius: 3,
+            '& .MuiLinearProgress-bar': {
+              borderRadius: 3,
+            }
+          }} 
+        />
+      ) : task.status === 'completed' ? (
+        <LinearProgress 
+          variant="determinate" 
+          value={100} 
+          sx={{ 
+            width: '100%', 
+            height: 6,
+            borderRadius: 3,
+            '& .MuiLinearProgress-bar': {
+              borderRadius: 3,
+              backgroundColor: theme.palette.success.main,
+            }
+          }} 
+        />
+      ) : null}
+    </ListItem>
+  );
+};
 
-          const result = await response.json();
-          console.log(`Curation service response for ${file.name}:`, result);
-          
-          // Process the results into cell line entries
-          if (result.curated_data && Object.keys(result.curated_data).length > 0) {
-            const newCellLines: CellLineEntry[] = Object.entries(result.curated_data).map(([cellLineId, cellLineData]) => ({
-              id: `${cellLineId}`, // Could add file prefix if needed: `${file.name}_${cellLineId}`
-              data: cellLineData,
-              status: 'pending' as const
-            }));
-            allCellLines = [...allCellLines, ...newCellLines];
-            
-            // Update cell lines in real-time as they're processed
-            setCellLines([...allCellLines]);
-          }
-          
-        } catch (fileError) {
-          console.error(`Error processing file ${file.name}:`, fileError);
-          // Continue with next file on error
-        }
+export default function CurationNewPage() {
+  const theme = useTheme();
+  const searchParams = useSearchParams();
+  const [uploadedFiles, setUploadedFiles] = useState<File[]>([]);
+  const [isDragging, setIsDragging] = useState(false);
+  const [taskResults, setTaskResults] = useState<any[]>([]);
+  const [activeTasks, setActiveTasks] = useState<Array<{
+    task_id: string;
+    filename: string;
+    status: 'processing' | 'completed' | 'failed';
+    result?: any;
+  }>>([]);
+  const [cellLines, setCellLines] = useState<Array<{ name: string; location: string }>>([]);
+  const [selectedCellLine, setSelectedCellLine] = useState<string | null>(null);
+  const [editedMetadata, setEditedMetadata] = useState<Record<string, any[]>>({});
+  const [lastModified, setLastModified] = useState<string | null>(null);
+  const [isLoadingCellLine, setIsLoadingCellLine] = useState(false);
+  const [editorKey, setEditorKey] = useState(0);
+  const [createAnchor, setCreateAnchor] = useState<HTMLButtonElement | null>(null);
+  const [filterAnchor, setFilterAnchor] = useState<HTMLButtonElement | null>(null);
+  const [filterWorking, setFilterWorking] = useState(true);
+  const [filterReady, setFilterReady] = useState(true);
+  const [searchQuery, setSearchQuery] = useState('');
+  const [selectedForDownload, setSelectedForDownload] = useState<Set<string>>(new Set());
+  const newNameInputRef = useRef<HTMLInputElement>(null);
+  const wsRef = useRef<WebSocket | null>(null);
+
+  // Fetch all cell lines from backend (both working and ready)
+  const fetchAllCellLines = async () => {
+    try {
+      const response = await fetch('http://localhost:8001/get-all-cell-lines');
+      if (response.ok) {
+        const data = await response.json();
+        setCellLines(data.cell_lines || []);
       }
-      
-      setCurationJob({ 
-        status: 'completed', 
-        currentArticle: selectedFiles.length, 
-        totalArticles: selectedFiles.length 
-      });
-      
-      setResponse({ 
-        status: 'success',
-        message: `Processed ${selectedFiles.length} files`,
-        total_cell_lines: allCellLines.length
-      });
-      
     } catch (error) {
-      console.error('Error during bulk upload:', error);
-      setCurationJob({ 
-        status: 'error', 
-        currentArticle: 0, 
-        totalArticles: selectedFiles.length, 
-        message: 'Failed to process files' 
-      });
-    } finally {
-      setUploading(false);
+      console.error('Error fetching cell lines:', error);
     }
   };
 
-  // Handle saving a single cell line
-  const handleSaveCellLine = async (cellLineId: string, cellLineData: any) => {
+  // Fetch specific cell line data
+  const fetchCellLineData = async (filename: string) => {
+    setIsLoadingCellLine(true);
     try {
-      const response = await fetch(`http://localhost:8002/curated-cell-lines/${encodeURIComponent(cellLineId)}`, {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify(cellLineData),
+      const response = await fetch(`http://localhost:8001/cell-line/${filename}`);
+      if (response.ok) {
+        const result = await response.json();
+        // Backend returns { data: {...}, location: "...", filename: "...", last_modified: "..." }
+        setEditedMetadata(result.data);
+        setSelectedCellLine(filename);
+        setLastModified(result.last_modified || null);
+      } else {
+        console.error('Failed to fetch cell line:', response.statusText);
+      }
+    } catch (error) {
+      console.error('Error fetching cell line data:', error);
+    } finally {
+      setIsLoadingCellLine(false);
+    }
+  };
+
+  // Save cell line data to backend
+  const saveCellLine = async (data: Record<string, any[]>) => {
+    if (!selectedCellLine) return;
+
+    try {
+      const response = await fetch(`http://localhost:8001/working/cell-line/${selectedCellLine}`, {
+        method: 'PUT',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(data),
       });
 
       if (response.ok) {
-        // Mark as saved and remove from list
-        setCellLines(prev => prev.filter(cl => cl.id !== cellLineId));
-        console.log('Cell line saved successfully:', cellLineId);
+        const result = await response.json();
+        console.log('Cell line saved successfully');
+        setEditedMetadata(data);
+        setLastModified(new Date().toISOString());
+
+        // If filename changed (hpscreg_name was updated), update selected cell line
+        if (result.filename && result.filename !== selectedCellLine) {
+          setSelectedCellLine(result.filename);
+          fetchAllCellLines(); // Refresh the file list
+        }
       } else {
-        // Mark as error
-        setCellLines(prev => prev.map(cl => 
-          cl.id === cellLineId ? { ...cl, status: 'error' as const } : cl
-        ));
-        console.error('Failed to save cell line:', cellLineId);
+        console.error('Failed to save cell line:', response.statusText);
       }
     } catch (error) {
-      setCellLines(prev => prev.map(cl => 
-        cl.id === cellLineId ? { ...cl, status: 'error' as const } : cl
-      ));
-      console.error('Error saving cell line:', cellLineId, error);
+      console.error('Error saving cell line:', error);
     }
   };
 
-  // Handle accepting all cell lines (save all and clear)
-  const handleAcceptAll = async () => {
-    const pendingCellLines = cellLines.filter(cl => cl.status === 'pending');
-    const count = pendingCellLines.length;
-    
-    for (const cellLine of pendingCellLines) {
-      await handleSaveCellLine(cellLine.id, cellLine.data);
+  // Create new cell line with initial name
+  const createNewCellLine = async (name: string) => {
+    setIsLoadingCellLine(true);
+    setSelectedCellLine(name); // Set immediately so skeleton shows
+    try {
+      // Fetch empty form structure from backend with hpscreg_name
+      const response = await fetch(`http://localhost:8001/get-empty-form?hpscreg_name=${encodeURIComponent(name)}`);
+      if (!response.ok) {
+        console.error('Failed to fetch empty form structure');
+        return;
+      }
+      const emptyData = await response.json();
+      setEditedMetadata(emptyData);
+      setLastModified(null);
+      setEditorKey(k => k + 1); // Force re-mount to reset uncontrolled inputs
+    } catch (error) {
+      console.error('Error creating new cell line:', error);
+    } finally {
+      setIsLoadingCellLine(false);
     }
-    
-    // Show success modal
-    setSuccessModal({ open: true, count });
   };
 
-  // Get selected cell line data
-  const selectedCellLine = cellLines.find(cl => cl.id === selectedCellLineId);
+  // Download cell line as JSON
+  const downloadCellLine = async (filename: string, e?: React.MouseEvent) => {
+    e?.stopPropagation(); // Prevent selecting the cell line
+    try {
+      const response = await fetch(`http://localhost:8001/cell-line/${filename}`);
+      if (response.ok) {
+        const result = await response.json();
+        const dataStr = JSON.stringify(result.data, null, 2);
+        const dataBlob = new Blob([dataStr], { type: 'application/json' });
+        const url = URL.createObjectURL(dataBlob);
+        const link = document.createElement('a');
+        link.href = url;
+        link.download = filename;
+        document.body.appendChild(link);
+        link.click();
+        document.body.removeChild(link);
+        URL.revokeObjectURL(url);
+      } else {
+        console.error('Failed to download cell line:', response.statusText);
+      }
+    } catch (error) {
+      console.error('Error downloading cell line:', error);
+    }
+  };
+
+  // Toggle selection for batch download
+  const toggleSelection = (filename: string, e: React.MouseEvent) => {
+    e.stopPropagation();
+    setSelectedForDownload(prev => {
+      const newSet = new Set(prev);
+      if (newSet.has(filename)) {
+        newSet.delete(filename);
+      } else {
+        newSet.add(filename);
+      }
+      return newSet;
+    });
+  };
+
+  // Batch download selected cell lines
+  const batchDownload = async () => {
+    for (const filename of selectedForDownload) {
+      await downloadCellLine(filename);
+      // Small delay between downloads to avoid browser issues
+      await new Promise(resolve => setTimeout(resolve, 100));
+    }
+    setSelectedForDownload(new Set()); // Clear selection after download
+  };
+
+  // Toggle select all for filtered cell lines
+  const toggleSelectAll = (filteredCellLines: Array<{ name: string; location: string }>) => {
+    const filteredNames = filteredCellLines.map(cl => cl.name);
+    const allSelected = filteredNames.every(name => selectedForDownload.has(name));
+
+    if (allSelected) {
+      // Deselect all filtered items
+      setSelectedForDownload(prev => {
+        const newSet = new Set(prev);
+        filteredNames.forEach(name => newSet.delete(name));
+        return newSet;
+      });
+    } else {
+      // Select all filtered items
+      setSelectedForDownload(prev => {
+        const newSet = new Set(prev);
+        filteredNames.forEach(name => newSet.add(name));
+        return newSet;
+      });
+    }
+  };
+
+  // Poll cell lines on mount and periodically
+  useEffect(() => {
+    fetchAllCellLines();
+    const interval = setInterval(fetchAllCellLines, 5000); // Poll every 5 seconds
+    return () => clearInterval(interval);
+  }, []);
+
+  // Load cell line from URL query parameter
+  useEffect(() => {
+    const cellLineParam = searchParams.get('cellLine');
+    if (cellLineParam && cellLineParam !== selectedCellLine) {
+      fetchCellLineData(cellLineParam);
+    }
+  }, [searchParams]);
+
+  // WebSocket connection effect
+  useEffect(() => {
+    // Connect to WebSocket for real-time task updates
+    wsRef.current = new WebSocket('ws://localhost:8001/ws/task-updates');
+    
+    wsRef.current.onopen = () => {
+      console.log('WebSocket connected for task updates');
+    };
+    
+    wsRef.current.onmessage = (event) => {
+      const taskUpdate = JSON.parse(event.data);
+      console.log('🔥 Task completed via WebSocket:', taskUpdate);
+      
+      // Add to task results for UI updates
+      setTaskResults(prev => [...prev, taskUpdate]);
+      
+      // Update active tasks status
+      setActiveTasks(prev => 
+        prev.map(task => 
+          task.task_id === taskUpdate.task_id 
+            ? { 
+                ...task, 
+                status: taskUpdate.result?.status === 'error' ? 'failed' : 'completed', 
+                result: taskUpdate.result 
+              }
+            : task
+        )
+      );
+      
+      // Refresh cell lines list when a task completes successfully
+      if (taskUpdate.result?.status === 'success') {
+        fetchAllCellLines();
+      }
+    };
+    
+    wsRef.current.onerror = (error) => {
+      console.error('WebSocket error:', error);
+    };
+    
+    wsRef.current.onclose = () => {
+      console.log('WebSocket connection closed');
+    };
+
+    // Cleanup on component unmount
+    return () => {
+      if (wsRef.current) {
+        wsRef.current.close();
+      }
+    };
+  }, []);
+
+  const getFileIcon = (fileName: string) => {
+    const extension = fileName.split('.').pop()?.toLowerCase();
+    switch (extension) {
+      case 'pdf':
+        return '/icons/pdf.png';
+      case 'docx':
+        return '/icons/docx-file.png';
+      case 'txt':
+        return '/icons/txt.png';
+      case 'json':
+      case 'jsonc':
+        return '/icons/json.png';
+      default:
+        return '/icons/txt.png';
+    }
+  };
+
+  const handleDragOver = (e: React.DragEvent) => {
+    e.preventDefault();
+    setIsDragging(true);
+  };
+
+  const handleDragLeave = (e: React.DragEvent) => {
+    e.preventDefault();
+    setIsDragging(false);
+  };
+
+  const handleDrop = (e: React.DragEvent) => {
+    e.preventDefault();
+    setIsDragging(false);
+    const files = Array.from(e.dataTransfer.files);
+    setUploadedFiles(prev => [...prev, ...files]);
+  };
+
+  const handleFileSelect = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const files = Array.from(e.target.files || []);
+    setUploadedFiles(prev => [...prev, ...files]);
+  };
+
+  const removeFile = (fileName: string) => {
+    setUploadedFiles(prev => prev.filter(file => file.name !== fileName));
+  };
 
   return (
-    <Box sx={{ minHeight: '100vh', bgcolor: 'background.default' }}>
-      <Container maxWidth="xl" sx={{ py: 4 }}>
-        <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', mb: 4 }}>
-          <Typography variant="h1" component="h1">
-            <ArticleIcon sx={{ mr: 2, fontSize: 'inherit', verticalAlign: 'middle' }} />
-            Article Curation
-          </Typography>
-          
-          {selectedFiles.length > 0 && (
-            <Button
-              variant={uploading || curationJob ? "contained" : "outlined"}
-              onClick={handleUpload}
-              disabled={uploading}
-              startIcon={uploading ? <HourglassEmptyIcon /> : <SaveIcon />}
-            >
-              {uploading ? 'Processing...' : `Start Curation (${selectedFiles.length} files)`}
-            </Button>
-          )}
-        </Box>
-        
-        <Grid container spacing={3}>
-          {/* Left Panel - Upload & Progress */}
-          <Grid item xs={12} md={4}>
-            <Stack spacing={3}>
-              {/* Upload Component */}
-              <Card>
-                <CardContent>
-                  <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', mb: 2 }}>
-                    <Typography variant="h5" component="h2">
-                      <CloudUploadIcon sx={{ mr: 1, verticalAlign: 'middle' }} />
-                      Upload PDF Articles
-                    </Typography>
-                    
-                    <Button
-                      variant="outlined"
-                      component="label"
-                    >
-                      Browse files
-                      <input
-                        type="file"
-                        accept=".pdf"
-                        multiple
-                        onChange={handleFileSelect}
-                        style={{ display: 'none' }}
-                      />
-                    </Button>
-                  </Box>
-
-                  {/* Selected Files Display */}
-                  <Collapse in={selectedFiles.length > 0}>
-                    <Box sx={{ mt: 3 }}>
-                      <Typography variant="subtitle1" component="h4" sx={{ mb: 2 }}>
-                        Selected Files ({selectedFiles.length})
-                      </Typography>
-                      
-                      <Box sx={{ border: '1px solid', borderColor: 'grey.200', borderRadius: 1, overflow: 'hidden' }}>
-                        {selectedFiles.map((file, index) => (
-                          <Box
-                            key={index}
-                            sx={{
-                              display: 'flex',
-                              alignItems: 'center',
-                              justifyContent: 'space-between',
-                              px: 2,
-                              py: 1,
-                              borderBottom: index < selectedFiles.length - 1 ? '1px solid' : 'none',
-                              borderColor: 'grey.100',
-                              '&:hover': { bgcolor: 'grey.50' }
-                            }}
-                          >
-                            <Box sx={{ flex: 1, minWidth: 0 }}>
-                              <Typography variant="body2" sx={{ fontWeight: 500, fontSize: '0.875rem' }} noWrap>
-                                {file.name}
-                              </Typography>
-                            </Box>
-                            <IconButton
-                              onClick={() => removeFile(index)}
-                              disabled={uploading}
-                              size="small"
-                              sx={{ ml: 1, p: 0.5 }}
-                            >
-                              <DeleteIcon sx={{ fontSize: 16 }} />
-                            </IconButton>
-                          </Box>
-                        ))}
-                      </Box>
-                    </Box>
-                  </Collapse>
-                </CardContent>
-              </Card>
-
-              {/* Progress Tracking */}
-              {curationJob && (
-                <Fade in={Boolean(curationJob)}>
-                  <Card>
-                    <CardContent>
-                      <Typography variant="h5" component="h3" gutterBottom>
-                        Curation Progress
-                      </Typography>
-                      
-                      <Box>
-                        <Box sx={{ display: 'flex', alignItems: 'center', mb: 2 }}>
-                          {curationJob.status === 'processing' && (
-                            <Box sx={{ mr: 2 }}>
-                              <LinearProgress 
-                                variant="determinate" 
-                                value={(curationJob.currentArticle / curationJob.totalArticles) * 100}
-                                sx={{ width: 40, height: 6, borderRadius: 3 }}
-                              />
-                            </Box>
-                          )}
-                          {curationJob.status === 'completed' && (
-                            <CheckCircleIcon sx={{ mr: 2, color: 'success.main' }} />
-                          )}
-                          {curationJob.status === 'error' && (
-                            <ErrorIcon sx={{ mr: 2, color: 'error.main' }} />
-                          )}
-                          
-                          <Typography variant="body1" sx={{ fontWeight: 500 }}>
-                            {curationJob.status === 'processing' && `Curating... Article ${curationJob.currentArticle}/${curationJob.totalArticles}`}
-                            {curationJob.status === 'completed' && `Completed! Found ${cellLines.length} cell lines`}
-                            {curationJob.status === 'error' && `Error: ${curationJob.message}`}
-                          </Typography>
-                        </Box>
-                        
-                        {curationJob.status === 'processing' && (
-                          <LinearProgress 
-                            variant="indeterminate"
-                            sx={{ 
-                              mt: 1,
-                              '& .MuiLinearProgress-bar': {
-                                animationDuration: '2s'
-                              }
-                            }}
-                          />
-                        )}
-                      </Box>
-                    </CardContent>
-                  </Card>
-                </Fade>
-              )}
-
-              {/* Cell Lines List */}
-              {cellLines.length > 0 && (
-                <Fade in={cellLines.length > 0}>
-                  <Card>
-                    <CardContent>
-                      <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', mb: 2 }}>
-                        <Typography variant="h5" component="h3">
-                          <BiotechIcon sx={{ mr: 1, verticalAlign: 'middle' }} />
-                          Cell Lines
-                        </Typography>
-                        {cellLines.filter(cl => cl.status === 'pending').length > 0 && (
-                          <Button
-                            variant="contained"
-                            color="success"
-                            onClick={handleAcceptAll}
-                            size="small"
-                          >
-                            Accept All
-                          </Button>
-                        )}
-                      </Box>
-                      
-                      <Paper variant="outlined" sx={{ maxHeight: 300, overflow: 'auto' }}>
-                        <List>
-                          {cellLines.map((cellLine) => (
-                            <ListItemButton
-                              key={cellLine.id}
-                              onClick={() => setSelectedCellLineId(cellLine.id)}
-                              selected={selectedCellLineId === cellLine.id}
-                              divider
-                            >
-                              <ListItemText
-                                primary={cellLine.id}
-                                primaryTypographyProps={{ fontWeight: 500 }}
-                              />
-                              <Chip
-                                size="small"
-                                label={
-                                  cellLine.status === 'pending' ? 'Pending' :
-                                  cellLine.status === 'saved' ? 'Saved' :
-                                  'Error'
-                                }
-                                color={
-                                  cellLine.status === 'pending' ? 'warning' :
-                                  cellLine.status === 'saved' ? 'success' :
-                                  'error'
-                                }
-                                variant="outlined"
-                              />
-                            </ListItemButton>
-                          ))}
-                        </List>
-                      </Paper>
-                    </CardContent>
-                  </Card>
-                </Fade>
-              )}
-            </Stack>
-          </Grid>
-
-          {/* Right Panel - Editor */}
-          <Grid item xs={12} md={8}>
-            {selectedCellLine ? (
-              <Card>
-                <CardContent>
-                  <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', mb: 3 }}>
-                    <Typography variant="h4" component="h3">
-                      Editing: {selectedCellLine.id}
-                    </Typography>
-                    <IconButton
-                      onClick={() => setSelectedCellLineId(null)}
-                      color="default"
-                    >
-                      <CloseIcon />
-                    </IconButton>
-                  </Box>
-                  
-                  <CurationCellLineEditor
-                    cellLineId={selectedCellLine.id}
-                    cellLineData={selectedCellLine.data}
-                    onSave={(savedData) => {
-                      handleSaveCellLine(selectedCellLine.id, savedData);
-                      setSelectedCellLineId(null);
-                    }}
-                    onError={(error) => {
-                      console.error('Error saving cell line:', selectedCellLine.id, error);
-                      alert(`Error saving ${selectedCellLine.id}: ${error}`);
-                    }}
-                  />
-                </CardContent>
-              </Card>
-            ) : (
-              <Card>
-                <CardContent sx={{ textAlign: 'center', py: 8 }}>
-                  <BiotechIcon sx={{ fontSize: 64, color: 'grey.400', mb: 2 }} />
-                  <Typography variant="h5" component="h3" gutterBottom>
-                    No Cell Line Selected
-                  </Typography>
-                  <Typography variant="body1" color="text.secondary">
-                    {cellLines.length > 0 
-                      ? 'Click on a cell line from the list to edit it'
-                      : 'Upload and curate an article to see cell lines here'
-                    }
-                  </Typography>
-                </CardContent>
-              </Card>
-            )}
-          </Grid>
-        </Grid>
-        
-        {/* Success Modal */}
-        <Modal
-          open={successModal.open}
-          onClose={() => {}} // Prevent manual close
-          closeAfterTransition
-          BackdropComponent={Backdrop}
-          BackdropProps={{
-            timeout: 500,
-            sx: { backgroundColor: 'rgba(0, 0, 0, 0.3)' }
-          }}
-        >
-          <Fade in={successModal.open}>
+    <Box
+      sx={{
+        display: 'flex',
+        flexDirection: 'row',
+        gap: 2,
+        height: '92vh',
+        backgroundColor: 'background.primary',
+        borderRadius: 3,
+        boxShadow: '0 1px 2px rgba(15, 23, 42, 0.06)',
+      }}
+    >
+      {/* Left quarter */}
+      <Box
+        id="left-quarter"
+        sx={{
+          flex: 1,
+          backgroundColor: 'background.primary',
+          overflow: 'auto',
+          maxHeight: '100%',
+          display: 'flex',
+          flexDirection: 'column',
+          gap: 2,
+        }}
+      >
+        {/* Upload card */}
+        <Card width="100%" height="40%" marginBottom={2} header="Upload Sources" headerBgColor={theme.palette.action.selected} headerTextColor={theme.palette.text.primary}>
+          <Box id="upload-card-content" sx={{ display: 'flex', flexDirection: 'column', height: '100%' }}>
+            {/* Drag-and-drop zone */}
             <Box
+              component="label"
+              onDragOver={handleDragOver}
+              onDragLeave={handleDragLeave}
+              onDrop={handleDrop}
               sx={{
-                position: 'absolute',
-                top: '50%',
-                left: '50%',
-                transform: 'translate(-50%, -50%)',
-                width: 400,
-                bgcolor: 'background.paper',
+                flex: 1,
+                m: 2,
+                mb: 1,
+                border: `2px dashed ${isDragging ? theme.palette.secondary.dark : theme.palette.grey[300]}`,
                 borderRadius: 2,
-                boxShadow: 24,
-                p: 4,
-                textAlign: 'center',
+                backgroundColor: isDragging ? theme.palette.action.hover : theme.palette.grey[50],
+                display: 'flex',
+                flexDirection: 'column',
+                alignItems: 'center',
+                justifyContent: 'center',
+                cursor: 'pointer',
+                transition: 'all 0.2s ease',
+                '&:hover': {
+                  borderColor: theme.palette.secondary.main,
+                  backgroundColor: theme.palette.action.hover,
+                },
               }}
             >
-              <CheckCircleIcon sx={{ fontSize: 64, color: 'success.main', mb: 2 }} />
-              <Typography variant="h5" component="h2" gutterBottom>
-                Success!
+              <FileUploadOutlinedIcon
+                sx={{
+                  fontSize: 48,
+                  color: isDragging ? theme.palette.secondary.dark : theme.palette.grey[400],
+                  mb: 1,
+                }}
+              />
+              <Typography variant="body2" fontWeight={500} color="text.primary">
+                Drop files here or click to browse
               </Typography>
-              <Typography variant="body1" color="text.secondary">
-                Saved {successModal.count} cell line{successModal.count !== 1 ? 's' : ''}
+              <Typography variant="caption" color="text.secondary" sx={{ mt: 0.5 }}>
+                PDF, DOCX, TXT, JSON files supported
               </Typography>
+              <input
+                type="file"
+                hidden
+                multiple
+                accept=".pdf,.doc,.docx,.txt,.json,.jsonc"
+                onChange={handleFileSelect}
+              />
             </Box>
-          </Fade>
-        </Modal>
-      </Container>
+
+            {/* Uploaded files list */}
+            {uploadedFiles.length > 0 && (
+              <Box
+                sx={{
+                  flex: 1,
+                  px: 2,
+                  pb: 1,
+                  overflow: 'auto',
+                  '&::-webkit-scrollbar': {
+                    width: '6px',
+                  },
+                  '&::-webkit-scrollbar-track': {
+                    backgroundColor: 'transparent',
+                  },
+                  '&::-webkit-scrollbar-thumb': {
+                    backgroundColor: theme.palette.grey[300],
+                    borderRadius: '3px',
+                  },
+                }}
+              >
+                <Typography variant="caption" color="text.secondary" sx={{ mb: 1, display: 'block', fontWeight: 500 }}>
+                  {uploadedFiles.length} file{uploadedFiles.length !== 1 ? 's' : ''} ready
+                </Typography>
+                <Box sx={{ display: 'flex', flexDirection: 'column', gap: 0.75 }}>
+                  {uploadedFiles.map((file, index) => (
+                    <Box
+                      key={`${file.name}-${index}`}
+                      sx={{
+                        display: 'flex',
+                        alignItems: 'center',
+                        gap: 1.5,
+                        p: 1,
+                        backgroundColor: theme.palette.background.paper,
+                        border: `1px solid ${theme.palette.grey[200]}`,
+                        borderRadius: 1,
+                        '&:hover': {
+                          borderColor: theme.palette.grey[300],
+                          backgroundColor: theme.palette.grey[50],
+                        },
+                      }}
+                    >
+                      <Box sx={{ width: 20, height: 20, flexShrink: 0 }}>
+                        <img
+                          src={getFileIcon(file.name)}
+                          alt={`${file.name} icon`}
+                          style={{ width: '100%', height: '100%' }}
+                        />
+                      </Box>
+                      <Typography
+                        variant="body2"
+                        sx={{
+                          flex: 1,
+                          overflow: 'hidden',
+                          textOverflow: 'ellipsis',
+                          whiteSpace: 'nowrap',
+                          fontSize: '0.85rem',
+                        }}
+                      >
+                        {file.name}
+                      </Typography>
+                      <IconButton
+                        size="small"
+                        onClick={() => removeFile(file.name)}
+                        sx={{
+                          p: 0.5,
+                          '&:hover': {
+                            backgroundColor: theme.palette.error.light,
+                            color: theme.palette.error.dark,
+                          },
+                        }}
+                      >
+                        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+                          <path d="M18 6L6 18M6 6l12 12" />
+                        </svg>
+                      </IconButton>
+                    </Box>
+                  ))}
+                </Box>
+              </Box>
+            )}
+
+            {/* Start AI Curation Button */}
+            <Button
+              id="start-ai-curation-button"
+              variant="contained"
+              color="primary"
+              disabled={uploadedFiles.length === 0}
+              onClick={async () => {
+                console.log('Starting AI curation for files:', uploadedFiles);
+
+                try {
+                  // Convert files to Base64
+                  const filesWithBase64 = await Promise.all(
+                    uploadedFiles.map(async (file) => ({
+                      filename: file.name,
+                      file_data: await fileToBase64(file)
+                    }))
+                  );
+
+                  // Call the API
+                  const response = await fetch('http://localhost:8001/start-ai-curation', {
+                    method: 'POST',
+                    headers: {
+                      'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify({ files: filesWithBase64 })
+                  });
+
+                  if (response.ok) {
+                    const result = await response.json();
+                    console.log('Curation tasks queued:', result);
+
+                    // Add tasks to active tasks list for progress tracking
+                    const newTasks = result.tasks.map((task: any) => ({
+                      task_id: task.task_id,
+                      filename: task.filename,
+                      status: 'processing' as const
+                    }));
+                    setActiveTasks(prev => [...prev, ...newTasks]);
+                  } else {
+                    const error = await response.json();
+                    console.error('Curation failed:', error);
+                    // TODO: Show error message
+                  }
+                } catch (error) {
+                  console.error('Error starting curation:', error);
+                  // TODO: Show error message
+                }
+              }}
+              sx={{
+                backgroundColor: theme.palette.action.selected,
+                width: '100%',
+                height: '48px',
+                borderRadius: '0 0 8px 8px',
+                border: `1px solid ${theme.palette.action.selected}`,
+                borderTop: 'none',
+                '&:hover': {
+                  backgroundColor: theme.palette.action.hover,
+                  boxShadow: 'none',
+                },
+                '&:disabled': {
+                  backgroundColor: theme.palette.grey[300],
+                  borderColor: theme.palette.grey[300],
+                },
+                color: theme.palette.text.primary,
+                boxShadow: 'none',
+                fontWeight: 600,
+              }}
+            >
+              <BlurOnOutlinedIcon sx={{ mr: 1 }} />
+              Start AI Curation
+            </Button>
+          </Box>
+        </Card>
+
+        {/* Task Progress */}
+        <Card width="100%" flex={1} header={`Task History (${activeTasks.filter(t => t.status === 'completed').length}/${activeTasks.length})`}>
+          <Box sx={{ flex: 1, overflow: 'auto' }}>
+            {activeTasks.length === 0 ? (
+              <Box sx={{ p: 2, textAlign: 'center' }}>
+                <Typography variant="body2" color="text.secondary">
+                  No active tasks. Upload files and start AI curation to see progress here.
+                </Typography>
+              </Box>
+            ) : (
+              <List sx={{ p: 0 }}>
+                {activeTasks.map((task) => (
+                  <TaskProgressBar key={task.task_id} task={task} />
+                ))}
+              </List>
+            )}
+          </Box>
+        </Card>
+      </Box>
+
+      {/* Middle half (two quarters merged) */}
+      <Card flex={2} header='Cell Line Editor'>
+        {isLoadingCellLine ? (
+          <Box sx={{ display: 'flex', height: '100%', '& .MuiSkeleton-wave::after': { animationDuration: '0.3s' } }}>
+            <Box sx={{ flex: 1, p: 2 }}>
+              {/* Section skeleton */}
+              {[1, 2, 3].map((i) => (
+                <Box key={i} sx={{ mb: 2 }}>
+                  <Skeleton animation="wave" variant="rounded" height={44} sx={{ mb: 1 }} />
+                  <Box sx={{ pl: 1 }}>
+                    {[1, 2, 3].map((j) => (
+                      <Box key={j} sx={{ display: 'flex', gap: 2, mb: 1 }}>
+                        <Skeleton animation="wave" variant="text" width={150} />
+                        <Skeleton animation="wave" variant="rounded" height={36} sx={{ flex: 1 }} />
+                      </Box>
+                    ))}
+                  </Box>
+                </Box>
+              ))}
+            </Box>
+            {/* TOC skeleton */}
+            <Box sx={{ width: 200, borderLeft: '1px solid', borderColor: 'grey.200', p: 2 }}>
+              <Skeleton animation="wave" variant="text" width={60} sx={{ mb: 1 }} />
+              {[1, 2, 3, 4, 5].map((i) => (
+                <Skeleton animation="wave" key={i} variant="text" width={120} sx={{ mb: 0.5 }} />
+              ))}
+            </Box>
+          </Box>
+        ) : selectedCellLine ? (
+          <CellLineEditor
+            key={editorKey}
+            data={editedMetadata}
+            cellLineName={selectedCellLine.replace('.json', '')}
+            filename={selectedCellLine}
+            lastModified={lastModified}
+            onSave={saveCellLine}
+            onCreate={createNewCellLine}
+            onDiscard={async () => {
+              await fetchCellLineData(selectedCellLine);
+              setEditorKey(k => k + 1);
+            }}
+          />
+        ) : (
+          <Box sx={{ p: 2, display: 'flex', flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between' }}>
+            <Typography variant="body2" color="text.secondary">
+              Select a cell line from the left panel or create a new one
+            </Typography>
+            <Button
+              variant="outlined"
+              size="small"
+              startIcon={<AddIcon />}
+              onClick={(e) => setCreateAnchor(e.currentTarget)}
+              sx={{
+                borderColor: theme.palette.secondary.dark,
+                color: theme.palette.secondary.dark,
+                '&:hover': {
+                  borderColor: theme.palette.secondary.main,
+                  backgroundColor: theme.palette.action.hover,
+                },
+              }}
+            >
+              New Cell Line
+            </Button>
+            <Popover
+              open={Boolean(createAnchor)}
+              anchorEl={createAnchor}
+              onClose={() => setCreateAnchor(null)}
+              anchorOrigin={{ vertical: 'bottom', horizontal: 'center' }}
+              transformOrigin={{ vertical: 'top', horizontal: 'center' }}
+            >
+              <Box sx={{ p: 2, display: 'flex', flexDirection: 'column', gap: 1.5, minWidth: 280 }}>
+                <Typography variant="body2" fontWeight={500}>
+                  Enter a name for the new cell line
+                </Typography>
+                <TextField
+                  size="small"
+                  placeholder="e.g. AIBNi001-A"
+                  inputRef={newNameInputRef}
+                  autoFocus
+                  onKeyDown={(e) => {
+                    if (e.key === 'Enter') {
+                      const value = newNameInputRef.current?.value.trim();
+                      if (value) {
+                        createNewCellLine(value);
+                        setCreateAnchor(null);
+                      }
+                    }
+                  }}
+                />
+                <Button
+                  variant="contained"
+                  size="small"
+                  onClick={() => {
+                    const value = newNameInputRef.current?.value.trim();
+                    if (value) {
+                      createNewCellLine(value);
+                      setCreateAnchor(null);
+                    }
+                  }}
+                  sx={{
+                    backgroundColor: theme.palette.secondary.dark,
+                    '&:hover': {
+                      backgroundColor: theme.palette.secondary.main,
+                    },
+                  }}
+                >
+                  Create
+                </Button>
+              </Box>
+            </Popover>
+          </Box>
+        )}
+      </Card>
+
+      {/* Right quarter - Cell Lines List */}
+      <Card flex={1} header={`Cell Lines`}>
+        <Box sx={{ display: 'flex', flexDirection: 'column', height: '100%' }}>
+          {/* Search and Filter section */}
+          <Box sx={{ px: 1.5, py: 1, borderBottom: `1px solid ${theme.palette.grey[200]}`, display: 'flex', gap: 1, alignItems: 'center' }}>
+            <TextField
+              size="small"
+              placeholder="Search..."
+              value={searchQuery}
+              onChange={(e) => setSearchQuery(e.target.value)}
+              InputProps={{
+                startAdornment: (
+                  <InputAdornment position="start">
+                    <SearchIcon sx={{ fontSize: 18, color: theme.palette.text.secondary }} />
+                  </InputAdornment>
+                ),
+              }}
+              sx={{
+                flex: 1,
+                '& .MuiOutlinedInput-root': {
+                  backgroundColor: theme.palette.background.paper,
+                  fontSize: '0.875rem',
+                  '& input': {
+                    py: 0.75,
+                  },
+                },
+              }}
+            />
+            <Button
+              size="small"
+              startIcon={<FilterListIcon />}
+              onClick={(e) => setFilterAnchor(e.currentTarget)}
+              sx={{
+                textTransform: 'none',
+                color: theme.palette.text.secondary,
+                '&:hover': {
+                  backgroundColor: theme.palette.action.hover,
+                },
+              }}
+            >
+              Filter by
+            </Button>
+            <Popover
+              open={Boolean(filterAnchor)}
+              anchorEl={filterAnchor}
+              onClose={() => setFilterAnchor(null)}
+              anchorOrigin={{ vertical: 'bottom', horizontal: 'left' }}
+              transformOrigin={{ vertical: 'top', horizontal: 'left' }}
+            >
+              <Box sx={{ p: 2, display: 'flex', flexDirection: 'column', gap: 1 }}>
+                <Typography variant="body2" fontWeight={500} sx={{ mb: 0.5 }}>
+                  Filter by status
+                </Typography>
+                <FormControlLabel
+                  control={
+                    <Checkbox
+                      checked={filterWorking}
+                      onChange={(e) => setFilterWorking(e.target.checked)}
+                      size="small"
+                    />
+                  }
+                  label="Working"
+                />
+                <FormControlLabel
+                  control={
+                    <Checkbox
+                      checked={filterReady}
+                      onChange={(e) => setFilterReady(e.target.checked)}
+                      size="small"
+                    />
+                  }
+                  label="Ready"
+                />
+              </Box>
+            </Popover>
+          </Box>
+
+          <Box sx={{ flex: 1, overflow: 'auto' }}>
+            {(() => {
+              const filteredCellLines = cellLines.filter(cl => {
+                // Filter by location
+                const locationMatch = (filterWorking && cl.location === 'working') ||
+                                     (filterReady && cl.location === 'ready');
+                // Filter by search query
+                const searchMatch = cl.name.toLowerCase().includes(searchQuery.toLowerCase());
+                return locationMatch && searchMatch;
+              });
+
+              const allFilteredSelected = filteredCellLines.length > 0 &&
+                filteredCellLines.every(cl => selectedForDownload.has(cl.name));
+
+              return (
+                <>
+                  {filteredCellLines.length > 0 && (
+                    <Box sx={{ px: 1.5, py: 0.75, borderBottom: `1px solid ${theme.palette.grey[200]}`, display: 'flex', alignItems: 'center' }}>
+                      <Checkbox
+                        checked={allFilteredSelected}
+                        indeterminate={
+                          !allFilteredSelected &&
+                          filteredCellLines.some(cl => selectedForDownload.has(cl.name))
+                        }
+                        onChange={() => toggleSelectAll(filteredCellLines)}
+                        size="small"
+                        sx={{ p: 0, mr: 1 }}
+                      />
+                      <Typography variant="caption" color="text.secondary">
+                        Select all
+                      </Typography>
+                    </Box>
+                  )}
+                  {filteredCellLines.length === 0 ? (
+                    <Box sx={{ p: 2, textAlign: 'center' }}>
+                      <Typography variant="body2" color="text.secondary">
+                        {cellLines.length === 0
+                          ? 'No cell lines found. Complete curation tasks to see cell lines here.'
+                          : 'No cell lines match the current filter.'}
+                      </Typography>
+                    </Box>
+                  ) : (
+                    <List sx={{ p: 0 }}>
+                      {filteredCellLines.map((cellLine) => (
+                        <ListItem
+                          key={cellLine.name}
+                          component="div"
+                          onClick={() => fetchCellLineData(cellLine.name)}
+                          secondaryAction={
+                            <IconButton
+                              edge="end"
+                              size="small"
+                              onClick={(e) => downloadCellLine(cellLine.name, e)}
+                              sx={{
+                                '&:hover': {
+                                  backgroundColor: theme.palette.action.hover,
+                                }
+                              }}
+                            >
+                              <DownloadIcon sx={{ fontSize: 18 }} />
+                            </IconButton>
+                          }
+                          sx={{
+                            cursor: 'pointer',
+                            py: 0.75,
+                            px: 1.5,
+                            borderBottom: `1px solid ${theme.palette.grey[200]}`,
+                            backgroundColor: selectedCellLine === cellLine.name ? theme.palette.action.selected : 'transparent',
+                            '&:hover': {
+                              backgroundColor: theme.palette.action.hover,
+                            }
+                          }}
+                        >
+                          <Checkbox
+                            checked={selectedForDownload.has(cellLine.name)}
+                            onClick={(e) => toggleSelection(cellLine.name, e)}
+                            size="small"
+                            sx={{ p: 0, mr: 1 }}
+                          />
+                          <ListItemText
+                            primary={cellLine.name.replace('.json', '')}
+                            secondary={cellLine.location === 'working' ? 'Working' : 'Ready'}
+                            primaryTypographyProps={{ fontSize: '0.875rem' }}
+                            secondaryTypographyProps={{ fontSize: '0.75rem' }}
+                          />
+                        </ListItem>
+                      ))}
+                    </List>
+                  )}
+                </>
+              );
+            })()}
+          </Box>
+
+          {/* Download Button at bottom */}
+          <Button
+            variant="contained"
+            color="primary"
+            disabled={selectedForDownload.size === 0}
+            onClick={batchDownload}
+            sx={{
+              backgroundColor: theme.palette.action.selected,
+              width: '100%',
+              height: '48px',
+              borderRadius: '0 0 8px 8px',
+              border: `1px solid ${theme.palette.action.selected}`,
+              borderTop: 'none',
+              '&:hover': {
+                backgroundColor: theme.palette.action.hover,
+                boxShadow: 'none',
+              },
+              '&:disabled': {
+                backgroundColor: theme.palette.grey[300],
+                borderColor: theme.palette.grey[300],
+              },
+              color: theme.palette.text.primary,
+              boxShadow: 'none',
+              fontWeight: 600,
+            }}
+          >
+            <DownloadIcon sx={{ mr: 1 }} />
+            Download Selected ({selectedForDownload.size})
+          </Button>
+        </Box>
+      </Card>
+
     </Box>
   );
 }

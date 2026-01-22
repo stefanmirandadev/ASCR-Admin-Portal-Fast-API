@@ -10,57 +10,44 @@ services:
       - frontend_node_modules:/app/node_modules
     environment:
       - NODE_ENV=development
-      - NEXT_PUBLIC_CURATION_API_URL=http://localhost:8001
-      - NEXT_PUBLIC_ARCHIVE_API_URL=http://localhost:8002
+      - NEXT_PUBLIC_BACKEND_API_URL=http://localhost:8001
     depends_on:
-      - curation_service
-      - cell_line_archive
+      - backend
 
-  curation_service:
+  backend:
     build:
-      context: ./services/curation_service
+      context: ./services/backend
       dockerfile: Dockerfile
     ports:
       - "8001:8001"
     volumes:
-      - ./services/curation_service:/app
-      - curation_data:/app/data
+      - ./services/backend:/app
+      - backend_data:/app/data
+      - ./data_dictionaries:/app/data_dictionaries
+      - ./curation_instructions:/app/curation_instructions
     environment:
       - OPENAI_API_KEY=${OPENAI_API_KEY}
       - ANTHROPIC_API_KEY=${ANTHROPIC_API_KEY}
       - REDIS_URL=redis://redis:6379/0
-      - ARCHIVE_SERVICE_URL=http://cell_line_archive:8002
     depends_on:
       - redis
-      - background_processor
 
-  cell_line_archive:
+  worker:
     build:
-      context: ./services/cell_line_archive
-      dockerfile: Dockerfile
-    ports:
-      - "8002:8002"
-    volumes:
-      - ./services/cell_line_archive:/app
-      - archive_data:/app/data
-    environment:
-      - DATA_PATH=/app/data
-
-  background_processor:
-    build:
-      context: ./services/background_processor
+      context: ./services/backend
       dockerfile: Dockerfile
     volumes:
-      - ./services/background_processor:/app
-      - curation_data:/app/curation_data
-      - archive_data:/app/archive_data
+      - ./services/backend:/app
+      - backend_data:/app/data
+      - ./data_dictionaries:/app/data_dictionaries
+      - ./curation_instructions:/app/curation_instructions
     environment:
-      - REDIS_URL=redis://redis:6379/0
       - OPENAI_API_KEY=${OPENAI_API_KEY}
-      - CURATION_SERVICE_URL=http://curation_service:8001
-      - ARCHIVE_SERVICE_URL=http://cell_line_archive:8002
+      - ANTHROPIC_API_KEY=${ANTHROPIC_API_KEY}
+      - REDIS_URL=redis://redis:6379/0
     depends_on:
       - redis
+    command: ["celery", "-A", "tasks", "worker", "--loglevel=info", "--pool=solo"]
 
   redis:
     image: redis:7-alpine
@@ -71,6 +58,5 @@ services:
 
 volumes:
   frontend_node_modules:
-  curation_data:
-  archive_data:
+  backend_data:
   redis_data:

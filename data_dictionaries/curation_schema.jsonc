@@ -1,0 +1,5458 @@
+// Auto-generated from: 2025_12_ascr_data_dictionary_v1.0.xlsx
+// Do not edit manually - regenerate from xlsx source.
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "ASCR Curation Schema",
+  "description": "JSON schema for cell line curation forms",
+  "$defs": {
+    "AdditionalGenomicCharacterisation": {
+      "properties": {
+        "hla_typing": {
+          "description": "Describes whether HLA typing was done.",
+          "title": "Hla Typing",
+          "type": "boolean"
+        },
+        "str_analysis": {
+          "description": "Describes whether STR analysis was done.",
+          "title": "Str Analysis",
+          "type": "boolean"
+        },
+        "fingerprinting_analysis": {
+          "description": "Describes whether fingerprint analysis was done.",
+          "title": "Fingerprinting Analysis",
+          "type": "boolean"
+        },
+        "genome_wide_or_functional_data": {
+          "description": "Describes whether GWAS analysis was done.",
+          "title": "Genome Wide Or Functional Data",
+          "type": "boolean"
+        }
+      },
+      "required": [
+        "hla_typing",
+        "str_analysis",
+        "fingerprinting_analysis",
+        "genome_wide_or_functional_data"
+      ],
+      "title": "AdditionalGenomicCharacterisation",
+      "type": "object"
+    },
+    "CellLine": {
+      "properties": {
+        "hpscreg_name": {
+          "anyOf": [
+            {
+              "maxLength": 100,
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "description": "Cell line name in hPSCreg.",
+          "title": "Hpscreg Name"
+        },
+        "cell_line_alt_name": {
+          "anyOf": [
+            {
+              "maxLength": 100,
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "description": "Alternative name/s for the cell line.",
+          "title": "Cell Line Alt Name"
+        },
+        "cell_type": {
+          "description": "Type of cell line.",
+          "enum": [
+            "human embryonic stem cell (hESC)",
+            "human induced pluripotent stem cell (hiPSC)"
+          ],
+          "title": "Cell Type",
+          "type": "string"
+        },
+        "status": {
+          "description": "Status of the cell line's characterisation.",
+          "enum": [
+            "Backup",
+            "Characterised"
+          ],
+          "title": "Status",
+          "type": "string"
+        },
+        "genotype": {
+          "description": "Summary of overall genotype of the cell line at the genotype_locus.",
+          "enum": [
+            "Patient Control",
+            "Gene Corrected"
+          ],
+          "title": "Genotype",
+          "type": "string"
+        },
+        "genotype_locus": {
+          "description": "Specific gene locus affected by variants or modifications.",
+          "maxLength": 100,
+          "title": "Genotype Locus",
+          "type": "string"
+        },
+        "frozen": {
+          "description": "Describes whether stock of the cell line was frozen.",
+          "title": "Frozen",
+          "type": "boolean"
+        },
+        "associated_polymorphism": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "description": "Known polymorphism/s associated with the cell line.",
+          "title": "Associated Polymorphism"
+        },
+        "research_use": {
+          "description": "Describes whether the cell line is available for research use.",
+          "title": "Research Use",
+          "type": "boolean"
+        },
+        "clinical_use": {
+          "description": "Describes whether the cell line is available for clinical use.",
+          "title": "Clinical Use",
+          "type": "boolean"
+        },
+        "commercial_use": {
+          "description": "Describes whether the cell line is available for commercial use.",
+          "title": "Commercial Use",
+          "type": "boolean"
+        },
+        "certificate_of_pluripotency_characterisation": {
+          "description": "Describes whether a certificate of pluripotency has been issued for the cell line.",
+          "title": "Certificate Of Pluripotency Characterisation",
+          "type": "boolean"
+        },
+        "publish": {
+          "description": "Whether the line can be made visible on ASCR website",
+          "title": "Publish",
+          "type": "boolean"
+        },
+        "embargo_date": {
+          "anyOf": [
+            {
+              "format": "date",
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "description": "Australian Stem Cell Registry embargo date for cell line entry.",
+          "title": "Embargo Date"
+        },
+        "registered_with_hpscreg": {
+          "description": "Whether the line can be registered with hPSCreg.",
+          "enum": [
+            "Not Registered",
+            "Registered",
+            "To be Updated",
+            "Cannot be Registered"
+          ],
+          "title": "Registered With Hpscreg",
+          "type": "string"
+        },
+        "curation_status": {
+          "description": "Cell line's curation status in the Australian Stem Cell Registry.",
+          "enum": [
+            "Not yet reviewed by Australian Stem Cell Registry",
+            "Reviewed by Australian Stem Cell Registry",
+            "Reviewed and Updated by Australian Stem Cell Registry",
+            "Flagged for further review"
+          ],
+          "title": "Curation Status",
+          "type": "string"
+        }
+      },
+      "required": [
+        "cell_type",
+        "status",
+        "genotype",
+        "genotype_locus",
+        "frozen",
+        "research_use",
+        "clinical_use",
+        "commercial_use",
+        "certificate_of_pluripotency_characterisation",
+        "publish",
+        "registered_with_hpscreg",
+        "curation_status"
+      ],
+      "title": "CellLine",
+      "type": "object"
+    },
+    "CellLineCurationForm": {
+      "$defs": {
+        "AdditionalGenomicCharacterisation": {
+          "properties": {
+            "hla_typing": {
+              "description": "Describes whether HLA typing was done.",
+              "title": "Hla Typing",
+              "type": "boolean"
+            },
+            "str_analysis": {
+              "description": "Describes whether STR analysis was done.",
+              "title": "Str Analysis",
+              "type": "boolean"
+            },
+            "fingerprinting_analysis": {
+              "description": "Describes whether fingerprint analysis was done.",
+              "title": "Fingerprinting Analysis",
+              "type": "boolean"
+            },
+            "genome_wide_or_functional_data": {
+              "description": "Describes whether GWAS analysis was done.",
+              "title": "Genome Wide Or Functional Data",
+              "type": "boolean"
+            }
+          },
+          "required": [
+            "hla_typing",
+            "str_analysis",
+            "fingerprinting_analysis",
+            "genome_wide_or_functional_data"
+          ],
+          "title": "AdditionalGenomicCharacterisation",
+          "type": "object"
+        },
+        "CellLine": {
+          "properties": {
+            "hpscreg_name": {
+              "anyOf": [
+                {
+                  "maxLength": 100,
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "default": null,
+              "description": "Cell line name in hPSCreg.",
+              "title": "Hpscreg Name"
+            },
+            "cell_line_alt_name": {
+              "anyOf": [
+                {
+                  "maxLength": 100,
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "default": null,
+              "description": "Alternative name/s for the cell line.",
+              "title": "Cell Line Alt Name"
+            },
+            "cell_type": {
+              "description": "Type of cell line.",
+              "enum": [
+                "human embryonic stem cell (hESC)",
+                "human induced pluripotent stem cell (hiPSC)"
+              ],
+              "title": "Cell Type",
+              "type": "string"
+            },
+            "status": {
+              "description": "Status of the cell line's characterisation.",
+              "enum": [
+                "Backup",
+                "Characterised"
+              ],
+              "title": "Status",
+              "type": "string"
+            },
+            "genotype": {
+              "description": "Summary of overall genotype of the cell line at the genotype_locus.",
+              "enum": [
+                "Patient Control",
+                "Gene Corrected"
+              ],
+              "title": "Genotype",
+              "type": "string"
+            },
+            "genotype_locus": {
+              "description": "Specific gene locus affected by variants or modifications.",
+              "maxLength": 100,
+              "title": "Genotype Locus",
+              "type": "string"
+            },
+            "frozen": {
+              "description": "Describes whether stock of the cell line was frozen.",
+              "title": "Frozen",
+              "type": "boolean"
+            },
+            "associated_polymorphism": {
+              "anyOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "default": null,
+              "description": "Known polymorphism/s associated with the cell line.",
+              "title": "Associated Polymorphism"
+            },
+            "research_use": {
+              "description": "Describes whether the cell line is available for research use.",
+              "title": "Research Use",
+              "type": "boolean"
+            },
+            "clinical_use": {
+              "description": "Describes whether the cell line is available for clinical use.",
+              "title": "Clinical Use",
+              "type": "boolean"
+            },
+            "commercial_use": {
+              "description": "Describes whether the cell line is available for commercial use.",
+              "title": "Commercial Use",
+              "type": "boolean"
+            },
+            "certificate_of_pluripotency_characterisation": {
+              "description": "Describes whether a certificate of pluripotency has been issued for the cell line.",
+              "title": "Certificate Of Pluripotency Characterisation",
+              "type": "boolean"
+            },
+            "publish": {
+              "description": "Whether the line can be made visible on ASCR website",
+              "title": "Publish",
+              "type": "boolean"
+            },
+            "embargo_date": {
+              "anyOf": [
+                {
+                  "format": "date",
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "default": null,
+              "description": "Australian Stem Cell Registry embargo date for cell line entry.",
+              "title": "Embargo Date"
+            },
+            "registered_with_hpscreg": {
+              "description": "Whether the line can be registered with hPSCreg.",
+              "enum": [
+                "Not Registered",
+                "Registered",
+                "To be Updated",
+                "Cannot be Registered"
+              ],
+              "title": "Registered With Hpscreg",
+              "type": "string"
+            },
+            "curation_status": {
+              "description": "Cell line's curation status in the Australian Stem Cell Registry.",
+              "enum": [
+                "Not yet reviewed by Australian Stem Cell Registry",
+                "Reviewed by Australian Stem Cell Registry",
+                "Reviewed and Updated by Australian Stem Cell Registry",
+                "Flagged for further review"
+              ],
+              "title": "Curation Status",
+              "type": "string"
+            }
+          },
+          "required": [
+            "cell_type",
+            "status",
+            "genotype",
+            "genotype_locus",
+            "frozen",
+            "research_use",
+            "clinical_use",
+            "commercial_use",
+            "certificate_of_pluripotency_characterisation",
+            "publish",
+            "registered_with_hpscreg",
+            "curation_status"
+          ],
+          "title": "CellLine",
+          "type": "object"
+        },
+        "CellLineDerivationEmbryonic": {
+          "properties": {
+            "e_nhmrc_licence_number": {
+              "anyOf": [
+                {
+                  "maxLength": 100,
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "default": null,
+              "description": "NHMRC License number.",
+              "title": "E Nhmrc Licence Number"
+            },
+            "e_preimplant_genetic_diagnosis": {
+              "description": "Indicates whether the cell line was derived from a preimplantation genetic diagnostic embryo.",
+              "title": "E Preimplant Genetic Diagnosis",
+              "type": "boolean"
+            },
+            "e_supernumerary": {
+              "description": "Indicates whether the embryo used was a supernumerary embryo from IVF treatment.",
+              "title": "E Supernumerary",
+              "type": "boolean"
+            },
+            "derivation_year": {
+              "anyOf": [
+                {
+                  "format": "date",
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "default": null,
+              "description": "Year in which the ESC was derived (ie. cells isolated from embryo).",
+              "title": "Derivation Year"
+            },
+            "reason_no_derivation_year": {
+              "anyOf": [
+                {
+                  "maxLength": 100,
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "default": null,
+              "description": "Text explanation if the year of derivation is unknown.",
+              "title": "Reason No Derivation Year"
+            },
+            "separation_of_research_and_ivf_treat": {
+              "anyOf": [
+                {
+                  "type": "boolean"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "default": null,
+              "description": "Describes whether IVF treatment and research decision-making processes were clearly separated.",
+              "title": "Separation Of Research And Ivf Treat"
+            },
+            "other_hesc_source": {
+              "description": "Indicates if the hESC line was derived from a source other than supernumerary IVF embryos.",
+              "enum": [
+                "Somatic Cell Nuclear Transfer (SCNT)",
+                "Pathogenesis",
+                "Other"
+              ],
+              "title": "Other Hesc Source",
+              "type": "string"
+            },
+            "other_hesc_source_other": {
+              "anyOf": [
+                {
+                  "maxLength": 100,
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "default": null,
+              "description": "Description of other embryo source.",
+              "title": "Other Hesc Source Other"
+            },
+            "embryo_stage": {
+              "anyOf": [
+                {
+                  "enum": [
+                    "Blastula with ICM and Trophoblast",
+                    "Cleavage (Mitosis)",
+                    "Compaction",
+                    "Morula",
+                    "Zygot"
+                  ],
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "default": null,
+              "description": "Developmental stage of the embryo at the time of cell isolation.",
+              "title": "Embryo Stage"
+            },
+            "expansion_status": {
+              "anyOf": [
+                {
+                  "enum": [
+                    "Stage 1",
+                    "Stage 2",
+                    "Stage 3",
+                    "Stage 4",
+                    "Stage 5",
+                    "Stage 6"
+                  ],
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "default": null,
+              "description": "\tIndicates the extent to which the cell line has undergone expansion.",
+              "title": "Expansion Status"
+            },
+            "icm_morphology": {
+              "anyOf": [
+                {
+                  "enum": [
+                    "Type A",
+                    "Type B",
+                    "Type C",
+                    "Type D",
+                    "Type E"
+                  ],
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "default": null,
+              "description": "Morphological quality of the inner cell mass (ICM) used in derivation.",
+              "title": "Icm Morphology"
+            },
+            "trophectoderm_morphology": {
+              "anyOf": [
+                {
+                  "enum": [
+                    "Type A",
+                    "Type B",
+                    "Type G"
+                  ],
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "default": null,
+              "description": "Morphology of the trophectoderm layer at the time of derivation.",
+              "title": "Trophectoderm Morphology"
+            },
+            "zp_removal_technique": {
+              "description": "Technique used to remove the zona pellucida (ZP).",
+              "enum": [
+                "Chemical",
+                "Enzymatic",
+                "Manual",
+                "Mechanical",
+                "Spontaneous",
+                "Other"
+              ],
+              "title": "Zp Removal Technique",
+              "type": "string"
+            },
+            "zp_removal_technique_other": {
+              "anyOf": [
+                {
+                  "maxLength": 100,
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "default": null,
+              "description": "\tFree-text entry for other techniques to remove ZP.",
+              "title": "Zp Removal Technique Other"
+            },
+            "cell_isolation": {
+              "description": "Method used to isolate cells from embryo.",
+              "enum": [
+                "Immunosurgery",
+                "Laser",
+                "mechanical trophectoderm and icm isolated",
+                "None",
+                "Other"
+              ],
+              "title": "Cell Isolation",
+              "type": "string"
+            },
+            "cell_isolation_other": {
+              "anyOf": [
+                {
+                  "maxLength": 100,
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "default": null,
+              "description": "Free-text entry for other method used to isolate cells from embryo.",
+              "title": "Cell Isolation Other"
+            },
+            "cell_seeding": {
+              "description": "Technique used to plate cells post-isolation.",
+              "enum": [
+                "Embryo",
+                "Isolated ICM",
+                "Single cell",
+                "Other"
+              ],
+              "title": "Cell Seeding",
+              "type": "string"
+            },
+            "cell_seeding_other": {
+              "anyOf": [
+                {
+                  "maxLength": 100,
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "default": null,
+              "description": "Free-text entry for other technique used to plate cells post-isolation.",
+              "title": "Cell Seeding Other"
+            },
+            "derived_under_gmp": {
+              "anyOf": [
+                {
+                  "type": "boolean"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "default": null,
+              "description": "Indicates whether derivation followed Good Manufacturing Practice.",
+              "title": "Derived Under Gmp"
+            },
+            "derived_under_xeno_free_conditions": {
+              "anyOf": [
+                {
+                  "type": "boolean"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "default": null,
+              "description": "Indicates whether the derivation was performed without animal products.",
+              "title": "Derived Under Xeno Free Conditions"
+            },
+            "available_as_clinical_grade": {
+              "anyOf": [
+                {
+                  "type": "boolean"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "default": null,
+              "description": "Indicates if the resulting cell line is available as clinical-grade.",
+              "title": "Available As Clinical Grade"
+            }
+          },
+          "required": [
+            "e_preimplant_genetic_diagnosis",
+            "e_supernumerary",
+            "other_hesc_source",
+            "zp_removal_technique",
+            "cell_isolation",
+            "cell_seeding"
+          ],
+          "title": "CellLineDerivationEmbryonic",
+          "type": "object"
+        },
+        "CellLineDerivationInducedPluripotent": {
+          "properties": {
+            "passage_number": {
+              "anyOf": [
+                {
+                  "maxLength": 10,
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "default": null,
+              "description": "Passage number at which reprogramming occurred.",
+              "title": "Passage Number"
+            },
+            "i_source_cell_type_additional_info": {
+              "anyOf": [
+                {
+                  "maxLength": 500,
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "default": null,
+              "description": "Free-text entry for additional information about source cell type.",
+              "title": "I Source Cell Type Additional Info"
+            },
+            "i_reprogramming_vector_type": {
+              "description": "Type of vector used for reprogramming.",
+              "enum": [
+                "Not integrated",
+                "Integrated",
+                "None",
+                "Vector free"
+              ],
+              "title": "I Reprogramming Vector Type",
+              "type": "string"
+            },
+            "vector_map_file": {
+              "anyOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "default": null,
+              "description": "\tVector plasmid map file.",
+              "title": "Vector Map File"
+            },
+            "method_used_immune_marker_staining": {
+              "description": "Was immune marker staining used to show that the reprogramming vector was not detected?",
+              "title": "Method Used Immune Marker Staining",
+              "type": "boolean"
+            },
+            "method_used_pcr": {
+              "description": "Was pcr used to show that the reprogramming vector was not detected?",
+              "title": "Method Used Pcr",
+              "type": "boolean"
+            },
+            "method_used_rtpcr": {
+              "description": "Was RT-PCR used to show that the reprogramming vector was not detected?",
+              "title": "Method Used Rtpcr",
+              "type": "boolean"
+            },
+            "method_used_seq": {
+              "description": "Was sequencing used to show that the reprogramming vector was not detected?",
+              "title": "Method Used Seq",
+              "type": "boolean"
+            },
+            "reprogramming_expression_silence_file": {
+              "anyOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "default": null,
+              "description": "File showing silencing of reprogramming gene expression.",
+              "title": "Reprogramming Expression Silence File"
+            },
+            "derivation_year": {
+              "anyOf": [
+                {
+                  "format": "date",
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "default": null,
+              "description": "Year in which the ipsc was derived.",
+              "title": "Derivation Year"
+            },
+            "reason_no_derivation_year": {
+              "anyOf": [
+                {
+                  "maxLength": 500,
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "default": null,
+              "description": "Text explanation if the year of derivation is unknown.",
+              "title": "Reason No Derivation Year"
+            },
+            "selection_criteria_for_clones": {
+              "anyOf": [
+                {
+                  "maxLength": 500,
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "default": null,
+              "description": "Description of how iPSC clones were selected.",
+              "title": "Selection Criteria For Clones"
+            },
+            "derived_under_xeno_free_conditions": {
+              "anyOf": [
+                {
+                  "type": "boolean"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "default": null,
+              "description": "Indicates whether derivation of the ipsc was performed without animal products.",
+              "title": "Derived Under Xeno Free Conditions"
+            },
+            "derivation_under_gmp": {
+              "anyOf": [
+                {
+                  "type": "boolean"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "default": null,
+              "description": "Indicates whether derivation of the ipsc followed Good Manufacturing Practice.",
+              "title": "Derivation Under Gmp"
+            },
+            "available_as_clinical_grade": {
+              "description": "Indicates if the ipsc cell line is available as clinical-grade.",
+              "title": "Available As Clinical Grade",
+              "type": "boolean"
+            },
+            "gene_list": {
+              "description": "Django ManyToManyField linking to stem_cell_loci through stem_cell_idpgene.",
+              "title": "Gene List",
+              "type": "string"
+            }
+          },
+          "required": [
+            "i_reprogramming_vector_type",
+            "method_used_immune_marker_staining",
+            "method_used_pcr",
+            "method_used_rtpcr",
+            "method_used_seq",
+            "available_as_clinical_grade",
+            "gene_list"
+          ],
+          "title": "CellLineDerivationInducedPluripotent",
+          "type": "object"
+        },
+        "CharacterisationMethod": {
+          "properties": {
+            "description": {
+              "description": "Characterisation method description.",
+              "title": "Description",
+              "type": "string"
+            },
+            "name": {
+              "description": "Characterisation method name.",
+              "maxLength": 100,
+              "title": "Name",
+              "type": "string"
+            }
+          },
+          "required": [
+            "description",
+            "name"
+          ],
+          "title": "CharacterisationMethod",
+          "type": "object"
+        },
+        "CharacterisationProtocolResult": {
+          "properties": {
+            "cell_type": {
+              "description": "Type of germ layer into which the stem cell line was differentiated.",
+              "enum": [
+                "Endoderm",
+                "Ectoderm",
+                "Mesoderm",
+                "Trophectoderm"
+              ],
+              "title": "Cell Type",
+              "type": "string"
+            },
+            "show_potency": {
+              "anyOf": [
+                {
+                  "type": "boolean"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "default": null,
+              "description": "Indicates whether the stem cell was shown to differentiate into the germ layer indicated by cell_type.",
+              "title": "Show Potency"
+            },
+            "marker_list": {
+              "anyOf": [
+                {
+                  "maxLength": 100,
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "default": null,
+              "description": "List of markers used to demonstrate differentiation into germ layer.",
+              "title": "Marker List"
+            },
+            "differentiation_profile": {
+              "anyOf": [
+                {
+                  "enum": [
+                    "In vivo teratoma",
+                    "In vitro spontaneous differentiation",
+                    "In vitro directed differentiation",
+                    "Other",
+                    "Unknown"
+                  ],
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "default": null,
+              "description": "Method of differentiation.",
+              "title": "Differentiation Profile"
+            },
+            "transcriptome_data_url": {
+              "anyOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "default": null,
+              "description": "Link to raw transcriptome data relevant to differentiation of stem cell line.",
+              "title": "Transcriptome Data Url"
+            },
+            "morphology_file": {
+              "anyOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "default": null,
+              "description": "File demonstrating morphology of differentiated cells.",
+              "title": "Morphology File"
+            }
+          },
+          "required": [
+            "cell_type"
+          ],
+          "title": "CharacterisationProtocolResult",
+          "type": "object"
+        },
+        "Contact": {
+          "properties": {
+            "first_name": {
+              "description": "First name of contact.",
+              "maxLength": 255,
+              "title": "First Name",
+              "type": "string"
+            },
+            "last_name": {
+              "description": "Last name of contact.",
+              "maxLength": 255,
+              "title": "Last Name",
+              "type": "string"
+            },
+            "name_initials": {
+              "anyOf": [
+                {
+                  "maxLength": 4,
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "default": null,
+              "description": "Initial of contact's middle name.",
+              "title": "Name Initials"
+            },
+            "e_mail": {
+              "description": "Email address of contact.",
+              "title": "E Mail",
+              "type": "string"
+            },
+            "phone_number": {
+              "anyOf": [
+                {
+                  "maxLength": 128,
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "default": null,
+              "description": "Phone number of contact.",
+              "title": "Phone Number"
+            }
+          },
+          "required": [
+            "first_name",
+            "last_name",
+            "e_mail"
+          ],
+          "title": "Contact",
+          "type": "object"
+        },
+        "CultureMedium": {
+          "properties": {
+            "co2_concentration": {
+              "anyOf": [
+                {
+                  "type": "number"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "default": null,
+              "description": "CO2 concentration.",
+              "title": "Co2 Concentration"
+            },
+            "o2_concentration": {
+              "anyOf": [
+                {
+                  "type": "number"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "default": null,
+              "description": "O2 Concentration.",
+              "title": "O2 Concentration"
+            },
+            "rho_kinase_sed": {
+              "anyOf": [
+                {
+                  "type": "boolean"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "default": null,
+              "description": "Whether Rho Kinase been used at cryo, passage or thaw. ",
+              "title": "Rho Kinase Sed"
+            },
+            "passage_method": {
+              "description": "Method used for passaging cells.",
+              "enum": [
+                "Enzymatically",
+                "Enzyme-free cell dissociation",
+                "Mechanically",
+                "Other",
+                "Not specified"
+              ],
+              "title": "Passage Method",
+              "type": "string"
+            },
+            "other_passage_method": {
+              "description": "Other cell passage method (if not covered by passage_method).",
+              "maxLength": 100,
+              "title": "Other Passage Method",
+              "type": "string"
+            },
+            "culture_medium_items": {
+              "description": "Django ManyToManyField linking to stem_cell_mediumcomponentitems via stem_cell_culturemedium_culture_medium_items",
+              "title": "Culture Medium Items",
+              "type": "string"
+            }
+          },
+          "required": [
+            "passage_method",
+            "other_passage_method",
+            "culture_medium_items"
+          ],
+          "title": "CultureMedium",
+          "type": "object"
+        },
+        "Disease": {
+          "properties": {
+            "name": {
+              "description": "Disease name as reported unless an ontological label applies.",
+              "maxLength": 100,
+              "title": "Name",
+              "type": "string"
+            },
+            "description": {
+              "description": "Disease description.",
+              "maxLength": 1250,
+              "title": "Description",
+              "type": "string"
+            },
+            "omim_url": {
+              "description": "URL for disease entry in OMIM.",
+              "title": "Omim Url",
+              "type": "string"
+            },
+            "omim_id": {
+              "description": "Identifier for disease entry in OMIM.",
+              "maxLength": 100,
+              "title": "Omim Id",
+              "type": "string"
+            },
+            "icd11_url": {
+              "description": "URL for disease entry in ICD11.",
+              "title": "Icd11 Url",
+              "type": "string"
+            },
+            "icd11_id": {
+              "description": "Identifier for disease entry in ICD11.",
+              "maxLength": 100,
+              "title": "Icd11 Id",
+              "type": "string"
+            }
+          },
+          "required": [
+            "name",
+            "description",
+            "omim_url",
+            "omim_id",
+            "icd11_url",
+            "icd11_id"
+          ],
+          "title": "Disease",
+          "type": "object"
+        },
+        "DonorSource": {
+          "properties": {
+            "age": {
+              "description": "Age range of the donor.",
+              "enum": [
+                "Unknown",
+                "Embryo",
+                "Fetal",
+                "Neonate",
+                "1-4",
+                "5-9",
+                "10-14",
+                "15-19",
+                "20-24",
+                "25-29",
+                "30-34",
+                "35-39",
+                "40-44",
+                "45-49",
+                "50-54",
+                "55-59",
+                "60-64",
+                "65-69",
+                "70-74",
+                "75-79",
+                "80-84",
+                "85-89",
+                "89+"
+              ],
+              "title": "Age",
+              "type": "string"
+            },
+            "sex": {
+              "description": "Genetic sex of the donor.",
+              "enum": [
+                "Male",
+                "Female",
+                "Other",
+                "Unknown"
+              ],
+              "title": "Sex",
+              "type": "string"
+            },
+            "polymorphism": {
+              "anyOf": [
+                {
+                  "maxLength": 500,
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "default": null,
+              "description": "Polymorphism associated with the donor.",
+              "title": "Polymorphism"
+            },
+            "xref_url": {
+              "anyOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "default": null,
+              "description": "Full URL to donor related entry in database.",
+              "title": "Xref Url"
+            },
+            "xref_id": {
+              "anyOf": [
+                {
+                  "maxLength": 100,
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "default": null,
+              "description": "Identifier for donor entry in external database.",
+              "title": "Xref Id"
+            }
+          },
+          "required": [
+            "age",
+            "sex"
+          ],
+          "title": "DonorSource",
+          "type": "object"
+        },
+        "Ethics": {
+          "properties": {
+            "ethics_number": {
+              "description": "Ethics approval number associated with the cell line.",
+              "maxLength": 100,
+              "title": "Ethics Number",
+              "type": "string"
+            },
+            "approval_date": {
+              "anyOf": [
+                {
+                  "format": "date",
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "default": null,
+              "description": "Date of ethics approval.",
+              "title": "Approval Date"
+            },
+            "consent_form": {
+              "anyOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "default": null,
+              "description": "Template of donor consent form.",
+              "title": "Consent Form"
+            },
+            "consent_for_specific_research": {
+              "description": "Whether consent pertains to a specific research project.",
+              "title": "Consent For Specific Research",
+              "type": "boolean"
+            },
+            "consent_for_future_research": {
+              "description": "Whether consent permits unforeseen future research, without further consent.",
+              "title": "Consent For Future Research",
+              "type": "boolean"
+            },
+            "consent_for_global_distribution": {
+              "description": "Whether consent prevents cells derived from the donated biosample from being made available to researchers anywhere in the world.",
+              "title": "Consent For Global Distribution",
+              "type": "boolean"
+            },
+            "institutional_HREC": {
+              "anyOf": [
+                {
+                  "maxLength": 500,
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "default": null,
+              "description": "Name of institutional human research ethics committee granting the relevant approval.",
+              "title": "Institutional Hrec"
+            }
+          },
+          "required": [
+            "ethics_number",
+            "consent_for_specific_research",
+            "consent_for_future_research",
+            "consent_for_global_distribution"
+          ],
+          "title": "Ethics",
+          "type": "object"
+        },
+        "ExternalCellLineSource": {
+          "properties": {
+            "name": {
+              "description": "Name of the external cell line which served as the source cell.",
+              "maxLength": 100,
+              "title": "Name",
+              "type": "string"
+            },
+            "xref_url": {
+              "description": "URL to source cell line pages in relevant external databases.",
+              "title": "Xref Url",
+              "type": "string"
+            },
+            "xref_id": {
+              "description": "Identifier for source cell line in relevant external databases.",
+              "maxLength": 100,
+              "title": "Xref Id",
+              "type": "string"
+            },
+            "polymorphism": {
+              "anyOf": [
+                {
+                  "maxLength": 500,
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "default": null,
+              "description": "Known polymorphism/s associated with the source cell line.",
+              "title": "Polymorphism"
+            },
+            "provider": {
+              "anyOf": [
+                {
+                  "maxLength": 500,
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "default": null,
+              "description": "Source cell line provider/ company name.",
+              "title": "Provider"
+            },
+            "provider_cat_num": {
+              "anyOf": [
+                {
+                  "maxLength": 100,
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "default": null,
+              "description": "Provider catalogue number for source cell line.",
+              "title": "Provider Cat Num"
+            },
+            "provider_cat_url": {
+              "anyOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "default": null,
+              "description": "URL to provider page for source cell line.",
+              "title": "Provider Cat Url"
+            },
+            "lot_number": {
+              "anyOf": [
+                {
+                  "maxLength": 100,
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "default": null,
+              "description": "Provider lot number for source cell line.",
+              "title": "Lot Number"
+            }
+          },
+          "required": [
+            "name",
+            "xref_url",
+            "xref_id"
+          ],
+          "title": "ExternalCellLineSource",
+          "type": "object"
+        },
+        "GenomicAlteration": {
+          "properties": {
+            "mutation_type": {
+              "description": "Type of genomic alteration.",
+              "enum": [
+                "Variant",
+                "Transgene Expression",
+                "Gene Knock-out",
+                "Gene Knock-in",
+                "Isogenic modification"
+              ],
+              "title": "Mutation Type",
+              "type": "string"
+            },
+            "cytoband": {
+              "description": "Chromosome/cytoband location of genomic alteration.",
+              "maxLength": 100,
+              "title": "Cytoband",
+              "type": "string"
+            },
+            "delivery_method": {
+              "description": "Delivery method of genomic alteration.",
+              "maxLength": 500,
+              "title": "Delivery Method",
+              "type": "string"
+            },
+            "description": {
+              "description": "Description relevant to genomic alteration.",
+              "maxLength": 500,
+              "title": "Description",
+              "type": "string"
+            },
+            "genotype": {
+              "description": "Genotype of genomic alteration.",
+              "maxLength": 500,
+              "title": "Genotype",
+              "type": "string"
+            }
+          },
+          "required": [
+            "mutation_type",
+            "cytoband",
+            "delivery_method",
+            "description",
+            "genotype"
+          ],
+          "title": "GenomicAlteration",
+          "type": "object"
+        },
+        "GenomicCharacterisation": {
+          "properties": {
+            "passage_number": {
+              "anyOf": [
+                {
+                  "maxLength": 10,
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "default": null,
+              "description": "Passage number at which characterisation occurred.",
+              "title": "Passage Number"
+            },
+            "karyotyped": {
+              "description": "Describes whether the line has been karyotyped.",
+              "enum": [
+                "YES",
+                "NO",
+                "UNKNOWN"
+              ],
+              "title": "Karyotyped",
+              "type": "string"
+            },
+            "karyotype": {
+              "description": "Karyotype of the line.",
+              "maxLength": 100,
+              "title": "Karyotype",
+              "type": "string"
+            },
+            "karyotype_method": {
+              "description": "Method used to karyotype line.",
+              "enum": [
+                "G-banding",
+                "Q-banding",
+                "Spectral Karyotyping",
+                "Comparative genomic hybridisation",
+                "Array comparative genomic hybridisation",
+                "Molecular karyotyping by SNP array",
+                "Karyolite BoBs",
+                "Exome sequencing",
+                "Methylation profiling",
+                "Other"
+              ],
+              "title": "Karyotype Method",
+              "type": "string"
+            },
+            "karyotype_method_other": {
+              "anyOf": [
+                {
+                  "maxLength": 100,
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "default": null,
+              "description": "Other Karyotype method (if not covered by karyotype_method).",
+              "title": "Karyotype Method Other"
+            },
+            "karyogram": {
+              "anyOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "default": null,
+              "description": "Karyogram file.",
+              "title": "Karyogram"
+            },
+            "summary": {
+              "description": "Text summary of genomic characterisation.",
+              "maxLength": 1500,
+              "title": "Summary",
+              "type": "string"
+            },
+            "data_url": {
+              "anyOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "default": null,
+              "description": "Data url.",
+              "title": "Data Url"
+            },
+            "data_file": {
+              "anyOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "default": null,
+              "description": "Data file.",
+              "title": "Data File"
+            }
+          },
+          "required": [
+            "karyotyped",
+            "karyotype",
+            "karyotype_method",
+            "summary"
+          ],
+          "title": "GenomicCharacterisation",
+          "type": "object"
+        },
+        "Group": {
+          "properties": {
+            "name": {
+              "description": "Name of the group.",
+              "maxLength": 100,
+              "title": "Name",
+              "type": "string"
+            },
+            "is_research_group": {
+              "description": "Describes whether the group is a research group.",
+              "title": "Is Research Group",
+              "type": "boolean"
+            },
+            "institutes": {
+              "description": "Django ManyToManyField linking to stakeholders_institute via stakeholders_group_institutes",
+              "title": "Institutes",
+              "type": "string"
+            },
+            "contacts": {
+              "description": "Django ManyToManyField linking to stakeholders_contact via stakeholders_group_contacts",
+              "title": "Contacts",
+              "type": "string"
+            }
+          },
+          "required": [
+            "name",
+            "is_research_group",
+            "institutes",
+            "contacts"
+          ],
+          "title": "Group",
+          "type": "object"
+        },
+        "HlaResult": {
+          "properties": {
+            "loci_group": {
+              "description": "HLA type.",
+              "enum": [
+                "HLA Class I",
+                "HLA Class II",
+                "Non HLA Genes"
+              ],
+              "title": "Loci Group",
+              "type": "string"
+            },
+            "allele_1": {
+              "anyOf": [
+                {
+                  "maxLength": 100,
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "default": null,
+              "description": "First HLA Allele.",
+              "title": "Allele 1"
+            },
+            "allele_2": {
+              "anyOf": [
+                {
+                  "maxLength": 100,
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "default": null,
+              "description": "Second HLA Allele.",
+              "title": "Allele 2"
+            }
+          },
+          "required": [
+            "loci_group"
+          ],
+          "title": "HlaResult",
+          "type": "object"
+        },
+        "HpscScorecard": {
+          "properties": {
+            "self_renewal": {
+              "description": "hPSC score card self-renewal result (TRUE indicates positive result).",
+              "title": "Self Renewal",
+              "type": "boolean"
+            },
+            "endoderm": {
+              "description": "hPSC scorecard endoderm result (TRUE indicates positive result).",
+              "title": "Endoderm",
+              "type": "boolean"
+            },
+            "mesoderm": {
+              "description": "hPSC scorecard mesoderm result (TRUE indicates positive result).",
+              "title": "Mesoderm",
+              "type": "boolean"
+            },
+            "ectoderm": {
+              "description": "hPSC scorecard ectoderm result (TRUE indicates positive result).",
+              "title": "Ectoderm",
+              "type": "boolean"
+            },
+            "scorecard_file": {
+              "anyOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "default": null,
+              "description": "hPSC scorecard file.",
+              "title": "Scorecard File"
+            }
+          },
+          "required": [
+            "self_renewal",
+            "endoderm",
+            "mesoderm",
+            "ectoderm"
+          ],
+          "title": "HpscScorecard",
+          "type": "object"
+        },
+        "IdpGene": {
+          "properties": {
+            "allele_1": {
+              "anyOf": [
+                {
+                  "maxLength": 100,
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "default": null,
+              "description": "First allele observed at gene locus.",
+              "title": "Allele 1"
+            },
+            "allele_2": {
+              "anyOf": [
+                {
+                  "maxLength": 100,
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "default": null,
+              "description": "Second allele observed at gene locus.",
+              "title": "Allele 2"
+            }
+          },
+          "title": "IdpGene",
+          "type": "object"
+        },
+        "Institute": {
+          "properties": {
+            "name": {
+              "description": "Name of institution.",
+              "maxLength": 100,
+              "title": "Name",
+              "type": "string"
+            },
+            "acronym": {
+              "anyOf": [
+                {
+                  "maxLength": 8,
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "default": null,
+              "description": "Institute acronym.",
+              "title": "Acronym"
+            },
+            "city": {
+              "description": "City of institution.",
+              "maxLength": 100,
+              "title": "City",
+              "type": "string"
+            },
+            "country": {
+              "description": "Country of institution.",
+              "maxLength": 80,
+              "title": "Country",
+              "type": "string"
+            },
+            "latitude": {
+              "anyOf": [
+                {
+                  "type": "number"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "default": null,
+              "description": "Latitude coordinate for institute.",
+              "title": "Latitude"
+            },
+            "longitude": {
+              "anyOf": [
+                {
+                  "type": "number"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "default": null,
+              "description": "Longitude coordinate for institute.",
+              "title": "Longitude"
+            }
+          },
+          "required": [
+            "name",
+            "city",
+            "country"
+          ],
+          "title": "Institute",
+          "type": "object"
+        },
+        "IntegratedVector": {
+          "properties": {
+            "int_vector_name": {
+              "description": "Name of integrating vector.",
+              "maxLength": 100,
+              "title": "Int Vector Name",
+              "type": "string"
+            },
+            "int_rep_vector": {
+              "description": "Type of integrating reprogramming vector.",
+              "enum": [
+                "Virus",
+                "Plasmid",
+                "Transposon",
+                "Other"
+              ],
+              "title": "Int Rep Vector",
+              "type": "string"
+            },
+            "int_rep_vector_other": {
+              "anyOf": [
+                {
+                  "maxLength": 100,
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "default": null,
+              "description": "Free-text to capture other type of integrating reprogramming vector.",
+              "title": "Int Rep Vector Other"
+            },
+            "int_rep_virus_type": {
+              "description": "Specify virus type if the vector is viral.",
+              "enum": [
+                "Adenovirus",
+                "Retrovirus",
+                "Lentivirus",
+                "Other"
+              ],
+              "title": "Int Rep Virus Type",
+              "type": "string"
+            },
+            "int_rep_virus_other": {
+              "anyOf": [
+                {
+                  "maxLength": 100,
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "default": null,
+              "description": "Free-text to capture other type of virus.",
+              "title": "Int Rep Virus Other"
+            },
+            "int_rep_trans_type": {
+              "description": "System used to deliver the vector.",
+              "enum": [
+                "PiggyBac",
+                "Sleeping Beauty",
+                "Other"
+              ],
+              "title": "Int Rep Trans Type",
+              "type": "string"
+            },
+            "int_rep_trans_type_other": {
+              "anyOf": [
+                {
+                  "maxLength": 100,
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "default": null,
+              "description": "Free-text to capture other types of system used to deliver the vector.",
+              "title": "Int Rep Trans Type Other"
+            },
+            "excisable": {
+              "description": "Indicates whether the integrating vector is designed to be excisable.",
+              "title": "Excisable",
+              "type": "boolean"
+            },
+            "silenced": {
+              "description": "Indicates whether expression of the reprogramming genes in the vector have been silenced.",
+              "enum": [
+                "Yes",
+                "No",
+                "Unknown"
+              ],
+              "title": "Silenced",
+              "type": "string"
+            },
+            "detected_reprogramming_vector": {
+              "description": "Was the reprogramming vector detected?",
+              "enum": [
+                "Yes",
+                "No",
+                "Unknown"
+              ],
+              "title": "Detected Reprogramming Vector",
+              "type": "string"
+            },
+            "detected_vector_notes": {
+              "anyOf": [
+                {
+                  "maxLength": 500,
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "default": null,
+              "description": "Notes describing how the reprogramming vector was detected.",
+              "title": "Detected Vector Notes"
+            }
+          },
+          "required": [
+            "int_vector_name",
+            "int_rep_vector",
+            "int_rep_virus_type",
+            "int_rep_trans_type",
+            "excisable",
+            "silenced",
+            "detected_reprogramming_vector"
+          ],
+          "title": "IntegratedVector",
+          "type": "object"
+        },
+        "Loci": {
+          "properties": {
+            "name": {
+              "description": "Loci name.",
+              "maxLength": 100,
+              "title": "Name",
+              "type": "string"
+            },
+            "chromosome": {
+              "anyOf": [
+                {
+                  "maxLength": 100,
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "default": null,
+              "description": "Chromome location.",
+              "title": "Chromosome"
+            },
+            "start": {
+              "anyOf": [
+                {
+                  "type": "integer"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "default": null,
+              "description": "Start position.",
+              "title": "Start"
+            },
+            "end": {
+              "anyOf": [
+                {
+                  "type": "integer"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "default": null,
+              "description": "End position.",
+              "title": "End"
+            },
+            "group": {
+              "anyOf": [
+                {
+                  "maxLength": 100,
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "default": null,
+              "description": "Loci group.",
+              "title": "Group"
+            },
+            "ncbi_url": {
+              "anyOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "default": null,
+              "description": "\tLink to NCBI entry.",
+              "title": "Ncbi Url"
+            },
+            "ebi_url": {
+              "anyOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "default": null,
+              "description": "Link to EBI/Ensembl entry.",
+              "title": "Ebi Url"
+            }
+          },
+          "required": [
+            "name"
+          ],
+          "title": "Loci",
+          "type": "object"
+        },
+        "MediumComponentItems": {
+          "properties": {
+            "name": {
+              "description": "Name of media component.",
+              "maxLength": 100,
+              "title": "Name",
+              "type": "string"
+            },
+            "amount": {
+              "anyOf": [
+                {
+                  "maxLength": 20,
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "default": null,
+              "description": "Number of unit/s of component used.",
+              "title": "Amount"
+            },
+            "unit": {
+              "anyOf": [
+                {
+                  "enum": [
+                    "Percent",
+                    "Milliliter",
+                    "Microliter",
+                    "Millimolar",
+                    "Micromolar",
+                    "Milligram per milliliter",
+                    "Microgram per milliliter",
+                    "Nanogram per milliliter",
+                    "Nanomolar",
+                    "Unit per milliliter",
+                    "Unit"
+                  ],
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "default": null,
+              "description": "Units for media component amount.",
+              "title": "Unit"
+            },
+            "company": {
+              "anyOf": [
+                {
+                  "maxLength": 100,
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "default": null,
+              "description": "Name of company who supplied media component.",
+              "title": "Company"
+            },
+            "type": {
+              "description": "Type of media component.",
+              "enum": [
+                "Base Medium",
+                "Main Protein",
+                "Supplement",
+                "Base Coat",
+                "Serum"
+              ],
+              "title": "Type",
+              "type": "string"
+            }
+          },
+          "required": [
+            "name",
+            "type"
+          ],
+          "title": "MediumComponentItems",
+          "type": "object"
+        },
+        "MicrobiologyVirologyScreening": {
+          "properties": {
+            "performed": {
+              "description": "Describes whether any microbiology or virology screening was performed.",
+              "title": "Performed",
+              "type": "boolean"
+            },
+            "hiv1": {
+              "description": "HIV1 test result if/ whether available.",
+              "enum": [
+                "Positive",
+                "Negative",
+                "Not Done"
+              ],
+              "title": "Hiv1",
+              "type": "string"
+            },
+            "hiv2": {
+              "description": "HIV2 test result if/ whether available.",
+              "enum": [
+                "Positive",
+                "Negative",
+                "Not Done"
+              ],
+              "title": "Hiv2",
+              "type": "string"
+            },
+            "hep_b": {
+              "description": "Hepatitis B test result if/ whether available.",
+              "enum": [
+                "Positive",
+                "Negative",
+                "Not Done"
+              ],
+              "title": "Hep B",
+              "type": "string"
+            },
+            "hep_c": {
+              "description": "Hepatitis C test result if/ whether available.",
+              "enum": [
+                "Positive",
+                "Negative",
+                "Not Done"
+              ],
+              "title": "Hep C",
+              "type": "string"
+            },
+            "mycoplasma": {
+              "description": "Mycoplasma test result if/ whether available.",
+              "enum": [
+                "Positive",
+                "Negative",
+                "Not Done"
+              ],
+              "title": "Mycoplasma",
+              "type": "string"
+            },
+            "other": {
+              "anyOf": [
+                {
+                  "maxLength": 100,
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "default": null,
+              "description": "Other microbiology/virology screening test performed if any.",
+              "title": "Other"
+            },
+            "other_result": {
+              "description": "Result of other screening test.",
+              "enum": [
+                "Positive",
+                "Negative",
+                "Not Done"
+              ],
+              "title": "Other Result",
+              "type": "string"
+            }
+          },
+          "required": [
+            "performed",
+            "hiv1",
+            "hiv2",
+            "hep_b",
+            "hep_c",
+            "mycoplasma",
+            "other_result"
+          ],
+          "title": "MicrobiologyVirologyScreening",
+          "type": "object"
+        },
+        "NonIntegratedVector": {
+          "properties": {
+            "non_int_vector_name": {
+              "description": "Name of non-integrating vector.",
+              "maxLength": 500,
+              "title": "Non Int Vector Name",
+              "type": "string"
+            },
+            "non_int_vector": {
+              "description": "Type of non-integrating vector.",
+              "enum": [
+                "Episomal",
+                "Sendai Virus",
+                "AAV",
+                "Other"
+              ],
+              "title": "Non Int Vector",
+              "type": "string"
+            },
+            "non_int_other_vector": {
+              "anyOf": [
+                {
+                  "maxLength": 500,
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "default": null,
+              "description": "Free-text to capture other type of non-integrating vector.",
+              "title": "Non Int Other Vector"
+            },
+            "detected_reprogramming_vector": {
+              "description": "Indicates whether the non-integrating reprogramming vector/s were detected.",
+              "enum": [
+                "Yes",
+                "No",
+                "Unknown"
+              ],
+              "title": "Detected Reprogramming Vector",
+              "type": "string"
+            },
+            "detected_vector_notes": {
+              "anyOf": [
+                {
+                  "maxLength": 500,
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "default": null,
+              "description": "Free text field to capture notes regarding how vector detection was performed.",
+              "title": "Detected Vector Notes"
+            }
+          },
+          "required": [
+            "non_int_vector_name",
+            "non_int_vector",
+            "detected_reprogramming_vector"
+          ],
+          "title": "NonIntegratedVector",
+          "type": "object"
+        },
+        "Ontology": {
+          "properties": {
+            "label": {
+              "description": "Text label for ontology_identifier.",
+              "maxLength": 1000,
+              "title": "Label",
+              "type": "string"
+            },
+            "definition": {
+              "anyOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "default": null,
+              "description": "Definition of ontology term (label).",
+              "title": "Definition"
+            },
+            "ontology_db_name": {
+              "description": "Name of ontology database.",
+              "maxLength": 100,
+              "title": "Ontology Db Name",
+              "type": "string"
+            },
+            "url": {
+              "description": "URL to web entry for ontology_identifier.",
+              "title": "Url",
+              "type": "string"
+            },
+            "lowest_level_for_search": {
+              "description": "Describes whether the ontology_id is used as the lowest level for filtering and searching.",
+              "title": "Lowest Level For Search",
+              "type": "boolean"
+            }
+          },
+          "required": [
+            "label",
+            "ontology_db_name",
+            "url",
+            "lowest_level_for_search"
+          ],
+          "title": "Ontology",
+          "type": "object"
+        },
+        "Publication": {
+          "properties": {
+            "doi": {
+              "description": "Digital Object Identifier of the publication.",
+              "title": "Doi",
+              "type": "string"
+            },
+            "pmid": {
+              "anyOf": [
+                {
+                  "maxLength": 100,
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "default": null,
+              "description": "PubMed ID of the publication.",
+              "title": "Pmid"
+            },
+            "first_author": {
+              "description": "Name of first author of the publication.",
+              "maxLength": 100,
+              "title": "First Author",
+              "type": "string"
+            },
+            "last_author": {
+              "description": "Name of last author of the publication.",
+              "maxLength": 100,
+              "title": "Last Author",
+              "type": "string"
+            },
+            "journal": {
+              "description": "Name of journal that publication was published in.",
+              "maxLength": 150,
+              "title": "Journal",
+              "type": "string"
+            },
+            "title": {
+              "anyOf": [
+                {
+                  "maxLength": 255,
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "default": null,
+              "description": "Title of the publication.",
+              "title": "Title"
+            },
+            "year": {
+              "description": "Year that publication was published.",
+              "title": "Year",
+              "type": "integer"
+            }
+          },
+          "required": [
+            "doi",
+            "first_author",
+            "last_author",
+            "journal",
+            "year"
+          ],
+          "title": "Publication",
+          "type": "object"
+        },
+        "RegistrationRequirements": {
+          "properties": {
+            "submitted_ethics_clearance": {
+              "description": "Describes whether the cell line has HREC approval",
+              "enum": [
+                "Yes",
+                "No",
+                "Unknown"
+              ],
+              "title": "Submitted Ethics Clearance",
+              "type": "string"
+            }
+          },
+          "required": [
+            "submitted_ethics_clearance"
+          ],
+          "title": "RegistrationRequirements",
+          "type": "object"
+        },
+        "SmallMolecule": {
+          "properties": {
+            "name": {
+              "description": "Small molecule name",
+              "title": "Name",
+              "type": "string"
+            },
+            "chembank_id": {
+              "anyOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "default": null,
+              "description": "Chembank database id for the small molecule",
+              "title": "Chembank Id"
+            }
+          },
+          "required": [
+            "name"
+          ],
+          "title": "SmallMolecule",
+          "type": "object"
+        },
+        "StrOrFingerprinting": {
+          "properties": {
+            "allele_1": {
+              "anyOf": [
+                {
+                  "maxLength": 100,
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "default": null,
+              "description": "First STR allele at a given locus.",
+              "title": "Allele 1"
+            },
+            "allele_2": {
+              "anyOf": [
+                {
+                  "maxLength": 100,
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "default": null,
+              "description": "Second STR allele at a given locus.",
+              "title": "Allele 2"
+            }
+          },
+          "title": "StrOrFingerprinting",
+          "type": "object"
+        },
+        "Synonym": {
+          "properties": {
+            "synonym": {
+              "description": "Cell line synonym.",
+              "maxLength": 100,
+              "title": "Synonym",
+              "type": "string"
+            }
+          },
+          "required": [
+            "synonym"
+          ],
+          "title": "Synonym",
+          "type": "object"
+        },
+        "Synonyms": {
+          "properties": {
+            "synonym": {
+              "description": "Synonyms of ontology label.",
+              "maxLength": 1000,
+              "title": "Synonym",
+              "type": "string"
+            }
+          },
+          "required": [
+            "synonym"
+          ],
+          "title": "Synonyms",
+          "type": "object"
+        },
+        "UnDiffCharacterisationExpressionMarkerMethod": {
+          "properties": {
+            "marker": {
+              "description": "Marker used to assess undifferentiated state.",
+              "maxLength": 100,
+              "title": "Marker",
+              "type": "string"
+            },
+            "method_file": {
+              "anyOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "default": null,
+              "description": "File containing method or protocol related information (image, data, etc.).",
+              "title": "Method File"
+            }
+          },
+          "required": [
+            "marker"
+          ],
+          "title": "UnDiffCharacterisationExpressionMarkerMethod",
+          "type": "object"
+        },
+        "UndifferentiatedCharacterisation": {
+          "properties": {
+            "epi_pluri_test": {
+              "anyOf": [
+                {
+                  "type": "boolean"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "default": null,
+              "description": "Describes whether EpiPluri Test results are available for undifferentiated cells.",
+              "title": "Epi Pluri Test"
+            },
+            "epi_pluri_score": {
+              "anyOf": [
+                {
+                  "type": "number"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "default": null,
+              "description": "EpiPluri Test Score (for undifferentiated cells).",
+              "title": "Epi Pluri Score"
+            },
+            "epi_pluri_mcpg": {
+              "description": "EpiPluri mCpG result (undifferentiated cells).",
+              "title": "Epi Pluri Mcpg",
+              "type": "boolean"
+            },
+            "epi_pluri_oct4": {
+              "description": "EpiPluri OCT4 methylation result (undifferentiated cells).",
+              "title": "Epi Pluri Oct4",
+              "type": "boolean"
+            },
+            "pluri_test": {
+              "anyOf": [
+                {
+                  "type": "boolean"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "default": null,
+              "description": "Describes whether PluriTest results are available for undifferentiated cells.",
+              "title": "Pluri Test"
+            },
+            "pluri_test_score": {
+              "anyOf": [
+                {
+                  "type": "number"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "default": null,
+              "description": "Pluritest_score (undifferentiated cells).",
+              "title": "Pluri Test Score"
+            },
+            "pluri_novelty_score": {
+              "anyOf": [
+                {
+                  "type": "number"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "default": null,
+              "description": "Pluritest_novelty_score (undifferentiated cells).",
+              "title": "Pluri Novelty Score"
+            },
+            "pluri_test_microarray_url": {
+              "anyOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "default": null,
+              "description": "URL for PluriTest microarray data (undifferentiated cells).",
+              "title": "Pluri Test Microarray Url"
+            },
+            "morphology_file": {
+              "anyOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "default": null,
+              "description": "Morphology image file (undifferentiated cells).",
+              "title": "Morphology File"
+            },
+            "other": {
+              "anyOf": [
+                {
+                  "maxLength": 100,
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "default": null,
+              "description": "Describes whether any other tests were performed to characterise undifferentiated cells.",
+              "title": "Other"
+            }
+          },
+          "required": [
+            "epi_pluri_mcpg",
+            "epi_pluri_oct4"
+          ],
+          "title": "UndifferentiatedCharacterisation",
+          "type": "object"
+        },
+        "VectorFreeReprogram": {
+          "properties": {
+            "kit_name": {
+              "anyOf": [
+                {
+                  "maxLength": 500,
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "default": null,
+              "description": "Name of the commercial kit used for vector-free reprogramming.",
+              "title": "Kit Name"
+            },
+            "mrna": {
+              "description": "Indicates whether mRNA was used to induce reprogramming.",
+              "title": "Mrna",
+              "type": "boolean"
+            },
+            "protein": {
+              "description": "Indicates whether protein was used to induce reprogramming.",
+              "title": "Protein",
+              "type": "boolean"
+            },
+            "small_molecule_flag": {
+              "description": "Indicates whether small molecules were used to induce reprogramming.",
+              "title": "Small Molecule Flag",
+              "type": "boolean"
+            },
+            "mirna": {
+              "description": "Indicates whether micro-RNA was used to induce reprogramming.",
+              "title": "Mirna",
+              "type": "boolean"
+            }
+          },
+          "required": [
+            "mrna",
+            "protein",
+            "small_molecule_flag",
+            "mirna"
+          ],
+          "title": "VectorFreeReprogram",
+          "type": "object"
+        },
+        "VectorFreeReprogrammingGenes": {
+          "properties": {
+            "nv_type": {
+              "description": "Type of genomic feature.",
+              "enum": [
+                "mRNA",
+                "Protein"
+              ],
+              "title": "Nv Type",
+              "type": "string"
+            },
+            "allele_1": {
+              "anyOf": [
+                {
+                  "maxLength": 100,
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "default": null,
+              "description": "First allele observed at gene locus.",
+              "title": "Allele 1"
+            },
+            "allele_2": {
+              "anyOf": [
+                {
+                  "maxLength": 100,
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "default": null,
+              "description": "Second allele observed at gene locus.",
+              "title": "Allele 2"
+            }
+          },
+          "required": [
+            "nv_type"
+          ],
+          "title": "VectorFreeReprogrammingGenes",
+          "type": "object"
+        },
+        "xRef": {
+          "properties": {
+            "db_url": {
+              "anyOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "default": null,
+              "description": "URL to the home page of the external database the cell line is referenced in.",
+              "title": "Db Url"
+            },
+            "xref_url": {
+              "description": "Full URL to the external database entry for the cell line.",
+              "title": "Xref Url",
+              "type": "string"
+            },
+            "db_name": {
+              "description": "Name of the external database the cell line is referenced in.",
+              "maxLength": 100,
+              "title": "Db Name",
+              "type": "string"
+            }
+          },
+          "required": [
+            "xref_url",
+            "db_name"
+          ],
+          "title": "xRef",
+          "type": "object"
+        }
+      },
+      "description": "Composite model containing all cell line curation data.",
+      "properties": {
+        "cell_line": {
+          "items": {
+            "$ref": "#/$defs/CellLine"
+          },
+          "title": "Cell Line",
+          "type": "array"
+        },
+        "external_cell_line_source": {
+          "items": {
+            "$ref": "#/$defs/ExternalCellLineSource"
+          },
+          "title": "External Cell Line Source",
+          "type": "array"
+        },
+        "contact": {
+          "items": {
+            "$ref": "#/$defs/Contact"
+          },
+          "title": "Contact",
+          "type": "array"
+        },
+        "institute": {
+          "items": {
+            "$ref": "#/$defs/Institute"
+          },
+          "title": "Institute",
+          "type": "array"
+        },
+        "group": {
+          "items": {
+            "$ref": "#/$defs/Group"
+          },
+          "title": "Group",
+          "type": "array"
+        },
+        "ethics": {
+          "items": {
+            "$ref": "#/$defs/Ethics"
+          },
+          "title": "Ethics",
+          "type": "array"
+        },
+        "registration_requirements": {
+          "items": {
+            "$ref": "#/$defs/RegistrationRequirements"
+          },
+          "title": "Registration Requirements",
+          "type": "array"
+        },
+        "x_ref": {
+          "items": {
+            "$ref": "#/$defs/xRef"
+          },
+          "title": "X Ref",
+          "type": "array"
+        },
+        "publication": {
+          "items": {
+            "$ref": "#/$defs/Publication"
+          },
+          "title": "Publication",
+          "type": "array"
+        },
+        "donor_source": {
+          "items": {
+            "$ref": "#/$defs/DonorSource"
+          },
+          "title": "Donor Source",
+          "type": "array"
+        },
+        "disease": {
+          "items": {
+            "$ref": "#/$defs/Disease"
+          },
+          "title": "Disease",
+          "type": "array"
+        },
+        "medium_component_items": {
+          "items": {
+            "$ref": "#/$defs/MediumComponentItems"
+          },
+          "title": "Medium Component Items",
+          "type": "array"
+        },
+        "culture_medium": {
+          "items": {
+            "$ref": "#/$defs/CultureMedium"
+          },
+          "title": "Culture Medium",
+          "type": "array"
+        },
+        "microbiology_virology_screening": {
+          "items": {
+            "$ref": "#/$defs/MicrobiologyVirologyScreening"
+          },
+          "title": "Microbiology Virology Screening",
+          "type": "array"
+        },
+        "genomic_alteration": {
+          "items": {
+            "$ref": "#/$defs/GenomicAlteration"
+          },
+          "title": "Genomic Alteration",
+          "type": "array"
+        },
+        "characterisation_protocol_result": {
+          "items": {
+            "$ref": "#/$defs/CharacterisationProtocolResult"
+          },
+          "title": "Characterisation Protocol Result",
+          "type": "array"
+        },
+        "undifferentiated_characterisation": {
+          "items": {
+            "$ref": "#/$defs/UndifferentiatedCharacterisation"
+          },
+          "title": "Undifferentiated Characterisation",
+          "type": "array"
+        },
+        "hpsc_scorecard": {
+          "items": {
+            "$ref": "#/$defs/HpscScorecard"
+          },
+          "title": "Hpsc Scorecard",
+          "type": "array"
+        },
+        "un_diff_characterisation_expression_marker_method": {
+          "items": {
+            "$ref": "#/$defs/UnDiffCharacterisationExpressionMarkerMethod"
+          },
+          "title": "Un Diff Characterisation Expression Marker Method",
+          "type": "array"
+        },
+        "characterisation_method": {
+          "items": {
+            "$ref": "#/$defs/CharacterisationMethod"
+          },
+          "title": "Characterisation Method",
+          "type": "array"
+        },
+        "genomic_characterisation": {
+          "items": {
+            "$ref": "#/$defs/GenomicCharacterisation"
+          },
+          "title": "Genomic Characterisation",
+          "type": "array"
+        },
+        "additional_genomic_characterisation": {
+          "items": {
+            "$ref": "#/$defs/AdditionalGenomicCharacterisation"
+          },
+          "title": "Additional Genomic Characterisation",
+          "type": "array"
+        },
+        "hla_result": {
+          "items": {
+            "$ref": "#/$defs/HlaResult"
+          },
+          "title": "Hla Result",
+          "type": "array"
+        },
+        "str_or_fingerprinting": {
+          "items": {
+            "$ref": "#/$defs/StrOrFingerprinting"
+          },
+          "title": "Str Or Fingerprinting",
+          "type": "array"
+        },
+        "loci": {
+          "items": {
+            "$ref": "#/$defs/Loci"
+          },
+          "title": "Loci",
+          "type": "array"
+        },
+        "vector_free_reprogram": {
+          "items": {
+            "$ref": "#/$defs/VectorFreeReprogram"
+          },
+          "title": "Vector Free Reprogram",
+          "type": "array"
+        },
+        "integrated_vector": {
+          "items": {
+            "$ref": "#/$defs/IntegratedVector"
+          },
+          "title": "Integrated Vector",
+          "type": "array"
+        },
+        "non_integrated_vector": {
+          "items": {
+            "$ref": "#/$defs/NonIntegratedVector"
+          },
+          "title": "Non Integrated Vector",
+          "type": "array"
+        },
+        "cell_line_derivation_induced_pluripotent": {
+          "items": {
+            "$ref": "#/$defs/CellLineDerivationInducedPluripotent"
+          },
+          "title": "Cell Line Derivation Induced Pluripotent",
+          "type": "array"
+        },
+        "cell_line_derivation_embryonic": {
+          "items": {
+            "$ref": "#/$defs/CellLineDerivationEmbryonic"
+          },
+          "title": "Cell Line Derivation Embryonic",
+          "type": "array"
+        },
+        "synonym": {
+          "items": {
+            "$ref": "#/$defs/Synonym"
+          },
+          "title": "Synonym",
+          "type": "array"
+        },
+        "idp_gene": {
+          "items": {
+            "$ref": "#/$defs/IdpGene"
+          },
+          "title": "Idp Gene",
+          "type": "array"
+        },
+        "vector_free_reprogramming_genes": {
+          "items": {
+            "$ref": "#/$defs/VectorFreeReprogrammingGenes"
+          },
+          "title": "Vector Free Reprogramming Genes",
+          "type": "array"
+        },
+        "small_molecule": {
+          "items": {
+            "$ref": "#/$defs/SmallMolecule"
+          },
+          "title": "Small Molecule",
+          "type": "array"
+        },
+        "ontology": {
+          "items": {
+            "$ref": "#/$defs/Ontology"
+          },
+          "title": "Ontology",
+          "type": "array"
+        },
+        "synonyms": {
+          "items": {
+            "$ref": "#/$defs/Synonyms"
+          },
+          "title": "Synonyms",
+          "type": "array"
+        }
+      },
+      "title": "CellLineCurationForm",
+      "type": "object"
+    },
+    "CellLineDerivationEmbryonic": {
+      "properties": {
+        "e_nhmrc_licence_number": {
+          "anyOf": [
+            {
+              "maxLength": 100,
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "description": "NHMRC License number.",
+          "title": "E Nhmrc Licence Number"
+        },
+        "e_preimplant_genetic_diagnosis": {
+          "description": "Indicates whether the cell line was derived from a preimplantation genetic diagnostic embryo.",
+          "title": "E Preimplant Genetic Diagnosis",
+          "type": "boolean"
+        },
+        "e_supernumerary": {
+          "description": "Indicates whether the embryo used was a supernumerary embryo from IVF treatment.",
+          "title": "E Supernumerary",
+          "type": "boolean"
+        },
+        "derivation_year": {
+          "anyOf": [
+            {
+              "format": "date",
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "description": "Year in which the ESC was derived (ie. cells isolated from embryo).",
+          "title": "Derivation Year"
+        },
+        "reason_no_derivation_year": {
+          "anyOf": [
+            {
+              "maxLength": 100,
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "description": "Text explanation if the year of derivation is unknown.",
+          "title": "Reason No Derivation Year"
+        },
+        "separation_of_research_and_ivf_treat": {
+          "anyOf": [
+            {
+              "type": "boolean"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "description": "Describes whether IVF treatment and research decision-making processes were clearly separated.",
+          "title": "Separation Of Research And Ivf Treat"
+        },
+        "other_hesc_source": {
+          "description": "Indicates if the hESC line was derived from a source other than supernumerary IVF embryos.",
+          "enum": [
+            "Somatic Cell Nuclear Transfer (SCNT)",
+            "Pathogenesis",
+            "Other"
+          ],
+          "title": "Other Hesc Source",
+          "type": "string"
+        },
+        "other_hesc_source_other": {
+          "anyOf": [
+            {
+              "maxLength": 100,
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "description": "Description of other embryo source.",
+          "title": "Other Hesc Source Other"
+        },
+        "embryo_stage": {
+          "anyOf": [
+            {
+              "enum": [
+                "Blastula with ICM and Trophoblast",
+                "Cleavage (Mitosis)",
+                "Compaction",
+                "Morula",
+                "Zygot"
+              ],
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "description": "Developmental stage of the embryo at the time of cell isolation.",
+          "title": "Embryo Stage"
+        },
+        "expansion_status": {
+          "anyOf": [
+            {
+              "enum": [
+                "Stage 1",
+                "Stage 2",
+                "Stage 3",
+                "Stage 4",
+                "Stage 5",
+                "Stage 6"
+              ],
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "description": "\tIndicates the extent to which the cell line has undergone expansion.",
+          "title": "Expansion Status"
+        },
+        "icm_morphology": {
+          "anyOf": [
+            {
+              "enum": [
+                "Type A",
+                "Type B",
+                "Type C",
+                "Type D",
+                "Type E"
+              ],
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "description": "Morphological quality of the inner cell mass (ICM) used in derivation.",
+          "title": "Icm Morphology"
+        },
+        "trophectoderm_morphology": {
+          "anyOf": [
+            {
+              "enum": [
+                "Type A",
+                "Type B",
+                "Type G"
+              ],
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "description": "Morphology of the trophectoderm layer at the time of derivation.",
+          "title": "Trophectoderm Morphology"
+        },
+        "zp_removal_technique": {
+          "description": "Technique used to remove the zona pellucida (ZP).",
+          "enum": [
+            "Chemical",
+            "Enzymatic",
+            "Manual",
+            "Mechanical",
+            "Spontaneous",
+            "Other"
+          ],
+          "title": "Zp Removal Technique",
+          "type": "string"
+        },
+        "zp_removal_technique_other": {
+          "anyOf": [
+            {
+              "maxLength": 100,
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "description": "\tFree-text entry for other techniques to remove ZP.",
+          "title": "Zp Removal Technique Other"
+        },
+        "cell_isolation": {
+          "description": "Method used to isolate cells from embryo.",
+          "enum": [
+            "Immunosurgery",
+            "Laser",
+            "mechanical trophectoderm and icm isolated",
+            "None",
+            "Other"
+          ],
+          "title": "Cell Isolation",
+          "type": "string"
+        },
+        "cell_isolation_other": {
+          "anyOf": [
+            {
+              "maxLength": 100,
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "description": "Free-text entry for other method used to isolate cells from embryo.",
+          "title": "Cell Isolation Other"
+        },
+        "cell_seeding": {
+          "description": "Technique used to plate cells post-isolation.",
+          "enum": [
+            "Embryo",
+            "Isolated ICM",
+            "Single cell",
+            "Other"
+          ],
+          "title": "Cell Seeding",
+          "type": "string"
+        },
+        "cell_seeding_other": {
+          "anyOf": [
+            {
+              "maxLength": 100,
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "description": "Free-text entry for other technique used to plate cells post-isolation.",
+          "title": "Cell Seeding Other"
+        },
+        "derived_under_gmp": {
+          "anyOf": [
+            {
+              "type": "boolean"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "description": "Indicates whether derivation followed Good Manufacturing Practice.",
+          "title": "Derived Under Gmp"
+        },
+        "derived_under_xeno_free_conditions": {
+          "anyOf": [
+            {
+              "type": "boolean"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "description": "Indicates whether the derivation was performed without animal products.",
+          "title": "Derived Under Xeno Free Conditions"
+        },
+        "available_as_clinical_grade": {
+          "anyOf": [
+            {
+              "type": "boolean"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "description": "Indicates if the resulting cell line is available as clinical-grade.",
+          "title": "Available As Clinical Grade"
+        }
+      },
+      "required": [
+        "e_preimplant_genetic_diagnosis",
+        "e_supernumerary",
+        "other_hesc_source",
+        "zp_removal_technique",
+        "cell_isolation",
+        "cell_seeding"
+      ],
+      "title": "CellLineDerivationEmbryonic",
+      "type": "object"
+    },
+    "CellLineDerivationInducedPluripotent": {
+      "properties": {
+        "passage_number": {
+          "anyOf": [
+            {
+              "maxLength": 10,
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "description": "Passage number at which reprogramming occurred.",
+          "title": "Passage Number"
+        },
+        "i_source_cell_type_additional_info": {
+          "anyOf": [
+            {
+              "maxLength": 500,
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "description": "Free-text entry for additional information about source cell type.",
+          "title": "I Source Cell Type Additional Info"
+        },
+        "i_reprogramming_vector_type": {
+          "description": "Type of vector used for reprogramming.",
+          "enum": [
+            "Not integrated",
+            "Integrated",
+            "None",
+            "Vector free"
+          ],
+          "title": "I Reprogramming Vector Type",
+          "type": "string"
+        },
+        "vector_map_file": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "description": "\tVector plasmid map file.",
+          "title": "Vector Map File"
+        },
+        "method_used_immune_marker_staining": {
+          "description": "Was immune marker staining used to show that the reprogramming vector was not detected?",
+          "title": "Method Used Immune Marker Staining",
+          "type": "boolean"
+        },
+        "method_used_pcr": {
+          "description": "Was pcr used to show that the reprogramming vector was not detected?",
+          "title": "Method Used Pcr",
+          "type": "boolean"
+        },
+        "method_used_rtpcr": {
+          "description": "Was RT-PCR used to show that the reprogramming vector was not detected?",
+          "title": "Method Used Rtpcr",
+          "type": "boolean"
+        },
+        "method_used_seq": {
+          "description": "Was sequencing used to show that the reprogramming vector was not detected?",
+          "title": "Method Used Seq",
+          "type": "boolean"
+        },
+        "reprogramming_expression_silence_file": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "description": "File showing silencing of reprogramming gene expression.",
+          "title": "Reprogramming Expression Silence File"
+        },
+        "derivation_year": {
+          "anyOf": [
+            {
+              "format": "date",
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "description": "Year in which the ipsc was derived.",
+          "title": "Derivation Year"
+        },
+        "reason_no_derivation_year": {
+          "anyOf": [
+            {
+              "maxLength": 500,
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "description": "Text explanation if the year of derivation is unknown.",
+          "title": "Reason No Derivation Year"
+        },
+        "selection_criteria_for_clones": {
+          "anyOf": [
+            {
+              "maxLength": 500,
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "description": "Description of how iPSC clones were selected.",
+          "title": "Selection Criteria For Clones"
+        },
+        "derived_under_xeno_free_conditions": {
+          "anyOf": [
+            {
+              "type": "boolean"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "description": "Indicates whether derivation of the ipsc was performed without animal products.",
+          "title": "Derived Under Xeno Free Conditions"
+        },
+        "derivation_under_gmp": {
+          "anyOf": [
+            {
+              "type": "boolean"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "description": "Indicates whether derivation of the ipsc followed Good Manufacturing Practice.",
+          "title": "Derivation Under Gmp"
+        },
+        "available_as_clinical_grade": {
+          "description": "Indicates if the ipsc cell line is available as clinical-grade.",
+          "title": "Available As Clinical Grade",
+          "type": "boolean"
+        },
+        "gene_list": {
+          "description": "Django ManyToManyField linking to stem_cell_loci through stem_cell_idpgene.",
+          "title": "Gene List",
+          "type": "string"
+        }
+      },
+      "required": [
+        "i_reprogramming_vector_type",
+        "method_used_immune_marker_staining",
+        "method_used_pcr",
+        "method_used_rtpcr",
+        "method_used_seq",
+        "available_as_clinical_grade",
+        "gene_list"
+      ],
+      "title": "CellLineDerivationInducedPluripotent",
+      "type": "object"
+    },
+    "CharacterisationMethod": {
+      "properties": {
+        "description": {
+          "description": "Characterisation method description.",
+          "title": "Description",
+          "type": "string"
+        },
+        "name": {
+          "description": "Characterisation method name.",
+          "maxLength": 100,
+          "title": "Name",
+          "type": "string"
+        }
+      },
+      "required": [
+        "description",
+        "name"
+      ],
+      "title": "CharacterisationMethod",
+      "type": "object"
+    },
+    "CharacterisationProtocolResult": {
+      "properties": {
+        "cell_type": {
+          "description": "Type of germ layer into which the stem cell line was differentiated.",
+          "enum": [
+            "Endoderm",
+            "Ectoderm",
+            "Mesoderm",
+            "Trophectoderm"
+          ],
+          "title": "Cell Type",
+          "type": "string"
+        },
+        "show_potency": {
+          "anyOf": [
+            {
+              "type": "boolean"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "description": "Indicates whether the stem cell was shown to differentiate into the germ layer indicated by cell_type.",
+          "title": "Show Potency"
+        },
+        "marker_list": {
+          "anyOf": [
+            {
+              "maxLength": 100,
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "description": "List of markers used to demonstrate differentiation into germ layer.",
+          "title": "Marker List"
+        },
+        "differentiation_profile": {
+          "anyOf": [
+            {
+              "enum": [
+                "In vivo teratoma",
+                "In vitro spontaneous differentiation",
+                "In vitro directed differentiation",
+                "Other",
+                "Unknown"
+              ],
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "description": "Method of differentiation.",
+          "title": "Differentiation Profile"
+        },
+        "transcriptome_data_url": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "description": "Link to raw transcriptome data relevant to differentiation of stem cell line.",
+          "title": "Transcriptome Data Url"
+        },
+        "morphology_file": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "description": "File demonstrating morphology of differentiated cells.",
+          "title": "Morphology File"
+        }
+      },
+      "required": [
+        "cell_type"
+      ],
+      "title": "CharacterisationProtocolResult",
+      "type": "object"
+    },
+    "Contact": {
+      "properties": {
+        "first_name": {
+          "description": "First name of contact.",
+          "maxLength": 255,
+          "title": "First Name",
+          "type": "string"
+        },
+        "last_name": {
+          "description": "Last name of contact.",
+          "maxLength": 255,
+          "title": "Last Name",
+          "type": "string"
+        },
+        "name_initials": {
+          "anyOf": [
+            {
+              "maxLength": 4,
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "description": "Initial of contact's middle name.",
+          "title": "Name Initials"
+        },
+        "e_mail": {
+          "description": "Email address of contact.",
+          "title": "E Mail",
+          "type": "string"
+        },
+        "phone_number": {
+          "anyOf": [
+            {
+              "maxLength": 128,
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "description": "Phone number of contact.",
+          "title": "Phone Number"
+        }
+      },
+      "required": [
+        "first_name",
+        "last_name",
+        "e_mail"
+      ],
+      "title": "Contact",
+      "type": "object"
+    },
+    "CultureMedium": {
+      "properties": {
+        "co2_concentration": {
+          "anyOf": [
+            {
+              "type": "number"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "description": "CO2 concentration.",
+          "title": "Co2 Concentration"
+        },
+        "o2_concentration": {
+          "anyOf": [
+            {
+              "type": "number"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "description": "O2 Concentration.",
+          "title": "O2 Concentration"
+        },
+        "rho_kinase_sed": {
+          "anyOf": [
+            {
+              "type": "boolean"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "description": "Whether Rho Kinase been used at cryo, passage or thaw. ",
+          "title": "Rho Kinase Sed"
+        },
+        "passage_method": {
+          "description": "Method used for passaging cells.",
+          "enum": [
+            "Enzymatically",
+            "Enzyme-free cell dissociation",
+            "Mechanically",
+            "Other",
+            "Not specified"
+          ],
+          "title": "Passage Method",
+          "type": "string"
+        },
+        "other_passage_method": {
+          "description": "Other cell passage method (if not covered by passage_method).",
+          "maxLength": 100,
+          "title": "Other Passage Method",
+          "type": "string"
+        },
+        "culture_medium_items": {
+          "description": "Django ManyToManyField linking to stem_cell_mediumcomponentitems via stem_cell_culturemedium_culture_medium_items",
+          "title": "Culture Medium Items",
+          "type": "string"
+        }
+      },
+      "required": [
+        "passage_method",
+        "other_passage_method",
+        "culture_medium_items"
+      ],
+      "title": "CultureMedium",
+      "type": "object"
+    },
+    "Disease": {
+      "properties": {
+        "name": {
+          "description": "Disease name as reported unless an ontological label applies.",
+          "maxLength": 100,
+          "title": "Name",
+          "type": "string"
+        },
+        "description": {
+          "description": "Disease description.",
+          "maxLength": 1250,
+          "title": "Description",
+          "type": "string"
+        },
+        "omim_url": {
+          "description": "URL for disease entry in OMIM.",
+          "title": "Omim Url",
+          "type": "string"
+        },
+        "omim_id": {
+          "description": "Identifier for disease entry in OMIM.",
+          "maxLength": 100,
+          "title": "Omim Id",
+          "type": "string"
+        },
+        "icd11_url": {
+          "description": "URL for disease entry in ICD11.",
+          "title": "Icd11 Url",
+          "type": "string"
+        },
+        "icd11_id": {
+          "description": "Identifier for disease entry in ICD11.",
+          "maxLength": 100,
+          "title": "Icd11 Id",
+          "type": "string"
+        }
+      },
+      "required": [
+        "name",
+        "description",
+        "omim_url",
+        "omim_id",
+        "icd11_url",
+        "icd11_id"
+      ],
+      "title": "Disease",
+      "type": "object"
+    },
+    "DonorSource": {
+      "properties": {
+        "age": {
+          "description": "Age range of the donor.",
+          "enum": [
+            "Unknown",
+            "Embryo",
+            "Fetal",
+            "Neonate",
+            "1-4",
+            "5-9",
+            "10-14",
+            "15-19",
+            "20-24",
+            "25-29",
+            "30-34",
+            "35-39",
+            "40-44",
+            "45-49",
+            "50-54",
+            "55-59",
+            "60-64",
+            "65-69",
+            "70-74",
+            "75-79",
+            "80-84",
+            "85-89",
+            "89+"
+          ],
+          "title": "Age",
+          "type": "string"
+        },
+        "sex": {
+          "description": "Genetic sex of the donor.",
+          "enum": [
+            "Male",
+            "Female",
+            "Other",
+            "Unknown"
+          ],
+          "title": "Sex",
+          "type": "string"
+        },
+        "polymorphism": {
+          "anyOf": [
+            {
+              "maxLength": 500,
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "description": "Polymorphism associated with the donor.",
+          "title": "Polymorphism"
+        },
+        "xref_url": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "description": "Full URL to donor related entry in database.",
+          "title": "Xref Url"
+        },
+        "xref_id": {
+          "anyOf": [
+            {
+              "maxLength": 100,
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "description": "Identifier for donor entry in external database.",
+          "title": "Xref Id"
+        }
+      },
+      "required": [
+        "age",
+        "sex"
+      ],
+      "title": "DonorSource",
+      "type": "object"
+    },
+    "Ethics": {
+      "properties": {
+        "ethics_number": {
+          "description": "Ethics approval number associated with the cell line.",
+          "maxLength": 100,
+          "title": "Ethics Number",
+          "type": "string"
+        },
+        "approval_date": {
+          "anyOf": [
+            {
+              "format": "date",
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "description": "Date of ethics approval.",
+          "title": "Approval Date"
+        },
+        "consent_form": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "description": "Template of donor consent form.",
+          "title": "Consent Form"
+        },
+        "consent_for_specific_research": {
+          "description": "Whether consent pertains to a specific research project.",
+          "title": "Consent For Specific Research",
+          "type": "boolean"
+        },
+        "consent_for_future_research": {
+          "description": "Whether consent permits unforeseen future research, without further consent.",
+          "title": "Consent For Future Research",
+          "type": "boolean"
+        },
+        "consent_for_global_distribution": {
+          "description": "Whether consent prevents cells derived from the donated biosample from being made available to researchers anywhere in the world.",
+          "title": "Consent For Global Distribution",
+          "type": "boolean"
+        },
+        "institutional_HREC": {
+          "anyOf": [
+            {
+              "maxLength": 500,
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "description": "Name of institutional human research ethics committee granting the relevant approval.",
+          "title": "Institutional Hrec"
+        }
+      },
+      "required": [
+        "ethics_number",
+        "consent_for_specific_research",
+        "consent_for_future_research",
+        "consent_for_global_distribution"
+      ],
+      "title": "Ethics",
+      "type": "object"
+    },
+    "ExternalCellLineSource": {
+      "properties": {
+        "name": {
+          "description": "Name of the external cell line which served as the source cell.",
+          "maxLength": 100,
+          "title": "Name",
+          "type": "string"
+        },
+        "xref_url": {
+          "description": "URL to source cell line pages in relevant external databases.",
+          "title": "Xref Url",
+          "type": "string"
+        },
+        "xref_id": {
+          "description": "Identifier for source cell line in relevant external databases.",
+          "maxLength": 100,
+          "title": "Xref Id",
+          "type": "string"
+        },
+        "polymorphism": {
+          "anyOf": [
+            {
+              "maxLength": 500,
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "description": "Known polymorphism/s associated with the source cell line.",
+          "title": "Polymorphism"
+        },
+        "provider": {
+          "anyOf": [
+            {
+              "maxLength": 500,
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "description": "Source cell line provider/ company name.",
+          "title": "Provider"
+        },
+        "provider_cat_num": {
+          "anyOf": [
+            {
+              "maxLength": 100,
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "description": "Provider catalogue number for source cell line.",
+          "title": "Provider Cat Num"
+        },
+        "provider_cat_url": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "description": "URL to provider page for source cell line.",
+          "title": "Provider Cat Url"
+        },
+        "lot_number": {
+          "anyOf": [
+            {
+              "maxLength": 100,
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "description": "Provider lot number for source cell line.",
+          "title": "Lot Number"
+        }
+      },
+      "required": [
+        "name",
+        "xref_url",
+        "xref_id"
+      ],
+      "title": "ExternalCellLineSource",
+      "type": "object"
+    },
+    "GenomicAlteration": {
+      "properties": {
+        "mutation_type": {
+          "description": "Type of genomic alteration.",
+          "enum": [
+            "Variant",
+            "Transgene Expression",
+            "Gene Knock-out",
+            "Gene Knock-in",
+            "Isogenic modification"
+          ],
+          "title": "Mutation Type",
+          "type": "string"
+        },
+        "cytoband": {
+          "description": "Chromosome/cytoband location of genomic alteration.",
+          "maxLength": 100,
+          "title": "Cytoband",
+          "type": "string"
+        },
+        "delivery_method": {
+          "description": "Delivery method of genomic alteration.",
+          "maxLength": 500,
+          "title": "Delivery Method",
+          "type": "string"
+        },
+        "description": {
+          "description": "Description relevant to genomic alteration.",
+          "maxLength": 500,
+          "title": "Description",
+          "type": "string"
+        },
+        "genotype": {
+          "description": "Genotype of genomic alteration.",
+          "maxLength": 500,
+          "title": "Genotype",
+          "type": "string"
+        }
+      },
+      "required": [
+        "mutation_type",
+        "cytoband",
+        "delivery_method",
+        "description",
+        "genotype"
+      ],
+      "title": "GenomicAlteration",
+      "type": "object"
+    },
+    "GenomicCharacterisation": {
+      "properties": {
+        "passage_number": {
+          "anyOf": [
+            {
+              "maxLength": 10,
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "description": "Passage number at which characterisation occurred.",
+          "title": "Passage Number"
+        },
+        "karyotyped": {
+          "description": "Describes whether the line has been karyotyped.",
+          "enum": [
+            "YES",
+            "NO",
+            "UNKNOWN"
+          ],
+          "title": "Karyotyped",
+          "type": "string"
+        },
+        "karyotype": {
+          "description": "Karyotype of the line.",
+          "maxLength": 100,
+          "title": "Karyotype",
+          "type": "string"
+        },
+        "karyotype_method": {
+          "description": "Method used to karyotype line.",
+          "enum": [
+            "G-banding",
+            "Q-banding",
+            "Spectral Karyotyping",
+            "Comparative genomic hybridisation",
+            "Array comparative genomic hybridisation",
+            "Molecular karyotyping by SNP array",
+            "Karyolite BoBs",
+            "Exome sequencing",
+            "Methylation profiling",
+            "Other"
+          ],
+          "title": "Karyotype Method",
+          "type": "string"
+        },
+        "karyotype_method_other": {
+          "anyOf": [
+            {
+              "maxLength": 100,
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "description": "Other Karyotype method (if not covered by karyotype_method).",
+          "title": "Karyotype Method Other"
+        },
+        "karyogram": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "description": "Karyogram file.",
+          "title": "Karyogram"
+        },
+        "summary": {
+          "description": "Text summary of genomic characterisation.",
+          "maxLength": 1500,
+          "title": "Summary",
+          "type": "string"
+        },
+        "data_url": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "description": "Data url.",
+          "title": "Data Url"
+        },
+        "data_file": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "description": "Data file.",
+          "title": "Data File"
+        }
+      },
+      "required": [
+        "karyotyped",
+        "karyotype",
+        "karyotype_method",
+        "summary"
+      ],
+      "title": "GenomicCharacterisation",
+      "type": "object"
+    },
+    "Group": {
+      "properties": {
+        "name": {
+          "description": "Name of the group.",
+          "maxLength": 100,
+          "title": "Name",
+          "type": "string"
+        },
+        "is_research_group": {
+          "description": "Describes whether the group is a research group.",
+          "title": "Is Research Group",
+          "type": "boolean"
+        },
+        "institutes": {
+          "description": "Django ManyToManyField linking to stakeholders_institute via stakeholders_group_institutes",
+          "title": "Institutes",
+          "type": "string"
+        },
+        "contacts": {
+          "description": "Django ManyToManyField linking to stakeholders_contact via stakeholders_group_contacts",
+          "title": "Contacts",
+          "type": "string"
+        }
+      },
+      "required": [
+        "name",
+        "is_research_group",
+        "institutes",
+        "contacts"
+      ],
+      "title": "Group",
+      "type": "object"
+    },
+    "HlaResult": {
+      "properties": {
+        "loci_group": {
+          "description": "HLA type.",
+          "enum": [
+            "HLA Class I",
+            "HLA Class II",
+            "Non HLA Genes"
+          ],
+          "title": "Loci Group",
+          "type": "string"
+        },
+        "allele_1": {
+          "anyOf": [
+            {
+              "maxLength": 100,
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "description": "First HLA Allele.",
+          "title": "Allele 1"
+        },
+        "allele_2": {
+          "anyOf": [
+            {
+              "maxLength": 100,
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "description": "Second HLA Allele.",
+          "title": "Allele 2"
+        }
+      },
+      "required": [
+        "loci_group"
+      ],
+      "title": "HlaResult",
+      "type": "object"
+    },
+    "HpscScorecard": {
+      "properties": {
+        "self_renewal": {
+          "description": "hPSC score card self-renewal result (TRUE indicates positive result).",
+          "title": "Self Renewal",
+          "type": "boolean"
+        },
+        "endoderm": {
+          "description": "hPSC scorecard endoderm result (TRUE indicates positive result).",
+          "title": "Endoderm",
+          "type": "boolean"
+        },
+        "mesoderm": {
+          "description": "hPSC scorecard mesoderm result (TRUE indicates positive result).",
+          "title": "Mesoderm",
+          "type": "boolean"
+        },
+        "ectoderm": {
+          "description": "hPSC scorecard ectoderm result (TRUE indicates positive result).",
+          "title": "Ectoderm",
+          "type": "boolean"
+        },
+        "scorecard_file": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "description": "hPSC scorecard file.",
+          "title": "Scorecard File"
+        }
+      },
+      "required": [
+        "self_renewal",
+        "endoderm",
+        "mesoderm",
+        "ectoderm"
+      ],
+      "title": "HpscScorecard",
+      "type": "object"
+    },
+    "IdpGene": {
+      "properties": {
+        "allele_1": {
+          "anyOf": [
+            {
+              "maxLength": 100,
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "description": "First allele observed at gene locus.",
+          "title": "Allele 1"
+        },
+        "allele_2": {
+          "anyOf": [
+            {
+              "maxLength": 100,
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "description": "Second allele observed at gene locus.",
+          "title": "Allele 2"
+        }
+      },
+      "title": "IdpGene",
+      "type": "object"
+    },
+    "Institute": {
+      "properties": {
+        "name": {
+          "description": "Name of institution.",
+          "maxLength": 100,
+          "title": "Name",
+          "type": "string"
+        },
+        "acronym": {
+          "anyOf": [
+            {
+              "maxLength": 8,
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "description": "Institute acronym.",
+          "title": "Acronym"
+        },
+        "city": {
+          "description": "City of institution.",
+          "maxLength": 100,
+          "title": "City",
+          "type": "string"
+        },
+        "country": {
+          "description": "Country of institution.",
+          "maxLength": 80,
+          "title": "Country",
+          "type": "string"
+        },
+        "latitude": {
+          "anyOf": [
+            {
+              "type": "number"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "description": "Latitude coordinate for institute.",
+          "title": "Latitude"
+        },
+        "longitude": {
+          "anyOf": [
+            {
+              "type": "number"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "description": "Longitude coordinate for institute.",
+          "title": "Longitude"
+        }
+      },
+      "required": [
+        "name",
+        "city",
+        "country"
+      ],
+      "title": "Institute",
+      "type": "object"
+    },
+    "IntegratedVector": {
+      "properties": {
+        "int_vector_name": {
+          "description": "Name of integrating vector.",
+          "maxLength": 100,
+          "title": "Int Vector Name",
+          "type": "string"
+        },
+        "int_rep_vector": {
+          "description": "Type of integrating reprogramming vector.",
+          "enum": [
+            "Virus",
+            "Plasmid",
+            "Transposon",
+            "Other"
+          ],
+          "title": "Int Rep Vector",
+          "type": "string"
+        },
+        "int_rep_vector_other": {
+          "anyOf": [
+            {
+              "maxLength": 100,
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "description": "Free-text to capture other type of integrating reprogramming vector.",
+          "title": "Int Rep Vector Other"
+        },
+        "int_rep_virus_type": {
+          "description": "Specify virus type if the vector is viral.",
+          "enum": [
+            "Adenovirus",
+            "Retrovirus",
+            "Lentivirus",
+            "Other"
+          ],
+          "title": "Int Rep Virus Type",
+          "type": "string"
+        },
+        "int_rep_virus_other": {
+          "anyOf": [
+            {
+              "maxLength": 100,
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "description": "Free-text to capture other type of virus.",
+          "title": "Int Rep Virus Other"
+        },
+        "int_rep_trans_type": {
+          "description": "System used to deliver the vector.",
+          "enum": [
+            "PiggyBac",
+            "Sleeping Beauty",
+            "Other"
+          ],
+          "title": "Int Rep Trans Type",
+          "type": "string"
+        },
+        "int_rep_trans_type_other": {
+          "anyOf": [
+            {
+              "maxLength": 100,
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "description": "Free-text to capture other types of system used to deliver the vector.",
+          "title": "Int Rep Trans Type Other"
+        },
+        "excisable": {
+          "description": "Indicates whether the integrating vector is designed to be excisable.",
+          "title": "Excisable",
+          "type": "boolean"
+        },
+        "silenced": {
+          "description": "Indicates whether expression of the reprogramming genes in the vector have been silenced.",
+          "enum": [
+            "Yes",
+            "No",
+            "Unknown"
+          ],
+          "title": "Silenced",
+          "type": "string"
+        },
+        "detected_reprogramming_vector": {
+          "description": "Was the reprogramming vector detected?",
+          "enum": [
+            "Yes",
+            "No",
+            "Unknown"
+          ],
+          "title": "Detected Reprogramming Vector",
+          "type": "string"
+        },
+        "detected_vector_notes": {
+          "anyOf": [
+            {
+              "maxLength": 500,
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "description": "Notes describing how the reprogramming vector was detected.",
+          "title": "Detected Vector Notes"
+        }
+      },
+      "required": [
+        "int_vector_name",
+        "int_rep_vector",
+        "int_rep_virus_type",
+        "int_rep_trans_type",
+        "excisable",
+        "silenced",
+        "detected_reprogramming_vector"
+      ],
+      "title": "IntegratedVector",
+      "type": "object"
+    },
+    "Loci": {
+      "properties": {
+        "name": {
+          "description": "Loci name.",
+          "maxLength": 100,
+          "title": "Name",
+          "type": "string"
+        },
+        "chromosome": {
+          "anyOf": [
+            {
+              "maxLength": 100,
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "description": "Chromome location.",
+          "title": "Chromosome"
+        },
+        "start": {
+          "anyOf": [
+            {
+              "type": "integer"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "description": "Start position.",
+          "title": "Start"
+        },
+        "end": {
+          "anyOf": [
+            {
+              "type": "integer"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "description": "End position.",
+          "title": "End"
+        },
+        "group": {
+          "anyOf": [
+            {
+              "maxLength": 100,
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "description": "Loci group.",
+          "title": "Group"
+        },
+        "ncbi_url": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "description": "\tLink to NCBI entry.",
+          "title": "Ncbi Url"
+        },
+        "ebi_url": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "description": "Link to EBI/Ensembl entry.",
+          "title": "Ebi Url"
+        }
+      },
+      "required": [
+        "name"
+      ],
+      "title": "Loci",
+      "type": "object"
+    },
+    "MediumComponentItems": {
+      "properties": {
+        "name": {
+          "description": "Name of media component.",
+          "maxLength": 100,
+          "title": "Name",
+          "type": "string"
+        },
+        "amount": {
+          "anyOf": [
+            {
+              "maxLength": 20,
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "description": "Number of unit/s of component used.",
+          "title": "Amount"
+        },
+        "unit": {
+          "anyOf": [
+            {
+              "enum": [
+                "Percent",
+                "Milliliter",
+                "Microliter",
+                "Millimolar",
+                "Micromolar",
+                "Milligram per milliliter",
+                "Microgram per milliliter",
+                "Nanogram per milliliter",
+                "Nanomolar",
+                "Unit per milliliter",
+                "Unit"
+              ],
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "description": "Units for media component amount.",
+          "title": "Unit"
+        },
+        "company": {
+          "anyOf": [
+            {
+              "maxLength": 100,
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "description": "Name of company who supplied media component.",
+          "title": "Company"
+        },
+        "type": {
+          "description": "Type of media component.",
+          "enum": [
+            "Base Medium",
+            "Main Protein",
+            "Supplement",
+            "Base Coat",
+            "Serum"
+          ],
+          "title": "Type",
+          "type": "string"
+        }
+      },
+      "required": [
+        "name",
+        "type"
+      ],
+      "title": "MediumComponentItems",
+      "type": "object"
+    },
+    "MicrobiologyVirologyScreening": {
+      "properties": {
+        "performed": {
+          "description": "Describes whether any microbiology or virology screening was performed.",
+          "title": "Performed",
+          "type": "boolean"
+        },
+        "hiv1": {
+          "description": "HIV1 test result if/ whether available.",
+          "enum": [
+            "Positive",
+            "Negative",
+            "Not Done"
+          ],
+          "title": "Hiv1",
+          "type": "string"
+        },
+        "hiv2": {
+          "description": "HIV2 test result if/ whether available.",
+          "enum": [
+            "Positive",
+            "Negative",
+            "Not Done"
+          ],
+          "title": "Hiv2",
+          "type": "string"
+        },
+        "hep_b": {
+          "description": "Hepatitis B test result if/ whether available.",
+          "enum": [
+            "Positive",
+            "Negative",
+            "Not Done"
+          ],
+          "title": "Hep B",
+          "type": "string"
+        },
+        "hep_c": {
+          "description": "Hepatitis C test result if/ whether available.",
+          "enum": [
+            "Positive",
+            "Negative",
+            "Not Done"
+          ],
+          "title": "Hep C",
+          "type": "string"
+        },
+        "mycoplasma": {
+          "description": "Mycoplasma test result if/ whether available.",
+          "enum": [
+            "Positive",
+            "Negative",
+            "Not Done"
+          ],
+          "title": "Mycoplasma",
+          "type": "string"
+        },
+        "other": {
+          "anyOf": [
+            {
+              "maxLength": 100,
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "description": "Other microbiology/virology screening test performed if any.",
+          "title": "Other"
+        },
+        "other_result": {
+          "description": "Result of other screening test.",
+          "enum": [
+            "Positive",
+            "Negative",
+            "Not Done"
+          ],
+          "title": "Other Result",
+          "type": "string"
+        }
+      },
+      "required": [
+        "performed",
+        "hiv1",
+        "hiv2",
+        "hep_b",
+        "hep_c",
+        "mycoplasma",
+        "other_result"
+      ],
+      "title": "MicrobiologyVirologyScreening",
+      "type": "object"
+    },
+    "NonIntegratedVector": {
+      "properties": {
+        "non_int_vector_name": {
+          "description": "Name of non-integrating vector.",
+          "maxLength": 500,
+          "title": "Non Int Vector Name",
+          "type": "string"
+        },
+        "non_int_vector": {
+          "description": "Type of non-integrating vector.",
+          "enum": [
+            "Episomal",
+            "Sendai Virus",
+            "AAV",
+            "Other"
+          ],
+          "title": "Non Int Vector",
+          "type": "string"
+        },
+        "non_int_other_vector": {
+          "anyOf": [
+            {
+              "maxLength": 500,
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "description": "Free-text to capture other type of non-integrating vector.",
+          "title": "Non Int Other Vector"
+        },
+        "detected_reprogramming_vector": {
+          "description": "Indicates whether the non-integrating reprogramming vector/s were detected.",
+          "enum": [
+            "Yes",
+            "No",
+            "Unknown"
+          ],
+          "title": "Detected Reprogramming Vector",
+          "type": "string"
+        },
+        "detected_vector_notes": {
+          "anyOf": [
+            {
+              "maxLength": 500,
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "description": "Free text field to capture notes regarding how vector detection was performed.",
+          "title": "Detected Vector Notes"
+        }
+      },
+      "required": [
+        "non_int_vector_name",
+        "non_int_vector",
+        "detected_reprogramming_vector"
+      ],
+      "title": "NonIntegratedVector",
+      "type": "object"
+    },
+    "Ontology": {
+      "properties": {
+        "label": {
+          "description": "Text label for ontology_identifier.",
+          "maxLength": 1000,
+          "title": "Label",
+          "type": "string"
+        },
+        "definition": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "description": "Definition of ontology term (label).",
+          "title": "Definition"
+        },
+        "ontology_db_name": {
+          "description": "Name of ontology database.",
+          "maxLength": 100,
+          "title": "Ontology Db Name",
+          "type": "string"
+        },
+        "url": {
+          "description": "URL to web entry for ontology_identifier.",
+          "title": "Url",
+          "type": "string"
+        },
+        "lowest_level_for_search": {
+          "description": "Describes whether the ontology_id is used as the lowest level for filtering and searching.",
+          "title": "Lowest Level For Search",
+          "type": "boolean"
+        }
+      },
+      "required": [
+        "label",
+        "ontology_db_name",
+        "url",
+        "lowest_level_for_search"
+      ],
+      "title": "Ontology",
+      "type": "object"
+    },
+    "Publication": {
+      "properties": {
+        "doi": {
+          "description": "Digital Object Identifier of the publication.",
+          "title": "Doi",
+          "type": "string"
+        },
+        "pmid": {
+          "anyOf": [
+            {
+              "maxLength": 100,
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "description": "PubMed ID of the publication.",
+          "title": "Pmid"
+        },
+        "first_author": {
+          "description": "Name of first author of the publication.",
+          "maxLength": 100,
+          "title": "First Author",
+          "type": "string"
+        },
+        "last_author": {
+          "description": "Name of last author of the publication.",
+          "maxLength": 100,
+          "title": "Last Author",
+          "type": "string"
+        },
+        "journal": {
+          "description": "Name of journal that publication was published in.",
+          "maxLength": 150,
+          "title": "Journal",
+          "type": "string"
+        },
+        "title": {
+          "anyOf": [
+            {
+              "maxLength": 255,
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "description": "Title of the publication.",
+          "title": "Title"
+        },
+        "year": {
+          "description": "Year that publication was published.",
+          "title": "Year",
+          "type": "integer"
+        }
+      },
+      "required": [
+        "doi",
+        "first_author",
+        "last_author",
+        "journal",
+        "year"
+      ],
+      "title": "Publication",
+      "type": "object"
+    },
+    "RegistrationRequirements": {
+      "properties": {
+        "submitted_ethics_clearance": {
+          "description": "Describes whether the cell line has HREC approval",
+          "enum": [
+            "Yes",
+            "No",
+            "Unknown"
+          ],
+          "title": "Submitted Ethics Clearance",
+          "type": "string"
+        }
+      },
+      "required": [
+        "submitted_ethics_clearance"
+      ],
+      "title": "RegistrationRequirements",
+      "type": "object"
+    },
+    "SmallMolecule": {
+      "properties": {
+        "name": {
+          "description": "Small molecule name",
+          "title": "Name",
+          "type": "string"
+        },
+        "chembank_id": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "description": "Chembank database id for the small molecule",
+          "title": "Chembank Id"
+        }
+      },
+      "required": [
+        "name"
+      ],
+      "title": "SmallMolecule",
+      "type": "object"
+    },
+    "StrOrFingerprinting": {
+      "properties": {
+        "allele_1": {
+          "anyOf": [
+            {
+              "maxLength": 100,
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "description": "First STR allele at a given locus.",
+          "title": "Allele 1"
+        },
+        "allele_2": {
+          "anyOf": [
+            {
+              "maxLength": 100,
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "description": "Second STR allele at a given locus.",
+          "title": "Allele 2"
+        }
+      },
+      "title": "StrOrFingerprinting",
+      "type": "object"
+    },
+    "Synonym": {
+      "properties": {
+        "synonym": {
+          "description": "Cell line synonym.",
+          "maxLength": 100,
+          "title": "Synonym",
+          "type": "string"
+        }
+      },
+      "required": [
+        "synonym"
+      ],
+      "title": "Synonym",
+      "type": "object"
+    },
+    "Synonyms": {
+      "properties": {
+        "synonym": {
+          "description": "Synonyms of ontology label.",
+          "maxLength": 1000,
+          "title": "Synonym",
+          "type": "string"
+        }
+      },
+      "required": [
+        "synonym"
+      ],
+      "title": "Synonyms",
+      "type": "object"
+    },
+    "UnDiffCharacterisationExpressionMarkerMethod": {
+      "properties": {
+        "marker": {
+          "description": "Marker used to assess undifferentiated state.",
+          "maxLength": 100,
+          "title": "Marker",
+          "type": "string"
+        },
+        "method_file": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "description": "File containing method or protocol related information (image, data, etc.).",
+          "title": "Method File"
+        }
+      },
+      "required": [
+        "marker"
+      ],
+      "title": "UnDiffCharacterisationExpressionMarkerMethod",
+      "type": "object"
+    },
+    "UndifferentiatedCharacterisation": {
+      "properties": {
+        "epi_pluri_test": {
+          "anyOf": [
+            {
+              "type": "boolean"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "description": "Describes whether EpiPluri Test results are available for undifferentiated cells.",
+          "title": "Epi Pluri Test"
+        },
+        "epi_pluri_score": {
+          "anyOf": [
+            {
+              "type": "number"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "description": "EpiPluri Test Score (for undifferentiated cells).",
+          "title": "Epi Pluri Score"
+        },
+        "epi_pluri_mcpg": {
+          "description": "EpiPluri mCpG result (undifferentiated cells).",
+          "title": "Epi Pluri Mcpg",
+          "type": "boolean"
+        },
+        "epi_pluri_oct4": {
+          "description": "EpiPluri OCT4 methylation result (undifferentiated cells).",
+          "title": "Epi Pluri Oct4",
+          "type": "boolean"
+        },
+        "pluri_test": {
+          "anyOf": [
+            {
+              "type": "boolean"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "description": "Describes whether PluriTest results are available for undifferentiated cells.",
+          "title": "Pluri Test"
+        },
+        "pluri_test_score": {
+          "anyOf": [
+            {
+              "type": "number"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "description": "Pluritest_score (undifferentiated cells).",
+          "title": "Pluri Test Score"
+        },
+        "pluri_novelty_score": {
+          "anyOf": [
+            {
+              "type": "number"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "description": "Pluritest_novelty_score (undifferentiated cells).",
+          "title": "Pluri Novelty Score"
+        },
+        "pluri_test_microarray_url": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "description": "URL for PluriTest microarray data (undifferentiated cells).",
+          "title": "Pluri Test Microarray Url"
+        },
+        "morphology_file": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "description": "Morphology image file (undifferentiated cells).",
+          "title": "Morphology File"
+        },
+        "other": {
+          "anyOf": [
+            {
+              "maxLength": 100,
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "description": "Describes whether any other tests were performed to characterise undifferentiated cells.",
+          "title": "Other"
+        }
+      },
+      "required": [
+        "epi_pluri_mcpg",
+        "epi_pluri_oct4"
+      ],
+      "title": "UndifferentiatedCharacterisation",
+      "type": "object"
+    },
+    "VectorFreeReprogram": {
+      "properties": {
+        "kit_name": {
+          "anyOf": [
+            {
+              "maxLength": 500,
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "description": "Name of the commercial kit used for vector-free reprogramming.",
+          "title": "Kit Name"
+        },
+        "mrna": {
+          "description": "Indicates whether mRNA was used to induce reprogramming.",
+          "title": "Mrna",
+          "type": "boolean"
+        },
+        "protein": {
+          "description": "Indicates whether protein was used to induce reprogramming.",
+          "title": "Protein",
+          "type": "boolean"
+        },
+        "small_molecule_flag": {
+          "description": "Indicates whether small molecules were used to induce reprogramming.",
+          "title": "Small Molecule Flag",
+          "type": "boolean"
+        },
+        "mirna": {
+          "description": "Indicates whether micro-RNA was used to induce reprogramming.",
+          "title": "Mirna",
+          "type": "boolean"
+        }
+      },
+      "required": [
+        "mrna",
+        "protein",
+        "small_molecule_flag",
+        "mirna"
+      ],
+      "title": "VectorFreeReprogram",
+      "type": "object"
+    },
+    "VectorFreeReprogrammingGenes": {
+      "properties": {
+        "nv_type": {
+          "description": "Type of genomic feature.",
+          "enum": [
+            "mRNA",
+            "Protein"
+          ],
+          "title": "Nv Type",
+          "type": "string"
+        },
+        "allele_1": {
+          "anyOf": [
+            {
+              "maxLength": 100,
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "description": "First allele observed at gene locus.",
+          "title": "Allele 1"
+        },
+        "allele_2": {
+          "anyOf": [
+            {
+              "maxLength": 100,
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "description": "Second allele observed at gene locus.",
+          "title": "Allele 2"
+        }
+      },
+      "required": [
+        "nv_type"
+      ],
+      "title": "VectorFreeReprogrammingGenes",
+      "type": "object"
+    },
+    "xRef": {
+      "properties": {
+        "db_url": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "description": "URL to the home page of the external database the cell line is referenced in.",
+          "title": "Db Url"
+        },
+        "xref_url": {
+          "description": "Full URL to the external database entry for the cell line.",
+          "title": "Xref Url",
+          "type": "string"
+        },
+        "db_name": {
+          "description": "Name of the external database the cell line is referenced in.",
+          "maxLength": 100,
+          "title": "Db Name",
+          "type": "string"
+        }
+      },
+      "required": [
+        "xref_url",
+        "db_name"
+      ],
+      "title": "xRef",
+      "type": "object"
+    }
+  }
+}

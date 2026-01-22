@@ -1,0 +1,194 @@
+{
+  "metadata_schema": "ASCR Cell Line Ontology",
+  "version": "1.0.0",
+  "description": "Controlled vocabulary for ASCR cell line metadata normalization",
+  "last_updated": "2024-12-12",
+  
+  "controlled_vocabularies": {
+    "donor": {
+      "age": {
+        "description": "Age range categories for cell line donors",
+        "values": [
+          "EM",
+          "FE", 
+          "NEO",
+          "A1_4",
+          "A5_9",
+          "A10_14", 
+          "A15_19",
+          "A20_24",
+          "A25_29",
+          "A30_34",
+          "A35_39", 
+          "A40_44",
+          "A45_49",
+          "A50_54",
+          "A55_59",
+          "A60_64",
+          "A65_69",
+          "A70_74",
+          "A75_79",
+          "A80_84",
+          "A85_89",
+          "A89P"
+        ]
+      },
+      "sex": {
+        "description": "Biological sex of the donor",
+        "values": [
+          "Male",
+          "Female"
+        ]
+      }
+    },
+    
+    "genomic_modifications": {
+      "mutation_type": {
+        "description": "Type of genomic alteration performed",
+        "values": [
+          "Knock in",
+          "Knock out", 
+          "Transgene expression",
+          "Variant",
+          "Isogenic modification"
+        ]
+      },
+      "delivery_method": {
+        "description": "Method used to deliver genomic modifications",
+        "values": [
+          "Crispr/Cas9",
+          "Homologous recombination"
+        ]
+      }
+    },
+    
+    "differentiation_results": {
+      "cell_type": {
+        "description": "Germ layer types for differentiation results",
+        "values": [
+          "Ectoderm",
+          "Mesoderm", 
+          "Endoderm"
+        ]
+      },
+      "description": {
+        "description": "Type of differentiation test performed",
+        "values": [
+          "In vitro directed differentiation",
+          "In vivo teratoma",
+          "In vitro spontaneous"
+        ]
+      }
+    },
+    
+    "genomic_characterisation": {
+      "karyotype_method": {
+        "description": "Karyotyping methods used for genomic characterization",
+        "values": [
+          "Ag-NOR banding",
+          "C-banding", 
+          "G-banding",
+          "R-banding",
+          "Q-banding",
+          "T-banding",
+          "Spectral karyotyping",
+          "Multiplex FISH", 
+          "CGH",
+          "Array CGH",
+          "Molecular karyotyping by SNP array",
+          "KaryoLite BoBs",
+          "Digital karyotyping",
+          "Whole genome sequencing",
+          "Exome sequencing", 
+          "Methylation profiling",
+          "Other"
+        ]
+      }
+    },
+    
+    "induced_derivation": {
+      "non_int_vector": {
+        "description": "Types of non-integrating vectors used for induced derivation",
+        "values": [
+          "Episomal",
+          "Sendai virus",
+          "AAV", 
+          "Other"
+        ]
+      }
+    },
+    
+    "embryonic_derivation": {
+      "embryo_stage": {
+        "description": "Embryo developmental stages for ESC derivation",
+        "values": [
+          "Blastula with ICM and Trophoblast",
+          "Cleavage (Mitosis)",
+          "Compaction",
+          "Morula", 
+          "Zygote"
+        ]
+      },
+      "zp_removal_technique": {
+        "description": "Zona pellucida removal techniques",
+        "values": [
+          "chemical",
+          "enzymatic",
+          "manual",
+          "mechanical",
+          "spontaneous",
+          "other"
+        ]
+      },
+      "trophectoderm_morphology": {
+        "description": "Trophectoderm morphology classifications",
+        "values": [
+          "type A",
+          "type B", 
+          "type G"
+        ]
+      },
+      "icm_morphology": {
+        "description": "ICM (Inner Cell Mass) morphology classifications",
+        "values": [
+          "type A",
+          "type B",
+          "type C",
+          "type D",
+          "type E"
+        ]
+      }
+    },
+    
+    "culture_medium": {
+      "passage_method": {
+        "description": "Methods used for cell passaging in culture",
+        "values": [
+          "Enzymatically",
+          "Enzyme-free cell dissociation",
+          "mechanically",
+          "other"
+        ]
+      }
+    }
+  },
+  
+  "field_mapping": {
+    "description": "Maps field paths to their controlled vocabularies",
+    "mappings": {
+      "donor.age": "donor.age",
+      "donor.sex": "donor.sex",
+      "genomic_modifications.mutation_type": "genomic_modifications.mutation_type",
+      "genomic_modifications.delivery_method": "genomic_modifications.delivery_method",
+      "differentiation_results.cell_type": "differentiation_results.cell_type", 
+      "differentiation_results.description": "differentiation_results.description",
+      "genomic_characterisation.karyotype_method": "genomic_characterisation.karyotype_method",
+      "induced_derivation.non_int_vector": "induced_derivation.non_int_vector",
+      "embryonic_derivation.embryo_stage": "embryonic_derivation.embryo_stage",
+      "embryonic_derivation.zp_removal_technique": "embryonic_derivation.zp_removal_technique", 
+      "embryonic_derivation.trophectoderm_morphology": "embryonic_derivation.trophectoderm_morphology",
+      "embryonic_derivation.icm_morphology": "embryonic_derivation.icm_morphology",
+      "culture_medium.passage_method": "culture_medium.passage_method"
+    }
+  }
+}

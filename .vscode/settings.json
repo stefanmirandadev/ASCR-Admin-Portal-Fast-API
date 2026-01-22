@@ -1,4 +1,6 @@
 {
-    "workbench.colorTheme": "GitHub Dark",
-    "claudeCodeChat.permissions.yoloMode": true
+    "workbench.colorTheme": "Nord Light Brighter",
+    "claudeCodeChat.permissions.yoloMode": true,
+    "editor.fontFamily": "Source Code Pro",
+    "editor.fontSize": 12
 }

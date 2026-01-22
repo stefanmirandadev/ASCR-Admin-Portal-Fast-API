@@ -149,3 +149,6 @@ dmypy.json
 *.crt
 *.p12
 secrets.json
+
+# Runtime configuration
+services/backend/config.json
