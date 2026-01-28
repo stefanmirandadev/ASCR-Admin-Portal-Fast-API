@@ -475,65 +475,83 @@ export default function CurationNewPage() {
 
   // WebSocket connection effect
   useEffect(() => {
-    // Connect to WebSocket for real-time task updates
-    wsRef.current = new WebSocket('ws://localhost:8001/ws/task-updates');
+    let reconnectTimeout: NodeJS.Timeout;
 
-    wsRef.current.onopen = () => {
-      console.log('WebSocket connected for task updates');
-    };
+    const connectWebSocket = () => {
+      try {
+        // Connect to WebSocket for real-time task updates
+        wsRef.current = new WebSocket('ws://localhost:8001/ws/task-updates');
 
-    wsRef.current.onmessage = (event) => {
-      const message = JSON.parse(event.data);
-      console.log('WebSocket message:', message);
+        wsRef.current.onopen = () => {
+          console.log('WebSocket connected for task updates');
+        };
 
-      // Handle different message types
-      if (message.type === 'task_progress') {
-        // Update task progress stages
-        setActiveTasks(prev =>
-          prev.map(task =>
-            task.task_id === message.task_id
-              ? {
-                  ...task,
-                  stages: updateTaskStages(task.stages || [], message.stage, message.status, message.message, message.data),
-                  updated_at: message.timestamp
-                }
-              : task
-          )
-        );
-      } else if (message.type === 'task_completed') {
-        // Handle legacy task completion
-        setTaskResults(prev => [...prev, message]);
+        wsRef.current.onmessage = (event) => {
+          const message = JSON.parse(event.data);
+          console.log('WebSocket message:', message);
 
-        setActiveTasks(prev =>
-          prev.map(task =>
-            task.task_id === message.task_id
-              ? {
-                  ...task,
-                  status: message.result?.status === 'error' ? 'failed' : 'completed',
-                  result: message.result,
-                  updated_at: message.timestamp
-                }
-              : task
-          )
-        );
+          // Handle different message types
+          if (message.type === 'task_progress') {
+            // Update task progress stages
+            setActiveTasks(prev =>
+              prev.map(task =>
+                task.task_id === message.task_id
+                  ? {
+                      ...task,
+                      stages: updateTaskStages(task.stages || [], message.stage, message.status, message.message, message.data),
+                      updated_at: message.timestamp
+                    }
+                  : task
+              )
+            );
+          } else if (message.type === 'task_completed') {
+            // Handle legacy task completion
+            setTaskResults(prev => [...prev, message]);
 
-        // Refresh cell lines list when a task completes successfully
-        if (message.result?.status === 'success') {
-          fetchAllCellLines();
-        }
+            setActiveTasks(prev =>
+              prev.map(task =>
+                task.task_id === message.task_id
+                  ? {
+                      ...task,
+                      status: message.result?.status === 'error' ? 'failed' : 'completed',
+                      result: message.result,
+                      updated_at: message.timestamp
+                    }
+                  : task
+              )
+            );
+
+            // Refresh cell lines list when a task completes successfully
+            if (message.result?.status === 'success') {
+              fetchAllCellLines();
+            }
+          }
+        };
+
+        wsRef.current.onerror = () => {
+          // Silently handle WebSocket errors - real-time updates are optional
+          // The page will still function normally without WebSocket connection
+        };
+
+        wsRef.current.onclose = () => {
+          console.log('WebSocket connection closed');
+          // Attempt to reconnect after 5 seconds
+          reconnectTimeout = setTimeout(() => {
+            console.log('Attempting to reconnect WebSocket...');
+            connectWebSocket();
+          }, 5000);
+        };
+      } catch (error) {
+        // Silently handle connection failures - WebSocket is optional
+        console.log('WebSocket unavailable - real-time updates disabled');
       }
     };
 
-    wsRef.current.onerror = (error) => {
-      console.error('WebSocket error:', error);
-    };
-
-    wsRef.current.onclose = () => {
-      console.log('WebSocket connection closed');
-    };
+    connectWebSocket();
 
     // Cleanup on component unmount
     return () => {
+      clearTimeout(reconnectTimeout);
       if (wsRef.current) {
         wsRef.current.close();
       }
