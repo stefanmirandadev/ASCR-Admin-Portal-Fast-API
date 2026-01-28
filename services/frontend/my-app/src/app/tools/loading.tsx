@@ -1,10 +1,29 @@
+import { Box, CircularProgress, Typography } from '@mui/material';
+
 export default function Loading() {
   return (
-    <div className="flex items-center justify-center h-full min-h-[400px]">
-      <div className="flex flex-col items-center space-y-4">
-        <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-gray-800 dark:border-white"></div>
-        <p className="text-gray-600 dark:text-gray-300 text-sm">Loading...</p>
-      </div>
-    </div>
+    <Box
+      sx={{
+        display: 'flex',
+        alignItems: 'center',
+        justifyContent: 'center',
+        minHeight: '400px',
+        height: '100%',
+      }}
+    >
+      <Box
+        sx={{
+          display: 'flex',
+          flexDirection: 'column',
+          alignItems: 'center',
+          gap: 2,
+        }}
+      >
+        <CircularProgress size={48} />
+        <Typography variant="body2" color="text.secondary">
+          Loading...
+        </Typography>
+      </Box>
+    </Box>
   );
 } 
