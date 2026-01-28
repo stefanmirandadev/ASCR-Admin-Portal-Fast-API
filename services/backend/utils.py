@@ -202,7 +202,20 @@ async def broadcast_task_completion(notification_data: Dict[str, Any]):
     })
 
 
+async def broadcast_task_progress(progress_data: Dict[str, Any]):
+    """Broadcast task progress update to all connected WebSocket clients"""
+    await websocket_manager.broadcast({
+        "type": progress_data["type"],
+        "task_id": progress_data["task_id"],
+        "stage": progress_data["stage"],
+        "status": progress_data["status"],
+        "message": progress_data["message"],
+        "data": progress_data.get("data", {}),
+        "timestamp": progress_data["timestamp"]
+    })
+
+
 # Note: The following functions have been moved/replaced:
 # - Cell line CRUD operations: moved to datastore.py (CellLineDataStore class)
-# - Cell line validation: moved to validation.py (CellLineValidation class)  
+# - Cell line validation: moved to validation.py (CellLineValidation class)
 # - Cell line saving: moved to tasks.py (_save_cell_lines function using datastore)

@@ -42,16 +42,11 @@ class ConfigManager:
 
     def get(self, key: str, default: Any = None) -> Any:
         """
-        Get a configuration value.
-        Checks runtime config first, then falls back to environment variables.
+        Get a configuration value from runtime config only.
+        Does NOT fall back to environment variables - Settings page is the single source of truth.
         """
-        # Check runtime config
         runtime_config = self._load_runtime_config()
-        if key in runtime_config:
-            return runtime_config[key]
-
-        # Fall back to environment variable
-        return os.getenv(key, default)
+        return runtime_config.get(key, default)
 
     def set(self, key: str, value: Any) -> None:
         """
@@ -66,7 +61,7 @@ class ConfigManager:
 
     def get_all_settings(self) -> Dict[str, Any]:
         """
-        Get all user-configurable settings (from runtime config only).
+        Get all user-configurable settings from runtime config only.
         Returns full API keys since app runs on private network.
         """
         runtime_config = self._load_runtime_config()
@@ -78,15 +73,9 @@ class ConfigManager:
             if key.endswith("_API_KEY") and value:
                 settings[f"{key}_SET"] = True
 
-        # Check if API key exists in env (fallback)
+        # Add status flags for API keys
         if "OPENAI_API_KEY" not in runtime_config:
-            env_key = os.getenv("OPENAI_API_KEY")
-            if env_key:
-                settings["OPENAI_API_KEY"] = env_key
-                settings["OPENAI_API_KEY_SET"] = True
-                settings["OPENAI_API_KEY_SOURCE"] = "environment"
-            else:
-                settings["OPENAI_API_KEY_SET"] = False
+            settings["OPENAI_API_KEY_SET"] = False
 
         return settings
 

@@ -7,8 +7,9 @@ from version_control import VersionControl
 from data_transport import DataTransport
 from models import StartAICurationRequest, TaskCompletionNotification
 from data_dictionaries.curation_models import CellLineCurationForm
-from tasks import curate_article_task
+from tasks import curate_article_task, redis_client
 from config_manager import config_manager
+from task_progress import TaskProgressManager
 
 # Set up logging
 logging.basicConfig(level=logging.INFO)
@@ -89,9 +90,19 @@ async def start_ai_curation(request: StartAICurationRequest):
     Each file is dispatched to an independent Celery task.
     """
     try:
+        # Check if API key is configured
+        api_key = config_manager.get("OPENAI_API_KEY")
+        if not api_key:
+            raise HTTPException(
+                status_code=400,
+                detail="OpenAI API key not configured. Please set it in Settings before starting curation."
+            )
+
         # Convert Pydantic request to dict format for utils function
         files = [{"filename": f.filename, "file_data": f.file_data} for f in request.files]
         return utils.queue_curation_tasks(files, curate_article_task) # Starts Celery curation tasks
+    except HTTPException:
+        raise
     except ValueError as e:
         raise HTTPException(status_code=400, detail=str(e))
     except Exception as e:
@@ -324,6 +335,91 @@ async def broadcast_task_completion_endpoint(notification: TaskCompletionNotific
     await utils.broadcast_task_completion(notification.model_dump())
     return {"status": "broadcasted"}
 
+
+@app.post("/internal/broadcast-task-progress")
+async def broadcast_task_progress_endpoint(progress_data: dict):
+    """Internal endpoint for Celery tasks to broadcast progress updates"""
+    await utils.broadcast_task_progress(progress_data)
+    return {"status": "broadcasted"}
+
+
+@app.get("/tasks")
+async def get_task_history(limit: int = 50):
+    """
+    Get recent task history with detailed progress stages.
+    Returns tasks sorted by most recent first.
+    """
+    try:
+        progress_manager = TaskProgressManager(redis_client)
+        tasks = progress_manager.get_all_tasks(limit)
+        return {"tasks": tasks, "count": len(tasks)}
+    except Exception as e:
+        logger.error(f"Error getting task history: {str(e)}")
+        raise HTTPException(status_code=500, detail=f"Failed to get task history: {str(e)}")
+
+
+@app.post("/tasks/{task_id}/retry")
+async def retry_task(task_id: str):
+    """
+    Retry a failed task by queueing it again with the original file data.
+    """
+    try:
+        progress_manager = TaskProgressManager(redis_client)
+
+        # Get original task info
+        task = progress_manager.get_task(task_id)
+        if not task:
+            raise HTTPException(status_code=404, detail=f"Task {task_id} not found")
+
+        # Get original file data
+        file_data = progress_manager.get_file_data(task_id)
+        if not file_data:
+            raise HTTPException(status_code=410, detail="Original file data no longer available. Please re-upload the file.")
+
+        # Queue a new task with the original file
+        filename = task["filename"]
+        new_task = curate_article_task.apply_async(args=[filename, file_data])
+
+        logger.info(f"Retrying task {task_id} as new task {new_task.id}")
+
+        return {
+            "status": "queued",
+            "original_task_id": task_id,
+            "new_task_id": new_task.id,
+            "filename": filename,
+            "message": "Task queued for retry"
+        }
+    except HTTPException:
+        raise
+    except Exception as e:
+        logger.error(f"Error retrying task {task_id}: {str(e)}")
+        raise HTTPException(status_code=500, detail=f"Failed to retry task: {str(e)}")
+
+
+@app.delete("/tasks/{task_id}")
+async def delete_task(task_id: str):
+    """
+    Delete a task from the task history.
+    Removes the task and all associated data from Redis.
+    """
+    try:
+        progress_manager = TaskProgressManager(redis_client)
+        deleted = progress_manager.delete_task(task_id)
+
+        if not deleted:
+            raise HTTPException(status_code=404, detail=f"Task {task_id} not found")
+
+        return {
+            "status": "success",
+            "task_id": task_id,
+            "message": "Task deleted successfully"
+        }
+    except HTTPException:
+        raise
+    except Exception as e:
+        logger.error(f"Error deleting task {task_id}: {str(e)}")
+        raise HTTPException(status_code=500, detail=f"Failed to delete task: {str(e)}")
+
 @app.get("/settings")
 async def get_settings():
     """
@@ -344,7 +440,9 @@ async def update_settings(settings: dict):
     Only updates non-empty values.
     """
     try:
+        logger.info(f"Received settings update request: {list(settings.keys())}")
         config_manager.update_settings(settings)
+        logger.info(f"Settings updated successfully. New config: {config_manager.get_all_settings()}")
         return {"status": "success", "message": "Settings updated successfully"}
     except Exception as e:
         logger.error(f"Error updating settings: {str(e)}")

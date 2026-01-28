@@ -1,6 +1,6 @@
 'use client';
 
-import { Typography, Box, List, ListItem, ListItemIcon, ListItemText, IconButton, LinearProgress, Skeleton, Popover, TextField, Checkbox, FormControlLabel, InputAdornment } from '@mui/material';
+import { Typography, Box, List, ListItem, ListItemIcon, ListItemText, IconButton, LinearProgress, Skeleton, Popover, TextField, Checkbox, FormControlLabel, InputAdornment, Collapse, Tooltip } from '@mui/material';
 import { Button } from '@mui/material';
 import BlurOnOutlinedIcon from '@mui/icons-material/BlurOnOutlined';
 import FileUploadOutlinedIcon from '@mui/icons-material/FileUploadOutlined';
@@ -9,6 +9,9 @@ import ErrorIcon from '@mui/icons-material/Error';
 import FilterListIcon from '@mui/icons-material/FilterList';
 import SearchIcon from '@mui/icons-material/Search';
 import DownloadIcon from '@mui/icons-material/Download';
+import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
+import ExpandLessIcon from '@mui/icons-material/ExpandLess';
+import RefreshIcon from '@mui/icons-material/Refresh';
 import { useTheme } from '@mui/material/styles';
 import { useState, useEffect, useRef } from 'react';
 import { useSearchParams } from 'next/navigation';
@@ -31,64 +34,173 @@ const fileToBase64 = (file: File): Promise<string> => {
   });
 };
 
-// Animated progress bar component
-const TaskProgressBar = ({ task }: { task: { task_id: string; filename: string; status: 'processing' | 'completed' | 'failed'; result?: any } }) => {
+// Stage status component for detailed progress
+const StageItem = ({ stage, theme }: { stage: any; theme: any }) => {
+  const getStageIcon = () => {
+    if (stage.status === 'completed') {
+      return <CheckCircleIcon sx={{ fontSize: 18, color: theme.palette.text.secondary }} />;
+    } else if (stage.status === 'failed') {
+      return <ErrorIcon sx={{ fontSize: 18, color: theme.palette.text.secondary }} />;
+    } else if (stage.status === 'processing') {
+      return <BlurOnOutlinedIcon sx={{ fontSize: 18, color: theme.palette.text.secondary }} />;
+    } else {
+      return <Box sx={{ width: 18, height: 18, borderRadius: '50%', border: `2px solid ${theme.palette.grey[300]}` }} />;
+    }
+  };
+
+  return (
+    <Box sx={{ display: 'flex', alignItems: 'flex-start', justifyContent: 'space-between', gap: 1, py: 0.5 }}>
+      <Box sx={{ flex: 1 }}>
+        <Typography variant="body2" sx={{ fontSize: '0.85rem' }}>
+          {stage.message}
+        </Typography>
+        {/* Show cell line sub-stages if available */}
+        {stage.data?.cell_lines && Array.isArray(stage.data.cell_lines) && (
+          <Box sx={{ pl: 2, mt: 0.5 }}>
+            {stage.data.cell_lines.map((cl: any, idx: number) => (
+              <Box key={idx} sx={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', gap: 0.5, py: 0.25 }}>
+                <Typography variant="caption" sx={{ fontSize: '0.75rem', color: theme.palette.text.secondary }}>
+                  {cl.name}
+                </Typography>
+                {cl.status === 'completed' && <CheckCircleIcon sx={{ fontSize: 14, color: theme.palette.text.secondary }} />}
+                {cl.status === 'processing' && <BlurOnOutlinedIcon sx={{ fontSize: 14, color: theme.palette.text.secondary }} />}
+                {cl.status === 'pending' && <Box sx={{ width: 14, height: 14, borderRadius: '50%', border: `1px solid ${theme.palette.grey[300]}` }} />}
+              </Box>
+            ))}
+          </Box>
+        )}
+      </Box>
+      {getStageIcon()}
+    </Box>
+  );
+};
+
+// Animated progress bar component with expandable details
+const TaskProgressBar = ({ task, onRetry, onClear }: { task: any; onRetry: (taskId: string) => void; onClear: (taskId: string) => void }) => {
   const theme = useTheme();
-  
+  // Auto-expand tasks that are processing or queued to show live progress
+  const [expanded, setExpanded] = useState(task.status === 'processing' || task.status === 'queued');
+  const [retrying, setRetrying] = useState(false);
+
+  // Auto-expand when task starts processing
+  useEffect(() => {
+    if (task.status === 'processing' || task.status === 'queued') {
+      setExpanded(true);
+    }
+  }, [task.status]);
+
+  const getMainIcon = () => {
+    if (task.status === 'completed') {
+      return <CheckCircleIcon sx={{ fontSize: 18, color: theme.palette.text.secondary }} />;
+    } else if (task.status === 'failed') {
+      return <ErrorIcon sx={{ fontSize: 18, color: theme.palette.text.secondary }} />;
+    } else {
+      return <BlurOnOutlinedIcon sx={{ fontSize: 18, color: theme.palette.text.secondary }} />;
+    }
+  };
+
+  const getStatusText = () => {
+    if (task.status === 'completed') return 'Complete';
+    if (task.status === 'failed') return 'Failed';
+    if (task.status === 'processing') return 'Processing...';
+    return 'Queued';
+  };
+
+  const handleRetry = async () => {
+    setRetrying(true);
+    try {
+      await onRetry(task.task_id);
+    } finally {
+      setRetrying(false);
+    }
+  };
+
   return (
     <ListItem
       sx={{
         flexDirection: 'column',
         alignItems: 'flex-start',
         gap: 1,
-        py: 2,
+        py: 1,
         borderBottom: `1px solid ${theme.palette.grey[200]}`,
       }}
     >
-      {/* File name and status */}
+      {/* Main task header */}
       <Box sx={{ display: 'flex', alignItems: 'center', gap: 1, width: '100%' }}>
-        <ListItemIcon>
-          {task.status === 'completed' ? (
-            <CheckCircleIcon sx={{ color: theme.palette.success.main }} />
-          ) : task.status === 'failed' ? (
-            <ErrorIcon sx={{ color: theme.palette.error.main }} />
-          ) : (
-            <BlurOnOutlinedIcon sx={{ color: theme.palette.primary.main }} />
-          )}
-        </ListItemIcon>
-        <ListItemText 
+        <ListItemText
           primary={task.filename}
-          secondary={task.status === 'completed' ? 'Curation completed' : task.status === 'failed' ? 'Curation failed' : 'Processing...'}
+          secondary={getStatusText()}
+          primaryTypographyProps={{ fontSize: '0.85rem' }}
+          secondaryTypographyProps={{ fontSize: '0.75rem' }}
+          sx={{ flex: 1 }}
         />
+        {/* Expand/collapse button - always show for active tasks */}
+        {(task.status === 'processing' || task.status === 'queued' || (task.stages && task.stages.length > 0)) && (
+          <IconButton
+            size="small"
+            onClick={() => setExpanded(!expanded)}
+            sx={{ p: 0.5 }}
+          >
+            {expanded ? <ExpandLessIcon sx={{ fontSize: 18 }} /> : <ExpandMoreIcon sx={{ fontSize: 18 }} />}
+          </IconButton>
+        )}
+        {/* Retry button for failed tasks */}
+        {task.status === 'failed' && (
+          <Tooltip title="Retry task">
+            <IconButton
+              size="small"
+              onClick={handleRetry}
+              disabled={retrying}
+              sx={{ p: 0.5 }}
+            >
+              <RefreshIcon sx={{ fontSize: 18 }} />
+            </IconButton>
+          </Tooltip>
+        )}
+        {/* Clear button */}
+        <Tooltip title="Clear task">
+          <IconButton
+            size="small"
+            onClick={() => onClear(task.task_id)}
+            sx={{ p: 0.5 }}
+          >
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+              <path d="M18 6L6 18M6 6l12 12" />
+            </svg>
+          </IconButton>
+        </Tooltip>
+        {/* Status icon on the right */}
+        {getMainIcon()}
       </Box>
-      
-      {/* Progress bar - only show for processing and completed states */}
-      {task.status === 'processing' ? (
-        <LinearProgress 
-          sx={{ 
-            width: '100%', 
+
+      {/* Progress bar - only show for processing tasks */}
+      {task.status === 'processing' && (
+        <LinearProgress
+          sx={{
+            width: '100%',
             height: 6,
             borderRadius: 3,
             '& .MuiLinearProgress-bar': {
               borderRadius: 3,
             }
-          }} 
+          }}
         />
-      ) : task.status === 'completed' ? (
-        <LinearProgress 
-          variant="determinate" 
-          value={100} 
-          sx={{ 
-            width: '100%', 
-            height: 6,
-            borderRadius: 3,
-            '& .MuiLinearProgress-bar': {
-              borderRadius: 3,
-              backgroundColor: theme.palette.success.main,
-            }
-          }} 
-        />
-      ) : null}
+      )}
+
+      {/* Expandable stage details */}
+      <Collapse in={expanded} sx={{ width: '100%' }}>
+        <Box sx={{ pl: 1, pt: 1 }}>
+          {task.stages && task.stages.length > 0 ? (
+            task.stages.map((stage: any, idx: number) => (
+              <StageItem key={idx} stage={stage} theme={theme} />
+            ))
+          ) : (
+            <Typography variant="caption" color="text.secondary" sx={{ fontStyle: 'italic' }}>
+              Waiting for task to start...
+            </Typography>
+          )}
+        </Box>
+      </Collapse>
     </ListItem>
   );
 };
@@ -102,7 +214,10 @@ export default function CurationNewPage() {
   const [activeTasks, setActiveTasks] = useState<Array<{
     task_id: string;
     filename: string;
-    status: 'processing' | 'completed' | 'failed';
+    status: 'queued' | 'processing' | 'completed' | 'failed';
+    stages?: any[];
+    created_at?: string;
+    updated_at?: string;
     result?: any;
   }>>([]);
   const [cellLines, setCellLines] = useState<Array<{ name: string; location: string }>>([]);
@@ -119,6 +234,19 @@ export default function CurationNewPage() {
   const [selectedForDownload, setSelectedForDownload] = useState<Set<string>>(new Set());
   const newNameInputRef = useRef<HTMLInputElement>(null);
   const wsRef = useRef<WebSocket | null>(null);
+
+  // Fetch task history from backend
+  const fetchTaskHistory = async () => {
+    try {
+      const response = await fetch('http://localhost:8001/tasks?limit=50');
+      if (response.ok) {
+        const data = await response.json();
+        setActiveTasks(data.tasks || []);
+      }
+    } catch (error) {
+      console.error('Error fetching task history:', error);
+    }
+  };
 
   // Fetch all cell lines from backend (both working and ready)
   const fetchAllCellLines = async () => {
@@ -255,6 +383,58 @@ export default function CurationNewPage() {
     setSelectedForDownload(new Set()); // Clear selection after download
   };
 
+  // Retry a failed task
+  const retryTask = async (taskId: string) => {
+    try {
+      const response = await fetch(`http://localhost:8001/tasks/${taskId}/retry`, {
+        method: 'POST',
+      });
+
+      if (response.ok) {
+        const result = await response.json();
+        console.log('Task retried:', result);
+
+        // Add the new task to active tasks
+        const newTask = {
+          task_id: result.new_task_id,
+          filename: result.filename,
+          status: 'queued' as const,
+          stages: [],
+        };
+        setActiveTasks(prev => [newTask, ...prev]);
+      } else {
+        const error = await response.json();
+        console.error('Failed to retry task:', error);
+        alert(error.detail || 'Failed to retry task');
+      }
+    } catch (error) {
+      console.error('Error retrying task:', error);
+      alert('Failed to retry task. Please try again.');
+    }
+  };
+
+  // Clear a task from the list and backend
+  const clearTask = async (taskId: string) => {
+    try {
+      const response = await fetch(`http://localhost:8001/tasks/${taskId}`, {
+        method: 'DELETE',
+      });
+
+      if (response.ok) {
+        // Remove from local state
+        setActiveTasks(prev => prev.filter(task => task.task_id !== taskId));
+        console.log('Task deleted successfully');
+      } else {
+        const error = await response.json();
+        console.error('Failed to delete task:', error);
+        alert(error.detail || 'Failed to delete task');
+      }
+    } catch (error) {
+      console.error('Error deleting task:', error);
+      alert('Failed to delete task. Please try again.');
+    }
+  };
+
   // Toggle select all for filtered cell lines
   const toggleSelectAll = (filteredCellLines: Array<{ name: string; location: string }>) => {
     const filteredNames = filteredCellLines.map(cl => cl.name);
@@ -277,8 +457,9 @@ export default function CurationNewPage() {
     }
   };
 
-  // Poll cell lines on mount and periodically
+  // Fetch task history and cell lines on mount
   useEffect(() => {
+    fetchTaskHistory();
     fetchAllCellLines();
     const interval = setInterval(fetchAllCellLines, 5000); // Poll every 5 seconds
     return () => clearInterval(interval);
@@ -296,41 +477,57 @@ export default function CurationNewPage() {
   useEffect(() => {
     // Connect to WebSocket for real-time task updates
     wsRef.current = new WebSocket('ws://localhost:8001/ws/task-updates');
-    
+
     wsRef.current.onopen = () => {
       console.log('WebSocket connected for task updates');
     };
-    
+
     wsRef.current.onmessage = (event) => {
-      const taskUpdate = JSON.parse(event.data);
-      console.log('🔥 Task completed via WebSocket:', taskUpdate);
-      
-      // Add to task results for UI updates
-      setTaskResults(prev => [...prev, taskUpdate]);
-      
-      // Update active tasks status
-      setActiveTasks(prev => 
-        prev.map(task => 
-          task.task_id === taskUpdate.task_id 
-            ? { 
-                ...task, 
-                status: taskUpdate.result?.status === 'error' ? 'failed' : 'completed', 
-                result: taskUpdate.result 
-              }
-            : task
-        )
-      );
-      
-      // Refresh cell lines list when a task completes successfully
-      if (taskUpdate.result?.status === 'success') {
-        fetchAllCellLines();
+      const message = JSON.parse(event.data);
+      console.log('WebSocket message:', message);
+
+      // Handle different message types
+      if (message.type === 'task_progress') {
+        // Update task progress stages
+        setActiveTasks(prev =>
+          prev.map(task =>
+            task.task_id === message.task_id
+              ? {
+                  ...task,
+                  stages: updateTaskStages(task.stages || [], message.stage, message.status, message.message, message.data),
+                  updated_at: message.timestamp
+                }
+              : task
+          )
+        );
+      } else if (message.type === 'task_completed') {
+        // Handle legacy task completion
+        setTaskResults(prev => [...prev, message]);
+
+        setActiveTasks(prev =>
+          prev.map(task =>
+            task.task_id === message.task_id
+              ? {
+                  ...task,
+                  status: message.result?.status === 'error' ? 'failed' : 'completed',
+                  result: message.result,
+                  updated_at: message.timestamp
+                }
+              : task
+          )
+        );
+
+        // Refresh cell lines list when a task completes successfully
+        if (message.result?.status === 'success') {
+          fetchAllCellLines();
+        }
       }
     };
-    
+
     wsRef.current.onerror = (error) => {
       console.error('WebSocket error:', error);
     };
-    
+
     wsRef.current.onclose = () => {
       console.log('WebSocket connection closed');
     };
@@ -342,6 +539,36 @@ export default function CurationNewPage() {
       }
     };
   }, []);
+
+  // Helper function to update task stages
+  const updateTaskStages = (currentStages: any[], stage: string, status: string, message: string, data: any) => {
+    const existingStageIndex = currentStages.findIndex(s => s.stage === stage);
+
+    if (existingStageIndex >= 0) {
+      // Update existing stage
+      const updatedStages = [...currentStages];
+      updatedStages[existingStageIndex] = {
+        stage,
+        status,
+        message,
+        data: data || {},
+        timestamp: new Date().toISOString()
+      };
+      return updatedStages;
+    } else {
+      // Add new stage
+      return [
+        ...currentStages,
+        {
+          stage,
+          status,
+          message,
+          data: data || {},
+          timestamp: new Date().toISOString()
+        }
+      ];
+    }
+  };
 
   const getFileIcon = (fileName: string) => {
     const extension = fileName.split('.').pop()?.toLowerCase();
@@ -577,13 +804,16 @@ export default function CurationNewPage() {
                     const newTasks = result.tasks.map((task: any) => ({
                       task_id: task.task_id,
                       filename: task.filename,
-                      status: 'processing' as const
+                      status: 'queued' as const,
+                      stages: [],
+                      created_at: new Date().toISOString(),
                     }));
                     setActiveTasks(prev => [...prev, ...newTasks]);
                   } else {
                     const error = await response.json();
                     console.error('Curation failed:', error);
-                    // TODO: Show error message
+                    // Show error message to user
+                    alert(error.detail || 'Failed to start curation. Please try again.');
                   }
                 } catch (error) {
                   console.error('Error starting curation:', error);
@@ -618,7 +848,21 @@ export default function CurationNewPage() {
 
         {/* Task Progress */}
         <Card width="100%" flex={1} header={`Task History (${activeTasks.filter(t => t.status === 'completed').length}/${activeTasks.length})`}>
-          <Box sx={{ flex: 1, overflow: 'auto' }}>
+          <Box sx={{
+            flex: 1,
+            overflow: 'auto',
+            maxHeight: '100%',
+            '&::-webkit-scrollbar': {
+              width: '6px',
+            },
+            '&::-webkit-scrollbar-track': {
+              backgroundColor: 'transparent',
+            },
+            '&::-webkit-scrollbar-thumb': {
+              backgroundColor: theme.palette.grey[300],
+              borderRadius: '3px',
+            },
+          }}>
             {activeTasks.length === 0 ? (
               <Box sx={{ p: 2, textAlign: 'center' }}>
                 <Typography variant="body2" color="text.secondary">
@@ -627,9 +871,16 @@ export default function CurationNewPage() {
               </Box>
             ) : (
               <List sx={{ p: 0 }}>
-                {activeTasks.map((task) => (
-                  <TaskProgressBar key={task.task_id} task={task} />
-                ))}
+                {activeTasks
+                  .sort((a, b) => {
+                    // Sort by created_at in descending order (most recent first)
+                    const dateA = a.created_at ? new Date(a.created_at).getTime() : 0;
+                    const dateB = b.created_at ? new Date(b.created_at).getTime() : 0;
+                    return dateB - dateA;
+                  })
+                  .map((task) => (
+                    <TaskProgressBar key={task.task_id} task={task} onRetry={retryTask} onClear={clearTask} />
+                  ))}
               </List>
             )}
           </Box>
@@ -639,7 +890,7 @@ export default function CurationNewPage() {
       {/* Middle half (two quarters merged) */}
       <Card flex={2} header='Cell Line Editor'>
         {isLoadingCellLine ? (
-          <Box sx={{ display: 'flex', height: '100%', '& .MuiSkeleton-wave::after': { animationDuration: '0.3s' } }}>
+          <Box sx={{ display: 'flex', height: '100%', '& .MuiSkeleton-wave::after': { animationDuration: '0.7s' } }}>
             <Box sx={{ flex: 1, p: 2 }}>
               {/* Section skeleton */}
               {[1, 2, 3].map((i) => (
@@ -681,7 +932,7 @@ export default function CurationNewPage() {
         ) : (
           <Box sx={{ p: 2, display: 'flex', flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between' }}>
             <Typography variant="body2" color="text.secondary">
-              Select a cell line from the left panel or create a new one
+              Select a cell line from the right panel, or create a new one.
             </Typography>
             <Button
               variant="outlined"
@@ -697,7 +948,7 @@ export default function CurationNewPage() {
                 },
               }}
             >
-              New Cell Line
+              Create cell line
             </Button>
             <Popover
               open={Boolean(createAnchor)}

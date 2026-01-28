@@ -16,6 +16,7 @@ import logging
 from validation import CellLineValidation
 from storage import FileStorage
 from config_manager import config_manager
+from task_progress import TaskProgressManager
 
 # Set up detailed logging
 logger = get_task_logger(__name__)
@@ -186,45 +187,97 @@ def _save_cell_lines(validated_results: list) -> Dict[str, Any]:
 def curate_article_task(self: Task, filename: str, file_data: bytes):
     """
     Curate cell line metadata from a PDF article using OpenAI Agents SDK.
-    
+
     Args:
         filename: Name of the uploaded PDF file
         file_data: PDF bytes
-        
+
     Returns:
         Dict containing curation results or error information
     """
-    
+
     task_id = self.request.id
     logger.info(f"Starting curation task {task_id} for file: {filename}")
-    
+
+    # Initialize task progress manager
+    progress = TaskProgressManager(redis_client)
+    progress.create_task(task_id, filename, file_data)
+    progress.update_task_status(task_id, "processing")
+
     async def _curate_article_async():
         start_time = time.time()
-        
+
         try:
-            # Clear 7-step pipeline with explicit agent visibility
+            # Load API keys from config_manager and set as environment variables
+            # This is required for the agents library to access OpenAI
+            openai_key = config_manager.get("OPENAI_API_KEY")
+            if not openai_key or openai_key == "your_openai_api_key_here":
+                raise ValueError("OpenAI API key not configured. Please set it in Settings.")
+            os.environ["OPENAI_API_KEY"] = openai_key
+
+            # Stage 1: Upload PDF
+            progress.update_stage(task_id, "uploading", "processing", "Uploading file to OpenAI...")
             pdf_info = await curate.validate_and_upload_pdf(filename, file_data)
+            progress.update_stage(task_id, "uploading", "completed", "File uploaded successfully")
+
+            # Stage 2: Initialize agents
+            progress.update_stage(task_id, "initializing", "processing", "Initializing AI agents...")
             identification_agent, curation_agent, normalization_agent = curate.initialize_agents()
+            progress.update_stage(task_id, "initializing", "completed", "Agents initialized")
+
+            # Stage 3: Identify cell lines
+            progress.update_stage(task_id, "identifying", "processing", "Identifying cell lines...")
             cell_lines = await curate.identify_cell_lines(pdf_info, identification_agent)
+            progress.update_stage(
+                task_id, "identifying", "completed",
+                f"Found {len(cell_lines)} cell line{'' if len(cell_lines) == 1 else 's'}",
+                {"cell_lines": cell_lines}
+            )
+
+            # Stage 4: Curate each cell line
+            progress.update_stage(
+                task_id, "curating", "processing",
+                f"Curating {len(cell_lines)} cell line{'' if len(cell_lines) == 1 else 's'}...",
+                {"cell_lines": [{"name": cl, "status": "pending"} for cl in cell_lines]}
+            )
+
             curated_data = await curate.curate_cell_lines(pdf_info, curation_agent, cell_lines)
+
+            progress.update_stage(
+                task_id, "curating", "completed",
+                "All cell lines curated",
+                {"cell_lines": [{"name": cl, "status": "completed"} for cl in cell_lines]}
+            )
+
+            # Stage 5: Normalize metadata
+            progress.update_stage(task_id, "normalizing", "processing", "Normalizing metadata...")
             normalized_data = await curate.normalize_metadata(curated_data, normalization_agent)
-            # Use new validation pipeline - validate each cell line individually
+            progress.update_stage(task_id, "normalizing", "completed", "Normalization complete")
+
+            # Stage 6: Validate
+            progress.update_stage(task_id, "validating", "processing", "Validating data...")
             validator = CellLineValidation()
             validated_data = []
             for cell_line in normalized_data:
                 validation_result = validator.validate(cell_line)
                 validated_data.append(validation_result)
+            progress.update_stage(task_id, "validating", "completed", "Validation complete")
+
+            # Stage 7: Prepare result
             result = await curate.cleanup_and_prepare_result(pdf_info, validated_data, start_time, cell_lines)
-            
-            # Add task_id to result
             result["task_id"] = task_id
+
             return result
-            
+
         except Exception as e:
             total_time = time.time() - start_time
             error_msg = f"Curation task failed: {str(e)}"
             logger.error(f"{error_msg}", exc_info=True)
-            
+
+            # Update failed stage
+            progress.update_stage(task_id, "error", "failed", error_msg)
+            progress.update_task_status(task_id, "failed", error=error_msg)
+
             # Cleanup on error if pdf_info exists
             try:
                 if 'pdf_info' in locals():
@@ -232,7 +285,7 @@ def curate_article_task(self: Task, filename: str, file_data: bytes):
                     logger.info(f"Cleaned up uploaded file on error: {pdf_info.file_id}")
             except:
                 pass
-                
+
             return {
                 "status": "error",
                 "task_id": task_id,
@@ -240,22 +293,35 @@ def curate_article_task(self: Task, filename: str, file_data: bytes):
                 "error": error_msg,
                 "total_processing_time": total_time
             }
-    
+
     # Run the async function
     logger.info(f"Executing async curation function for task {task_id}")
     result = asyncio.run(_curate_article_async())
-    
-    # Save cell lines to files before broadcasting completion using datastore
+
+    # Stage 8: Save cell lines to files
     if result.get("status") == "success" and result.get("results"):
+        progress.update_stage(task_id, "saving", "processing", "Saving cell lines to files...")
         logger.info(f"Saving {len(result['results'])} cell lines to files using datastore")
         saved_files_info = _save_cell_lines(result["results"])
         result["saved_files"] = saved_files_info
         logger.info(f"Saved {saved_files_info['total_saved']} cell lines with {saved_files_info['save_errors']} errors")
-    
-    # Broadcast completion
+        progress.update_stage(
+            task_id, "saving", "completed",
+            f"Saved {saved_files_info['total_saved']} cell lines",
+            {"files_saved": saved_files_info["files_saved"]}
+        )
+
+        # Mark task as completed
+        progress.update_task_status(task_id, "completed", result=result)
+        progress.update_stage(task_id, "complete", "completed", "Task completed successfully")
+    else:
+        # Task failed
+        progress.update_task_status(task_id, "failed", error=result.get("error"))
+
+    # Broadcast completion (legacy support)
     logger.info(f"Broadcasting task completion for {task_id}")
     broadcast_task_completion(task_id, filename, result)
-    
+
     logger.info(f"Task {task_id} completed successfully")
     return result
 

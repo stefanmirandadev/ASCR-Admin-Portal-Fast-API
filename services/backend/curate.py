@@ -68,6 +68,10 @@ async def validate_and_upload_pdf(filename: str, file_data: bytes) -> PDFInfo:
     if not api_key or api_key == "your_openai_api_key_here":
         raise ValueError("OpenAI API key not set. Please set it in Settings.")
 
+    # Log masked API key for debugging
+    masked_key = f"***{api_key[-4:]}" if api_key and len(api_key) > 4 else "***"
+    logger.info(f"Using OpenAI API key ending with: {masked_key}")
+
     client = AsyncOpenAI(api_key=api_key)
     
     # Upload PDF file to OpenAI Files API
